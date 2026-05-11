@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Mediator Login | Surya Teja Raw and Boiled Rice Industries</title>
+  <style>
+    :root{
+      --bg:#f5f5f7;
+      --ink:#1d1d1f;
+      --muted:#6e6e73;
+      --line:rgba(0,0,0,.10);
+      --card:rgba(255,255,255,.78);
+      --purple:#5e35b1;
+      --purple-dark:#2b145f;
+      --green:#16794c;
+      --red:#c62828;
+      --shadow:0 30px 90px rgba(0,0,0,.18);
+      --soft-shadow:0 16px 50px rgba(20,20,25,.10);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Arial,sans-serif}
+
+    body{
+      min-height:100vh;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 16% 12%, rgba(126,87,194,.28), transparent 34%),
+        radial-gradient(circle at 86% 18%, rgba(255,255,255,.75), transparent 30%),
+        radial-gradient(circle at 75% 85%, rgba(94,53,177,.20), transparent 34%),
+        linear-gradient(145deg,#fbfbfd 0%,#f3f1f8 48%,#e9e5f5 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px;
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background-image:linear-gradient(rgba(255,255,255,.42) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.42) 1px,transparent 1px);
+      background-size:54px 54px;
+      mask-image:linear-gradient(to bottom,rgba(0,0,0,.40),transparent 70%);
+      pointer-events:none;
+    }
+
+    .page{
+      width:min(1120px,100%);
+      display:grid;
+      grid-template-columns:1.06fr .94fr;
+      gap:28px;
+      align-items:stretch;
+      position:relative;
+      z-index:1;
+    }
+
+    .hero,.card{
+      border:1px solid rgba(255,255,255,.72);
+      background:var(--card);
+      backdrop-filter:blur(28px);
+      -webkit-backdrop-filter:blur(28px);
+      box-shadow:var(--shadow);
+      border-radius:34px;
+      overflow:hidden;
+    }
+
+    .hero{
+      min-height:620px;
+      padding:42px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      position:relative;
+    }
+
+    .hero::after{
+      content:"";
+      position:absolute;
+      width:360px;
+      height:360px;
+      border-radius:50%;
+      background:linear-gradient(135deg,rgba(94,53,177,.22),rgba(255,255,255,.08));
+      right:-110px;
+      bottom:-100px;
+      filter:blur(2px);
+    }
+
+    .brand-row{display:flex;align-items:center;gap:16px;position:relative;z-index:1}
+    .logo-box{
+      width:74px;height:74px;border-radius:22px;background:white;display:flex;align-items:center;justify-content:center;
+      box-shadow:0 12px 30px rgba(0,0,0,.10);border:1px solid rgba(0,0,0,.06);overflow:hidden;
+    }
+    .logo-box img{width:66px;height:66px;object-fit:contain}
+    .brand-text strong{display:block;font-size:19px;letter-spacing:-.02em}.brand-text span{display:block;color:var(--muted);font-size:13px;margin-top:4px}
+
+    .hero-content{position:relative;z-index:1;max-width:520px}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(94,53,177,.10);color:var(--purple-dark);border:1px solid rgba(94,53,177,.16);font-weight:800;font-size:13px;padding:9px 13px;border-radius:999px;margin-bottom:20px}
+    .hero h1{font-size:58px;line-height:.98;letter-spacing:-.055em;margin-bottom:18px;color:#111113}
+    .hero p{font-size:18px;line-height:1.55;color:#55555a;max-width:470px}
+
+    .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;position:relative;z-index:1}
+    .feature{background:rgba(255,255,255,.58);border:1px solid rgba(0,0,0,.06);border-radius:22px;padding:16px;box-shadow:var(--soft-shadow)}
+    .feature b{font-size:14px;display:block;margin-bottom:6px}.feature span{font-size:12px;color:var(--muted);line-height:1.45}
+
+    .card{padding:42px;display:flex;align-items:center;justify-content:center}
+    .login-box{width:100%;max-width:430px}
+    .login-title{margin-bottom:28px;text-align:left}
+    .login-title h2{font-size:34px;letter-spacing:-.04em;margin-bottom:9px;color:#111113}.login-title p{color:var(--muted);line-height:1.55;font-size:15px}
+
+    label{display:block;margin:17px 0 8px;font-size:13px;font-weight:800;color:#36363a;letter-spacing:.01em}
+    .input-wrap{position:relative}
+    input{
+      width:100%;height:52px;border:1px solid var(--line);background:rgba(255,255,255,.74);border-radius:16px;padding:0 16px;font-size:15px;color:var(--ink);
+      outline:none;transition:.22s ease;box-shadow:inset 0 1px 0 rgba(255,255,255,.62);
+    }
+    input:focus{border-color:rgba(94,53,177,.55);box-shadow:0 0 0 5px rgba(94,53,177,.12),inset 0 1px 0 rgba(255,255,255,.7);background:white}
+
+    .row{display:flex;align-items:center;gap:10px;margin:17px 0 4px;color:#4d4d52;font-size:14px}
+    .row input{width:18px;height:18px;accent-color:var(--purple)}
+
+    .btn{width:100%;border:0;border-radius:16px;padding:15px 16px;font-weight:900;cursor:pointer;margin-top:12px;font-size:15px;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+    .btn:hover{transform:translateY(-1px)}
+    .primary{background:linear-gradient(135deg,#2a145f,#6d45c8);color:white;box-shadow:0 16px 34px rgba(70,35,150,.30)}
+    .primary:hover{box-shadow:0 20px 42px rgba(70,35,150,.36)}
+    .link{background:rgba(255,255,255,.70);color:#19191d;border:1px solid rgba(0,0,0,.08);box-shadow:0 10px 26px rgba(0,0,0,.06)}
+    .link:hover{background:white}
+
+    #msg{margin-top:16px;line-height:1.45;font-size:14px}
+    .error{color:var(--red);font-weight:800;background:rgba(198,40,40,.08);border:1px solid rgba(198,40,40,.12);padding:12px 14px;border-radius:14px}
+    .ok{color:var(--green);font-weight:800;background:rgba(22,121,76,.08);border:1px solid rgba(22,121,76,.12);padding:12px 14px;border-radius:14px}
+
+    .approval-note{margin-top:22px;background:rgba(94,53,177,.08);border:1px solid rgba(94,53,177,.12);color:#3a256a;padding:14px;border-radius:18px;font-size:13px;line-height:1.55}
+
+    @media(max-width:920px){.page{grid-template-columns:1fr}.hero{min-height:auto}.hero h1{font-size:44px}.feature-grid{grid-template-columns:1fr}.card{padding:28px}.hero{padding:30px}}
+    @media(max-width:520px){body{padding:16px}.hero{display:none}.card{border-radius:28px;padding:24px}.login-title h2{font-size:30px}}
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="brand-row">
+        <div class="logo-box"><img src="images/logo.jpg" alt="Surya Teja Logo"></div>
+        <div class="brand-text"><strong>Surya Teja Raw and Boiled Rice Industries</strong><span>Mediator Order Management</span></div>
+      </div>
+
+      <div class="hero-content">
+        <div class="eyebrow">Approved Mediator Access</div>
+        <h1>Simple orders. Official control.</h1>
+        <p>Login to view current rice rates, submit WhatsApp-style bulk orders, track order history, and download bill copies uploaded by staff.</p>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature"><b>Live Rates</b><span>View updated quintal rates shared by staff.</span></div>
+        <div class="feature"><b>Bulk Orders</b><span>Enter multiple party orders in one simple box.</span></div>
+        <div class="feature"><b>Bill Copies</b><span>Download company-wise bills securely from dashboard.</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="login-box">
+        <div class="login-title">
+          <h2>Mediator Login</h2>
+          <p>Access is allowed only after staff approval.</p>
+        </div>
+
+        <label>Mobile Number</label>
+        <div class="input-wrap"><input id="mobile" placeholder="Enter registered mobile number" maxlength="10" inputmode="numeric"></div>
+
+        <label>Password</label>
+        <div class="input-wrap"><input id="password" type="password" placeholder="Enter password"></div>
+
+        <div class="row"><input id="remember" type="checkbox"><span>Remember me</span></div>
+
+        <button class="btn primary" onclick="login()">Login to Dashboard</button>
+        <button class="btn link" onclick="showForgotPasswordInfo()">Forgot Password?</button>
+        <button class="btn link" onclick="location.href='MediatorRegister.html'">No login? Register</button>
+        <button class="btn link" onclick="location.href='index.html'">Back to Home Screen</button>
+
+        <div id="msg"></div>
+
+        <div class="approval-note"><b>Note:</b> If your registration is still pending, please wait for staff approval before logging in.</div>
+      </div>
+    </section>
+  </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script>
+    function setMessage(type, text){
+      const msg=document.getElementById('msg');
+      msg.className=type||'';
+      msg.innerText=text||'';
+    }
+
+    function showForgotPasswordInfo(){
+      setMessage(
+        'ok',
+        'Please contact Surya Teja Rice Industries staff for password reset verification. Staff will verify your mobile number and update your password.'
+      );
+    }
+
+    async function login(){
+      const mobile=document.getElementById('mobile').value.replace(/\D/g,'').trim();
+      const password=document.getElementById('password').value.trim();
+
+      setMessage('', '');
+
+      if(!/^[6-9][0-9]{9}$/.test(mobile)){
+        setMessage('error','Please enter a valid registered mobile number.');
+        return;
+      }
+      if(!password){
+        setMessage('error','Please enter your password.');
+        return;
+      }
+      if(typeof supabaseClient==='undefined'){
+        setMessage('error','Supabase is not connected. Check supabase.js.');
+        return;
+      }
+
+      const { data, error } = await supabaseClient
+        .from('mediators')
+        .select('id, company_name, mobile, password, status, verification_status')
+        .eq('mobile', mobile)
+        .eq('password', password)
+        .maybeSingle();
+
+      if(error){
+        setMessage('error', error.message || 'Login failed.');
+        return;
+      }
+      if(!data){
+        setMessage('error','Invalid mobile number or password');
+        return;
+      }
+      if(data.status !== 'Approved'){
+        setMessage('error','Your registration is pending staff approval');
+        return;
+      }
+
+      if(document.getElementById('remember').checked)localStorage.setItem('rememberedMediator',mobile);
+      localStorage.setItem('loggedMediator', data.mobile);
+      localStorage.setItem('loggedMediatorId', data.id);
+      localStorage.setItem('loggedMediatorCompany', data.company_name || 'Company Name Not Available');
+      location.href='MediatorDashboard.html';
+    }
+
+    document.addEventListener('keydown',function(e){
+      if(e.key==='Enter')login();
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const remembered = localStorage.getItem('rememberedMediator');
+
+      const mobileInput = document.getElementById('mobile');
+      const rememberCheckbox = document.getElementById('remember');
+
+      if (remembered && mobileInput && rememberCheckbox) {
+        mobileInput.value = remembered;
+        rememberCheckbox.checked = true;
+      }
+    });
+  </script>
+</body>
+</html>

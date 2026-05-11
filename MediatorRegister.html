@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Mediator Register</title>
+
+  <style>
+    *{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+    body{margin:0;background:#f4f6f8;min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .card{background:white;width:440px;max-width:92%;padding:32px;border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.16)}
+    h1{color:#4c1d95;margin:0 0 8px}
+    p{color:#6b7280;line-height:1.5}
+    label{display:block;margin:14px 0 7px;font-weight:700;color:#374151}
+    input{width:100%;padding:13px;border:1px solid #d1d5db;border-radius:12px}
+    .btn{width:100%;border:0;border-radius:12px;padding:13px;font-weight:800;cursor:pointer;margin-top:12px}
+    .primary{background:#16a34a;color:white}
+    .link{background:#f3f4f6;color:#111827}
+    .ok{color:#16a34a;font-weight:800;margin-top:12px;line-height:1.5}
+    .error{color:#dc2626;font-weight:800;margin-top:12px;line-height:1.5}
+    .info{background:#eef2ff;color:#3730a3;border-left:5px solid #6366f1;padding:12px;border-radius:12px;margin-top:14px;font-weight:800;line-height:1.5}
+  </style>
+</head>
+
+<body>
+  <div class="card">
+
+    <h1>Mediator Registration</h1>
+    <p>Register your company details. Staff approval is mandatory before login access is enabled.</p>
+
+    <label>Mobile Number</label>
+    <input id="mobile" placeholder="Enter mobile number" maxlength="10" inputmode="numeric" autocomplete="tel">
+
+    <label>Company Name</label>
+    <input id="companyName" placeholder="Enter company name" autocomplete="organization">
+
+    <label>Password</label>
+    <input id="password" type="password" placeholder="Create password" autocomplete="new-password">
+
+    <label>Confirm Password</label>
+    <input id="confirmPassword" type="password" placeholder="Confirm password" autocomplete="new-password">
+
+    <div class="info">
+      After registration, Surya Teja Rice Industries team will call you and verify your details as a second verification process.
+    </div>
+
+    <button class="btn primary" onclick="registerMediator()">Submit Registration</button>
+    <button class="btn link" onclick="location.href='index.html'">Back to Home Screen</button>
+
+    <div id="msg"></div>
+
+  </div>
+
+<script>
+  function safeParse(key, fallback){try{return JSON.parse(localStorage.getItem(key)||JSON.stringify(fallback));}catch(e){return fallback;}}
+  function sanitizeText(value){return String(value||'').replace(/[<>]/g,'').trim().slice(0,120);}
+  function getMediators(){
+    return safeParse('mediators', []);
+  }
+
+  function saveMediators(data){
+    localStorage.setItem('mediators', JSON.stringify(data));
+  }
+
+  function getNotifications(){
+    return safeParse('notifications', []);
+  }
+
+  function saveNotifications(data){
+    localStorage.setItem('notifications', JSON.stringify(data));
+  }
+
+  function isValidMobile(mobile){
+    return /^[6-9][0-9]{9}$/.test(mobile);
+  }
+
+  function setMessage(type, text){
+    const msg = document.getElementById('msg');
+    msg.className = type || '';
+    msg.innerText = text || '';
+  }
+
+  async function registerMediator(){
+    const mobile = document.getElementById('mobile').value.trim();
+    const companyName = sanitizeText(document.getElementById('companyName').value);
+    const password = document.getElementById('password').value.trim();
+    const confirmPassword = document.getElementById('confirmPassword').value.trim();
+    const submitBtn = document.querySelector('.btn.primary');
+
+    setMessage('', '');
+
+    if(!mobile){
+      setMessage('error', 'Mobile number is mandatory.');
+      return;
+    }
+
+    if(!companyName){
+      setMessage('error', 'Company name is mandatory.');
+      return;
+    }
+
+    if(!password){
+      setMessage('error', 'Password is mandatory.');
+      return;
+    }
+
+    if(!confirmPassword){
+      setMessage('error', 'Please confirm your password.');
+      return;
+    }
+
+    if(!isValidMobile(mobile)){
+      setMessage('error', 'Please enter a valid 10-digit Indian mobile number.');
+      return;
+    }
+
+    if(password.length < 6){
+      setMessage('error', 'Password must be at least 6 characters.');
+      return;
+    }
+
+    if(password !== confirmPassword){
+      setMessage('error', 'Password and confirm password do not match.');
+      return;
+    }
+
+    if(typeof supabaseClient === 'undefined'){
+      setMessage('error', 'Supabase connection not found. Please check supabase.js.');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.innerText = 'Submitting...';
+
+    try{
+      const { data: existingMediator, error: checkError } = await supabaseClient
+        .from('mediators')
+        .select('mobile')
+        .eq('mobile', mobile)
+        .maybeSingle();
+
+      if(checkError){
+        setMessage('error', 'Unable to verify mobile number. Please try again.');
+        return;
+      }
+
+      if(existingMediator){
+        setMessage('error', 'This mobile number is already registered.');
+        return;
+      }
+
+      const { error: insertError } = await supabaseClient
+        .from('mediators')
+        .insert([{
+          company_name: companyName,
+          mobile: mobile,
+          password: password,
+          status: 'Pending Approval',
+          verification_status: 'Pending Call Verification'
+        }]);
+
+      if(insertError){
+        if(String(insertError.message || '').toLowerCase().includes('duplicate')){
+          setMessage('error', 'This mobile number is already registered.');
+        }else{
+          setMessage('error', insertError.message || 'Registration failed. Please try again.');
+        }
+        return;
+      }
+
+      await supabaseClient
+        .from('notifications')
+        .insert([{
+          type: 'Mediator Registration',
+          message: 'New mediator registered: ' + companyName + ' (' + mobile + '). Call verification required before approval.',
+          company_name: companyName,
+          mobile: mobile,
+          status: 'Unread'
+        }]);
+
+      setMessage(
+        'ok',
+        'Registration submitted successfully. Surya Teja Rice Industries team will call you and verify your details as a second verification process. Please wait for staff approval.'
+      );
+
+      document.getElementById('mobile').value = '';
+      document.getElementById('companyName').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('confirmPassword').value = '';
+
+    }catch(error){
+      setMessage('error', 'Registration failed. Please check internet connection and try again.');
+    }finally{
+      submitBtn.disabled = false;
+      submitBtn.innerText = 'Submit Registration';
+    }
+  }</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+</body>
+</html>

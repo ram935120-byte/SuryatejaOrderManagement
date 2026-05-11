@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Surya Teja Current Rates</title>
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --text: #1d1d1f;
+      --muted: #6e6e73;
+      --surface: rgba(255, 255, 255, .88);
+      --line: rgba(0, 0, 0, .08);
+      --shadow: 0 24px 60px rgba(0, 0, 0, .08)
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif
+    }
+
+    body {
+      background: radial-gradient(circle at 70% 0, rgba(124, 58, 237, .12), transparent 28%), linear-gradient(180deg, #fff, var(--bg));
+      color: var(--text);
+      min-height: 100vh
+    }
+
+    .sidebar {
+      width: 280px;
+      background: rgba(17, 17, 19, .88);
+      color: white;
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      bottom: 18px;
+      padding: 24px 18px;
+      overflow-y: auto;
+      border-radius: 32px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, .22);
+      backdrop-filter: blur(28px)
+    }
+
+    .brand-box {
+      margin-bottom: 30px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(255, 255, 255, .12)
+    }
+
+    .brand-box img {
+      width: 220px;
+      object-fit: contain;
+      margin-bottom: 15px;
+      filter: drop-shadow(0 12px 28px rgba(0, 0, 0, .22))
+    }
+
+    .brand-box h1 {
+      font-size: 24px;
+      line-height: 1.08;
+      margin-bottom: 10px;
+      letter-spacing: -.04em
+    }
+
+    .brand-box p {
+      font-size: 13px;
+      color: rgba(255, 255, 255, .62);
+      line-height: 1.5
+    }
+
+    .menu-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: rgba(255, 255, 255, .45);
+      margin-bottom: 12px;
+      padding-left: 8px
+    }
+
+    .menu a {
+      display: block;
+      text-decoration: none;
+      color: rgba(255, 255, 255, .76);
+      padding: 13px 15px;
+      border-radius: 16px;
+      margin-bottom: 9px;
+      font-weight: 750;
+      font-size: 14px;
+      background: transparent;
+      transition: .18s
+    }
+
+    .menu a.active,
+    .menu a:hover {
+      background: rgba(255, 255, 255, .14);
+      color: white;
+      transform: translateX(2px)
+    }
+
+    .main {
+      margin-left: 316px;
+      min-height: 100vh;
+      padding: 28px 30px 44px
+    }
+
+    .topbar {
+      background: var(--surface);
+      padding: 32px;
+      border-radius: 34px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      gap: 16px;
+      border: 1px solid rgba(255, 255, 255, .74);
+      backdrop-filter: blur(22px)
+    }
+
+    .topbar h2 {
+      font-size: 42px;
+      letter-spacing: -.065em;
+      line-height: 1;
+      margin-bottom: 10px
+    }
+
+    .topbar p {
+      color: var(--muted);
+      font-size: 15px
+    }
+
+    .live-badge {
+      background: #ecfdf3;
+      color: #087443;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 850;
+      font-size: 14px;
+      white-space: nowrap;
+      border: 1px solid #dcfce7
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px
+    }
+
+    .summary-card {
+      background: var(--surface);
+      padding: 23px;
+      border-radius: 26px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, .06);
+      border: 1px solid rgba(255, 255, 255, .76)
+    }
+
+    .summary-card h3 {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 9px;
+      text-transform: uppercase;
+      letter-spacing: .08em
+    }
+
+    .summary-card strong {
+      font-size: 26px;
+      letter-spacing: -.035em
+    }
+
+    .section-title {
+      font-size: 28px;
+      letter-spacing: -.045em;
+      margin-bottom: 20px
+    }
+
+    .rate-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+      gap: 20px
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 18px 48px rgba(0, 0, 0, .08);
+      border: 1px solid var(--line);
+      transition: .2s ease
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 26px 70px rgba(0, 0, 0, .11)
+    }
+
+    .product-image {
+      height: 230px;
+      background: linear-gradient(145deg, #fbfbfd, #f0f0f4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px
+    }
+
+    .product-image img {
+      max-width: 100%;
+      max-height: 202px;
+      object-fit: contain;
+      filter: drop-shadow(0 22px 28px rgba(0, 0, 0, .12))
+    }
+
+    .product-body {
+      padding: 23px
+    }
+
+    .product-name {
+      font-size: 20px;
+      font-weight: 850;
+      margin-bottom: 10px;
+      min-height: 50px;
+      letter-spacing: -.025em
+    }
+
+    .category {
+      display: inline-block;
+      background: #f2f2f7;
+      color: #424245;
+      font-size: 12px;
+      font-weight: 850;
+      padding: 7px 11px;
+      border-radius: 999px;
+      margin-bottom: 17px
+    }
+
+    .rate-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 15px;
+      gap: 16px
+    }
+
+    .rate-row span {
+      color: var(--muted)
+    }
+
+    .rate-row strong {
+      color: var(--text)
+    }
+
+    .main-rate strong {
+      font-size: 24px;
+      letter-spacing: -.04em
+    }
+
+    .active {
+      display: inline-block;
+      margin-top: 16px;
+      background: #ecfdf3;
+      color: #087443;
+      padding: 8px 13px;
+      border-radius: 999px;
+      font-weight: 850;
+      font-size: 13px
+    }
+
+    .note {
+      margin-top: 28px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: #424245;
+      padding: 17px 18px;
+      border-radius: 20px;
+      line-height: 1.6;
+      font-size: 14px;
+      box-shadow: 0 12px 34px rgba(0, 0, 0, .05)
+    }
+
+    @media(max-width:900px) {
+      .sidebar {
+        position: relative;
+        width: auto;
+        bottom: auto;
+        top: auto;
+        left: auto;
+        margin: 14px
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 18px
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start
+      }
+
+      .topbar h2 {
+        font-size: 34px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="brand-box"><img src="images/logo.jpg" alt="Surya Teja Logo">
+      <h1>Surya Teja Raw and Boiled <br>Rice Industries</h1>
+      <!-- <p>Current rice rates dashboard for staff and mediators.</p> -->
+    </div>
+    <div class="menu-title">Login Options</div>
+    <nav class="menu"><a class="active" href="StaffLogin.html">Staff Login</a><a href="MediatorLogin.html">Mediator
+        Login</a></nav>
+  </aside>
+  <main class="main">
+    <section class="topbar">
+      <div>
+        <h2>Surya Teja Raw and Boiled Rice Industries</h2>
+        <p>Order Management for Staff and Rice Mediators</p>
+      </div>
+      <div class="live-badge">Live Rates</div>
+    </section>
+    <section class="summary">
+      <div class="summary-card">
+        <h3>Active Products</h3><strong>8</strong>
+      </div>
+      <div class="summary-card">
+        <h3>Updated By</h3><strong id="updated-by">Rice Mill</strong>
+      </div>
+      <div class="summary-card">
+        <h3>Effective Date</h3><strong id="effective-date">-</strong>
+      </div>
+      <div class="summary-card">
+        <h3>Current Time</h3><strong id="current-time"></strong>
+      </div>
+    </section>
+    <h2 class="section-title">Current Rice Rates</h2>
+    <section class="rate-grid">
+      <div class="product-card" data-product="hmt">
+        <div class="product-image"><img src="images/hmt.png" alt="Surya Teja HMT Premium Rice"></div>
+        <div class="product-body">
+          <div class="product-name">Surya Teja HMT Premium Rice</div>
+          <div class="category">Steam Rice</div>
+          <!-- <div class="rate-row main-rate"><span>Rate / Quintal</span><strong>₹<span
+                class="quintal-rate">5465</span></strong></div>
+          <div class="rate-row"><span>26kg Bag Rate</span><strong class="bag-rate"></strong></div> -->
+          <div class="rate-row"><span>Availability</span><strong>Available</strong></div><span
+            class="active">Active</span>
+        </div>
+      </div>
+      <div class="product-card" data-product="joker">
+        <div class="product-image"><img src="images/joker.png" alt="Old Surya Teja Joker JSR Steam Rice"></div>
+        <div class="product-body">
+          <div class="product-name">Old Surya Teja Joker JSR Steam Rice</div>
+          <div class="category">Steam Rice</div>
+          <!-- <div class="rate-row main-rate"><span>Rate / Quintal</span><strong>₹<span
+                class="quintal-rate">5480</span></strong></div>
+          <div class="rate-row"><span>26kg Bag Rate</span><strong class="bag-rate"></strong></div> -->
+          <div class="rate-row"><span>Availability</span><strong>Available</strong></div><span
+            class="active">Active</span>
+        </div>
+      </div>
+      <div class="product-card" data-product="joker">
+        <div class="product-image"><img src="images/joker.png" alt="Surya Teja Joker JSR Steam Rice"></div>
+        <div class="product-body">
+          <div class="product-name">Surya Teja Joker JSR Steam Rice</div>
+          <div class="category">Steam Rice</div>
+          <!-- <div class="rate-row main-rate"><span>Rate / Quintal</span><strong>₹<span
+                class="quintal-rate">5480</span></strong></div>
+          <div class="rate-row"><span>26kg Bag Rate</span><strong class="bag-rate"></strong></div> -->
+          <div class="rate-row"><span>Availability</span><strong>Available</strong></div><span
+            class="active">Active</span>
+        </div>
+      </div>
+      <div class="product-card" data-product="knm">
+        <div class="product-image"><img src="images/knm.png" alt="Surya Teja KNM Steam Rice"></div>
+        <div class="product-body">
+          <div class="product-name">Surya Teja KNM Steam Rice</div>
+          <div class="category">Steam Rice</div>
+          <!-- <div class="rate-row main-rate"><span>Rate / Quintal</span><strong>₹<span
+                class="quintal-rate">4500</span></strong></div>
+          <div class="rate-row"><span>26kg Bag Rate</span><strong class="bag-rate"></strong></div> -->
+          <div class="rate-row"><span>Availability</span><strong>Available</strong></div><span
+            class="active">Active</span>
+        </div>
+      </div>
+      <div class="product-card" data-product="rnr">
+        <div class="product-image"><img src="images/rnr.png" alt="Surya Teja RNR Boiled Rice"></div>
+        <div class="product-body">
+          <div class="product-name">Surya Teja RNR Boiled Rice</div>
+          <div class="category">Boiled Rice</div>
+          <!-- <div class="rate-row main-rate"><span>Rate / Quintal</span><strong>₹<span
+                class="quintal-rate">4950</span></strong></div>
+          <div class="rate-row"><span>26kg Bag Rate</span><strong class="bag-rate"></strong></div> -->
+          <div class="rate-row"><span>Availability</span><strong>Available</strong></div><span
+            class="active">Active</span>
+        </div>
+      </div>
+            <div class="product-card" data-product="rnr">
+        <div class="product-image"><img src="images/jsr.jpeg" alt="Surya Teja JSR Boiled Rice"></div>
+        <div class="product-body">
+          <div class="product-name">Surya Teja JSR Boiled Rice(JUTE JOKER BAG)</div>
+          <div class="category">Boiled Rice</div>
+          <!-- <div class="rate-row main-rate"><span>Rate / Quintal</span><strong>₹<span
+                class="quintal-rate">4950</span></strong></div>
+          <div class="rate-row"><span>26kg Bag Rate</span><strong class="bag-rate"></strong></div> -->
+          <div class="rate-row"><span>Availability</span><strong>Available</strong></div><span
+            class="active">Active</span>
+        </div>
+      </div>
+                 <div class="product-card" data-product="rnr">
+        <div class="product-image"><img src="images/rava.png" alt="Surya Teja Joker Idly Rava(30KG)"></div>
+        <div class="product-body">
+          <div class="product-name">Surya Teja Joker Idly Rava(30KG)</div>
+          <div class="category">Idly Rava</div>
+          <!-- <div class="rate-row main-rate"><span>Rate / Quintal</span><strong>₹<span
+                class="quintal-rate">4950</span></strong></div>
+          <div class="rate-row"><span>26kg Bag Rate</span><strong class="bag-rate"></strong></div> -->
+          <div class="rate-row"><span>Availability</span><strong>Available</strong></div><span
+            class="active">Active</span>
+        </div>
+      </div>
+                     <div class="product-card" data-product="rnr">
+        <div class="product-image"><img src="images/IdlyRava.png" alt="Surya Teja Joker Idly Rava(1KG)"></div>
+        <div class="product-body">
+          <div class="product-name">Surya Teja Joker Idly Rava(1KG)</div>
+          <div class="category">Idly Rava</div>
+          <!-- <div class="rate-row main-rate"><span>Rate / Quintal</span><strong>₹<span
+                class="quintal-rate">4950</span></strong></div>
+          <div class="rate-row"><span>26kg Bag Rate</span><strong class="bag-rate"></strong></div> -->
+          <div class="rate-row"><span>Availability</span><strong>Available</strong></div><span
+            class="active">Active</span>
+        </div>
+      </div>
+    </section>
+    <div class="note">Note: This Entire System will be handled by Surya Teja staff/admin.</div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script>
+    const fallbackRates = { hmt:5465, oldJoker:6200, joker:5480, knm:4500, rnr:4950, jsrBoiled:0, idlyRava30:0, idlyRava1:0 };
+    function formatIndianCurrency(amount){return '₹'+Math.round(amount).toLocaleString('en-IN');}
+    function updateTime(){document.getElementById('current-time').innerText=new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});}
+    function applyRates(rateMap){
+      document.querySelectorAll('.product-card').forEach(card=>{
+        const key=card.dataset.product;
+        const q=card.querySelector('.quintal-rate');
+        const b=card.querySelector('.bag-rate');
+        if(!key||!q||!b)return;
+        const rate=Number(rateMap[key]||0);
+        q.innerText=rate.toLocaleString('en-IN');
+        b.innerText=rate>0?formatIndianCurrency((rate/100)*26):'-';
+      });
+    }
+    async function updateHomeScreenRates(){
+      let rateMap={...fallbackRates};
+      try{
+        const {data,error}=await supabaseClient.from('product_rates').select('product_key, quintal_rate, updated_at');
+        if(error) throw error;
+        let latest='';
+        (data||[]).forEach(r=>{rateMap[r.product_key]=Number(r.quintal_rate||0); if(r.updated_at && r.updated_at>latest) latest=r.updated_at;});
+        document.getElementById('updated-by').innerText='Staff';
+        document.getElementById('effective-date').innerText=latest?new Date(latest).toLocaleDateString('en-IN'):new Date().toLocaleDateString('en-IN');
+      }catch(e){
+        console.warn(e);
+        document.getElementById('updated-by').innerText='Staff';
+        document.getElementById('effective-date').innerText=new Date().toLocaleDateString('en-IN');
+      }
+      applyRates(rateMap);
+    }
+    updateHomeScreenRates();updateTime();setInterval(updateTime,1000);
+  </script>
+</body>
+
+</html>

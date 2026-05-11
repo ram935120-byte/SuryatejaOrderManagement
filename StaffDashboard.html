@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Staff Dashboard</title>
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --surface: rgba(255, 255, 255, .86);
+      --surface-strong: #fff;
+      --text: #1d1d1f;
+      --muted: #6e6e73;
+      --line: rgba(0, 0, 0, .08);
+      --shadow: 0 22px 55px rgba(0, 0, 0, .08);
+      --soft-shadow: 0 10px 30px rgba(0, 0, 0, .06);
+      --accent: #111827;
+      --accent-2: #7c3aed;
+      --success: #0f8f4e;
+      --danger: #c62828;
+      --warning: #a76300;
+      --blue: #2563eb;
+      --radius: 24px;
+      --radius-sm: 15px;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(124, 58, 237, .13), transparent 34%),
+        radial-gradient(circle at 80% 0, rgba(37, 99, 235, .09), transparent 30%), var(--bg);
+      min-height: 100vh
+    }
+
+    .sidebar {
+      width: 276px;
+      background: rgba(18, 18, 20, .86);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      color: white;
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      bottom: 18px;
+      padding: 24px 16px;
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 30px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, .22)
+    }
+
+    .brand {
+      font-size: 24px;
+      font-weight: 850;
+      letter-spacing: -.04em;
+      line-height: 1.08;
+      margin: 5px 8px 26px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(255, 255, 255, .12)
+    }
+
+    .brand:after {
+      content: "Operations Console";
+      display: block;
+      font-size: 12px;
+      font-weight: 650;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .55);
+      margin-top: 12px
+    }
+
+    .menu a {
+      display: block;
+      text-decoration: none;
+      color: rgba(255, 255, 255, .76);
+      padding: 13px 14px;
+      border-radius: 16px;
+      margin-bottom: 8px;
+      font-weight: 750;
+      font-size: 14px;
+      background: transparent;
+      transition: .18s ease
+    }
+
+    .menu a.active,
+    .menu a:hover {
+      background: rgba(255, 255, 255, .14);
+      color: white;
+      transform: translateX(2px)
+    }
+
+    .submenu {
+      display: none;
+      margin: 2px 0 14px 18px;
+      border-left: 1px solid rgba(255, 255, 255, .16);
+      padding-left: 12px
+    }
+
+    .submenu-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: rgba(255, 255, 255, .42);
+      margin: 12px 0 8px
+    }
+
+    .submenu a {
+      font-size: 12px;
+      padding: 10px 12px;
+      margin-bottom: 6px;
+      background: rgba(255, 255, 255, .05);
+      font-weight: 700;
+      border-radius: 13px
+    }
+
+    .submenu a.company-active {
+      background: white;
+      color: #111827
+    }
+
+    .empty-company {
+      font-size: 12px;
+      color: rgba(255, 255, 255, .5);
+      padding: 8px 12px;
+      line-height: 1.4
+    }
+
+    .main {
+      margin-left: 312px;
+      padding: 24px 28px 42px
+    }
+
+    .topbar {
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, .72);
+      border-radius: 32px;
+      padding: 28px 30px;
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      backdrop-filter: blur(22px)
+    }
+
+    .topbar h1 {
+      margin: 0 0 8px;
+      font-size: 36px;
+      letter-spacing: -.055em;
+      line-height: 1
+    }
+
+    .topbar p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5
+    }
+
+    .badge {
+      background: #fff1f2;
+      color: #b91c1c;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 850;
+      border: 1px solid #ffe4e6;
+      white-space: nowrap
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px
+    }
+
+    .card {
+      background: var(--surface);
+      padding: 21px;
+      border-radius: 24px;
+      box-shadow: var(--soft-shadow);
+      border: 1px solid rgba(255, 255, 255, .76);
+      backdrop-filter: blur(18px)
+    }
+
+    .card h3 {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin: 0 0 10px
+    }
+
+    .card strong {
+      font-size: 34px;
+      letter-spacing: -.04em
+    }
+
+    .section {
+      background: var(--surface-strong);
+      padding: 26px;
+      border-radius: 28px;
+      box-shadow: var(--soft-shadow);
+      border: 1px solid var(--line);
+      margin-bottom: 24px;
+      overflow: hidden
+    }
+
+    .section h2 {
+      font-size: 24px;
+      letter-spacing: -.035em;
+      margin: 0 0 6px
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0
+    }
+
+    th,
+    td {
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      padding: 14px 12px;
+      font-size: 14px;
+      vertical-align: top
+    }
+
+    th {
+      color: var(--muted);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: .08em;
+      font-weight: 800;
+      background: #fbfbfd
+    }
+
+    tr:hover td {
+      background: #fafafa
+    }
+
+    .status {
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-weight: 850;
+      font-size: 12px;
+      display: inline-block
+    }
+
+    .pending {
+      background: #fff7ed;
+      color: #9a5b00
+    }
+
+    .approved {
+      background: #ecfdf3;
+      color: #087443
+    }
+
+    .rejected {
+      background: #fff1f2;
+      color: #b42318
+    }
+
+    .btn,
+    button {
+      border: 0;
+      border-radius: 14px;
+      padding: 10px 13px;
+      font-weight: 850;
+      cursor: pointer;
+      margin-right: 6px;
+      transition: .16s ease
+    }
+
+    .btn:hover,
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(.98)
+    }
+
+    .approve {
+      background: #0f8f4e;
+      color: white
+    }
+
+    .reject {
+      background: #c62828;
+      color: white
+    }
+
+    .save {
+      background: #111827;
+      color: white
+    }
+
+    .view,
+    .download-link {
+      background: #111827;
+      color: white;
+      text-decoration: none;
+      display: inline-block;
+      padding: 9px 12px;
+      border-radius: 13px;
+      font-weight: 800
+    }
+
+    input,
+    select,
+    textarea {
+      padding: 12px 13px;
+      border: 1px solid #d8d8df;
+      border-radius: 14px;
+      font-size: 14px;
+      background: #fbfbfd;
+      color: var(--text);
+      outline: none;
+      transition: .16s ease
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #111827;
+      box-shadow: 0 0 0 4px rgba(17, 24, 39, .08);
+      background: white
+    }
+
+    input[type=file] {
+      background: #fff
+    }
+
+    .success {
+      display: none;
+      background: #ecfdf3;
+      color: #087443;
+      border-left: 5px solid #0f8f4e;
+      padding: 14px;
+      border-radius: 16px;
+      margin-bottom: 16px;
+      font-weight: 800
+    }
+
+    .order-text {
+      max-width: 460px;
+      white-space: pre-wrap;
+      line-height: 1.55
+    }
+
+    .company-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px
+    }
+
+    .company-pill {
+      background: #f2f2f7;
+      color: #1d1d1f;
+      padding: 9px 13px;
+      border-radius: 999px;
+      font-weight: 850;
+      border: 1px solid var(--line)
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+      margin: 16px 0
+    }
+
+    .filters button {
+      background: #111827;
+      color: white;
+      border: 0;
+      border-radius: 14px;
+      font-weight: 850;
+      cursor: pointer
+    }
+
+    .timeline {
+      font-size: 13px;
+      line-height: 1.55;
+      color: #424245
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 16px 0
+    }
+
+    .full {
+      grid-column: 1/-1
+    }
+
+    label b {
+      font-size: 13px;
+      color: #424245
+    }
+
+    hr {
+      border-color: var(--line) !important
+    }
+
+    @media(max-width:900px) {
+      .sidebar {
+        position: relative;
+        width: auto;
+        left: auto;
+        top: auto;
+        bottom: auto;
+        margin: 14px;
+        border-radius: 26px
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 14px
+      }
+
+      .topbar,
+      .company-header {
+        flex-direction: column;
+        align-items: flex-start
+      }
+
+      .topbar h1 {
+        font-size: 30px
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="brand">Surya Teja<br>Staff Dashboard</div>
+    <nav class="menu">
+      <a href="#" class="active" onclick="showSection('notifications',this)">Notifications</a>
+      <a href="#" id="ordersMainMenu" onclick="showOrdersMenu(this)">Orders</a>
+      <div class="submenu" id="ordersSubmenu">
+        <div class="submenu-title">Registered Companies</div>
+        <div id="companyMenuRows"></div>
+      </div>
+      <a href="#" onclick="showSection('billUpload',this); loadBillCompanyOptions(); renderBills();">Bill Upload</a>
+      <a href="#" onclick="showSection('rates',this)">Update Current Rates</a>
+      <a href="#" onclick="showSection('mediators',this)">Mediator Approvals</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h1>Staff Dashboard</h1>
+        <p>Approve mediators, update rates, manage orders, and upload bill copies company-wise.</p>
+      </div>
+      <div class="badge"><span id="notificationCount">0</span> Notifications</div>
+    </div>
+
+    <section class="cards">
+      <div class="card">
+        <h3>Pending Mediators</h3><strong id="pendingCount">0</strong>
+      </div>
+      <div class="card">
+        <h3>Approved Mediators</h3><strong id="approvedCount">0</strong>
+      </div>
+      <div class="card">
+        <h3>Orders Submitted</h3><strong id="ordersCount">0</strong>
+      </div>
+      <div class="card">
+        <h3>Pending Orders</h3><strong id="pendingOrdersCount">0</strong>
+      </div>
+      <div class="card">
+        <h3>Accepted Orders</h3><strong id="acceptedOrdersCount">0</strong>
+      </div>
+      <div class="card">
+        <h3>Updated Orders</h3><strong id="updatedOrdersCount">0</strong>
+      </div>
+      <div class="card">
+        <h3>Bills Uploaded</h3><strong id="billsCount">0</strong>
+      </div>
+    </section>
+
+    <section class="section" id="notifications">
+      <h2>Notifications</h2><br>
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Message</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="notificationRows"></tbody>
+      </table>
+    </section>
+
+    <section class="section" id="orders" style="display:none">
+      <div class="company-header">
+        <div>
+          <h2 id="ordersTitle">Orders</h2>
+          <p id="ordersSubtitle" style="color:#6b7280;margin-top:8px;">Select a company under Orders or use filters.</p>
+        </div>
+        <span class="company-pill" id="selectedCompanyPill">All Companies</span>
+      </div>
+      <div class="filters">
+        <input id="filterDate" type="date">
+        <select id="filterStatus">
+          <option value="">All Status</option>
+          <option>Submitted</option>
+          <option>Updated by Mediator</option>
+          <option>Accepted</option>
+          <option>Rejected</option>
+          <!-- <option>Loading</option>
+          <option>Dispatched</option>
+          <option>Bill Uploaded</option> -->
+          <option>Completed</option>
+          <!-- <option>Cancelled</option> -->
+        </select>
+        <input id="filterSearch" placeholder="Search company/mobile/order">
+        <button onclick="applyOrderFilters()">Apply Filters</button>
+        <button onclick="clearOrderFilters()" style="background:#f3f4f6;color:#111827">Clear</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Company</th>
+            <th>Order Message</th>
+            <th>Submitted</th>
+            <th>Status</th>
+            <th>Update Status</th>
+            <th>Timeline</th>
+          </tr>
+        </thead>
+        <tbody id="orderRows"></tbody>
+      </table>
+    </section>
+
+    <section class="section" id="billUpload" style="display:none">
+      <h2>Bill Upload</h2>
+      <p style="color:#6b7280;margin:8px 0 18px;">Upload one bill or multiple bill copies by selecting the registered
+        company. Mediator will see only their company bills.</p>
+      <div id="billSuccess" class="success">Bill copy uploaded successfully.</div>
+
+      <div class="form-grid">
+        <div>
+          <label><b>Registered Company</b></label><br><br>
+          <select id="billCompany" style="width:100%"></select>
+        </div>
+        <div>
+          <label><b>Bill Date</b></label><br><br>
+          <input type="date" id="billDate" style="width:100%">
+        </div>
+        <div>
+          <label><b>Bill Number / Reference</b></label><br><br>
+          <input id="billNumber" placeholder="Example: ST-INV-001" style="width:100%">
+        </div>
+        <div class="full">
+          <label><b>Upload Bill Copy / Copies</b></label><br><br>
+          <input type="file" id="billFiles" multiple accept=".pdf,.jpg,.jpeg,.png" style="width:100%">
+          <p style="color:#6b7280;margin-top:8px;">You can upload single or multiple PDF/Image bill copies.</p>
+        </div>
+        <div class="full">
+          <label><b>Bill Notes</b></label><br><br>
+          <textarea id="billNotes" placeholder="Optional bill notes" style="width:100%;min-height:90px"></textarea>
+        </div>
+      </div>
+      <button class="btn save" onclick="uploadBills()">Upload Bill Copy</button>
+
+      <hr style="border:0;border-top:1px solid #e5e7eb;margin:24px 0">
+
+      <h2>Search Uploaded Bills</h2>
+      <div class="filters">
+        <select id="billSearchCompany">
+          <option value="">All Companies</option>
+        </select>
+        <input type="date" id="billSearchDate">
+        <button onclick="renderBills()">Search Bills</button>
+        <button onclick="clearBillSearch()" style="background:#f3f4f6;color:#111827">Show All</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Bill No.</th>
+            <th>Bill Date</th>
+            <th>File Name</th>
+            <th>Notes</th>
+            <th>Uploaded Time</th>
+            <th>Download</th>
+          </tr>
+        </thead>
+        <tbody id="billRows"></tbody>
+      </table>
+    </section>
+
+    <section class="section" id="rates" style="display:none">
+      <h2>Update Current Product Rates</h2>
+      <p style="color:#6b7280;margin:8px 0 18px;">Enter only quintal rates.</p>
+      <div id="rateSuccess" class="success">Rates updated successfully.</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Rate / Quintal</th>
+            <!-- <th>26kg Bag Rate</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Surya Teja HMT Premium Rice</td>
+            <td><input type="number" id="rate-hmt"></td>
+            <!-- <td id="bag-hmt"></td> -->
+          </tr>
+          <tr>
+            <td>old Surya Teja Joker JSR Steam Rice</td>
+            <td><input type="number" id="rate-oldJoker"></td>
+            <!-- <td id="bag-hmt"></td> -->
+          </tr>
+          <tr>
+            <td>Surya Teja Joker JSR Steam Rice</td>
+            <td><input type="number" id="rate-joker"></td>
+            <!-- <td id="bag-joker"></td> -->
+          </tr>
+          <tr>
+            <td>Surya Teja KNM Steam Rice</td>
+            <td><input type="number" id="rate-knm"></td>
+            <!-- <td id="bag-knm"></td> -->
+          </tr>
+          <tr>
+            <td>Surya Teja RNR Boiled Rice(LOADING RATE)</td>
+            <td><input type="number" id="rate-rnr"></td>
+            <!-- <td id="bag-rnr"></td> -->
+          </tr>
+          <tr>
+            <td>Surya Teja JSR Boiled Rice(LOADING RATE)</td>
+            <td><input type="number" id="rate-jsrBoiled"></td>
+            <!-- <td id="bag-jsr"></td> -->
+          </tr>
+        </tbody>
+      </table><br>
+      <button class="btn save" onclick="saveRates()">Save Current Rates</button>
+    </section>
+
+    <section class="section" id="mediators" style="display:none">
+      <h2>Mediator Approvals</h2><br>
+      <table>
+        <thead>
+          <tr>
+            <th>Company Name</th>
+            <th>Mobile</th>
+            <th>Registered At</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="mediatorRows"></tbody>
+      </table>
+    </section>
+  </main>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script>
+    const productNames={hmt:'Surya Teja HMT Premium Rice',oldJoker:'Old Surya Teja Joker JSR Steam Rice',joker:'Surya Teja Joker JSR Steam Rice',knm:'Surya Teja KNM Steam Rice',rnr:'Surya Teja RNR Boiled Rice',jsrBoiled:'Surya Teja JSR Boiled Rice'};
+    const defaultRates={hmt:5465,oldJoker:6200,joker:5480,knm:4500,rnr:4950,jsrBoiled:0};
+    let selectedCompany='';
+    let state={mediators:[],notifications:[],orders:[],bills:[],rates:{...defaultRates}};
+
+    function escapeHtml(value){return String(value==null?'':value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+    function escapeAttr(value){return escapeHtml(value).replace(/`/g,'&#96;');}
+    function safeNumber(value){const n=Number(value);return Number.isFinite(n)&&n>=0?n:0;}
+    function sanitizeFileName(name){return String(name||'bill-copy').replace(/[^a-zA-Z0-9._ -]/g,'_').slice(0,120);}
+    function isAllowedBillFile(file){const allowedTypes=['application/pdf','image/jpeg','image/png'];const allowedExt=/\.(pdf|jpg|jpeg|png)$/i;const maxBytes=10*1024*1024;return file&&allowedTypes.includes(file.type)&&allowedExt.test(file.name||'')&&file.size<=maxBytes;}
+    function getLocalDateKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+    function getOrderDateKey(o){const d=new Date(o.created_at);return isNaN(d.getTime())?'':getLocalDateKey(d)}
+    function getCompanyName(o){return (o.company_name&&o.company_name.trim())?o.company_name.trim():'Unknown Company'}
+    // function statusClass(s){return s==='Accepted'||s==='Completed'||s==='Dispatched'||s==='Bill Uploaded'?'approved':s==='Rejected'||s==='Cancelled'?'rejected':'pending'}
+    function statusClass(s){
+  return s==='Accepted'||s==='Completed'
+    ?'approved'
+    :s==='Rejected'
+    ?'rejected'
+    :'pending'
+}
+    async function requireStaff(){
+      const {data}=await supabaseClient.auth.getSession();
+      if(!data.session && localStorage.getItem('staffLoggedIn')!=='true'){
+        location.href='StaffLogin.html';
+        return false;
+      }
+      localStorage.setItem('staffLoggedIn','true');
+      return true;
+    }
+
+    async function loadData(){
+      const [m,n,o,b,r]=await Promise.all([
+        supabaseClient.from('mediators').select('*').order('created_at',{ascending:false}),
+        supabaseClient.from('notifications').select('*').order('created_at',{ascending:false}),
+        supabaseClient.from('orders').select('*').order('created_at',{ascending:false}),
+        supabaseClient.from('bill_copies').select('*').order('uploaded_at',{ascending:false}),
+        supabaseClient.from('product_rates').select('*')
+      ]);
+      if(m.error) console.warn(m.error); if(n.error) console.warn(n.error); if(o.error) console.warn(o.error); if(b.error) console.warn(b.error); if(r.error) console.warn(r.error);
+      state.mediators=m.data||[]; state.notifications=n.data||[]; state.orders=o.data||[]; state.bills=b.data||[];
+      state.rates={...defaultRates};
+      (r.data||[]).forEach(x=>state.rates[x.product_key]=Number(x.quintal_rate||0));
+    }
+
+    function getRegisteredCompanies(){
+      const fromMediators=state.mediators.map(m=>({companyName:m.company_name||'Unknown Company',mobile:m.mobile||''}));
+      const fromOrders=state.orders.map(o=>({companyName:getCompanyName(o),mobile:o.mobile||''}));
+      const map={};
+      [...fromMediators,...fromOrders].forEach(item=>{if(item.companyName&&item.companyName!=='Unknown Company')map[item.companyName]=item.mobile||map[item.companyName]||'';});
+      return Object.keys(map).sort((a,b)=>a.localeCompare(b)).map(name=>({companyName:name,mobile:map[name]}));
+    }
+
+    function loadRates(){
+      ['hmt','oldJoker','joker','knm','rnr','jsrBoiled'].forEach(k=>{const input=document.getElementById('rate-'+k);if(input)input.value=state.rates[k]??0;});
+    }
+
+    async function saveRates(){
+      const rows=['hmt','oldJoker','joker','knm','rnr','jsrBoiled'].map(k=>({product_key:k,product_name:productNames[k]||k,quintal_rate:safeNumber(document.getElementById('rate-'+k).value),updated_at:new Date().toISOString()}));
+      const {error}=await supabaseClient.from('product_rates').upsert(rows,{onConflict:'product_key'});
+      if(error){alert(error.message);return}
+      document.getElementById('rateSuccess').style.display='block';
+      setTimeout(()=>document.getElementById('rateSuccess').style.display='none',3000);
+      await render();
+    }
+
+    function showSection(id,link){['notifications','orders','billUpload','rates','mediators'].forEach(s=>document.getElementById(s).style.display=s===id?'block':'none');document.querySelectorAll('.menu a').forEach(a=>a.classList.remove('active'));document.querySelectorAll('#companyMenuRows a').forEach(a=>a.classList.remove('company-active'));if(link)link.classList.add('active');if(id!=='orders')document.getElementById('ordersSubmenu').style.display='none';if(id==='rates')loadRates();}
+    function showOrdersMenu(link){selectedCompany='';showSection('orders',link);document.getElementById('ordersSubmenu').style.display='block';renderOrders()}
+    function showCompanyOrders(company,link){selectedCompany=company;showSection('orders',document.getElementById('ordersMainMenu'));document.getElementById('ordersSubmenu').style.display='block';document.querySelectorAll('#companyMenuRows a').forEach(a=>a.classList.remove('company-active'));if(link)link.classList.add('company-active');renderOrders(company)}
+    function applyOrderFilters(){renderOrders(selectedCompany)}
+    function clearOrderFilters(){document.getElementById('filterDate').value='';document.getElementById('filterStatus').value='';document.getElementById('filterSearch').value='';renderOrders(selectedCompany)}
+
+    function renderCompanySubmenu(){
+      const companies=[...new Set(state.orders.map(getCompanyName))].sort((a,b)=>a.localeCompare(b));
+      document.getElementById('companyMenuRows').innerHTML=companies.length?companies.map(c=>`<a href="#" onclick="showCompanyOrders('${escapeAttr(c)}',this)">${escapeHtml(c)}</a>`).join(''):'<div class="empty-company">No company orders yet.</div>';
+    }
+
+    function renderOrders(company){
+      let orders=[...state.orders];
+      if(company)orders=orders.filter(o=>getCompanyName(o)===company);
+      const date=document.getElementById('filterDate')?.value||'';
+      const status=document.getElementById('filterStatus')?.value||'';
+      const search=(document.getElementById('filterSearch')?.value||'').toLowerCase();
+      if(date)orders=orders.filter(o=>getOrderDateKey(o)===date);
+      if(status)orders=orders.filter(o=>(o.status||'Submitted')===status);
+      if(search)orders=orders.filter(o=>(getCompanyName(o)+' '+(o.mobile||'')+' '+(o.order_text||'')).toLowerCase().includes(search));
+      document.getElementById('ordersTitle').innerText=company?company+' - Orders':'Orders';
+      document.getElementById('selectedCompanyPill').innerText=company||'All Companies';
+      document.getElementById('orderRows').innerHTML=orders.length?orders.map(o=>`
+        <tr>
+          <td>${escapeHtml(o.id||'-')}</td>
+          <td>${escapeHtml(getCompanyName(o))}<br><small>${escapeHtml(o.mobile||'')}</small></td>
+          <td class="order-text">${escapeHtml(o.order_text||'-')}</td>
+          <td>${escapeHtml(o.created_at?new Date(o.created_at).toLocaleString('en-IN'):'-')}</td>
+          <td><span class="status ${statusClass(o.status)}">${escapeHtml(o.status||'Submitted')}</span><br><br><b>Staff Comment:</b><br>${escapeHtml(o.staff_comment||'-')}</td>
+          <td>
+  <select id="status-${escapeAttr(o.id)}" style="width:100%;margin-bottom:8px">
+    <option value="">Select</option>
+    <option>Accepted</option>
+    <option>Rejected</option>
+    <option>Completed</option>
+  </select>
+
+  <textarea
+    id="comment-${escapeAttr(o.id)}"
+    placeholder="Enter staff comment"
+    style="width:100%;min-height:80px;margin-bottom:8px"
+  ></textarea>
+
+  <button
+    class="btn approve"
+    onclick="updateOrderStatus('${escapeAttr(o.id)}')"
+  >
+    Submit
+  </button>
+</td>
+          <td class="timeline"><b>${escapeHtml(o.status||'Submitted')}</b><br><small>${escapeHtml(o.created_at?new Date(o.created_at).toLocaleString('en-IN'):'')}</small></td>
+        </tr>`).join(''):'<tr><td colspan="7">No orders found.</td></tr>';
+    }
+
+    async function updateOrderStatus(orderId){
+      const status=document.getElementById('status-'+orderId).value;
+      const comment=document.getElementById('comment-'+orderId).value.trim();
+      if(!status){alert('Please select order status.');return}
+      if(!comment){alert('Please enter staff comment.');return}
+      const order=state.orders.find(o=>String(o.id)===String(orderId));
+      const {error}=await supabaseClient.from('orders').update({status,staff_comment:comment}).eq('id',orderId);
+      if(error){alert(error.message);return}
+      if(order){await supabaseClient.from('notifications').insert([{type:'Order Status Update',message:'Order '+orderId+' was '+status+' by staff',mobile:order.mobile,company_name:order.company_name,status:'Unread'}]);}
+      alert('Order updated successfully.');
+      await render();
+      renderOrders(selectedCompany);
+    }
+
+    function loadBillCompanyOptions(){
+      const companies=getRegisteredCompanies();
+      const options='<option value="">Select Company</option>'+companies.map(c=>`<option value="${escapeAttr(c.companyName)}" data-mobile="${escapeAttr(c.mobile)}">${escapeHtml(c.companyName)}</option>`).join('');
+      document.getElementById('billCompany').innerHTML=options;
+      document.getElementById('billSearchCompany').innerHTML='<option value="">All Companies</option>'+companies.map(c=>`<option value="${escapeAttr(c.companyName)}">${escapeHtml(c.companyName)}</option>`).join('');
+      if(!document.getElementById('billDate').value)document.getElementById('billDate').value=getLocalDateKey(new Date());
+    }
+
+    async function uploadBills(){
+      const company=document.getElementById('billCompany').value;
+      const billDate=document.getElementById('billDate').value;
+      const billNumber=document.getElementById('billNumber').value.trim();
+      const notes=document.getElementById('billNotes').value.trim();
+      const files=document.getElementById('billFiles').files;
+      if(!company){alert('Please select registered company.');return}
+      if(!billDate){alert('Please select bill date.');return}
+      if(!files.length){alert('Please upload at least one bill copy.');return}
+      const fileList=Array.from(files);
+      const invalid=fileList.find(f=>!isAllowedBillFile(f));
+      if(invalid){alert('Only PDF, JPG, JPEG, PNG files up to 10 MB are allowed. Invalid file: '+invalid.name);return}
+      const mobile=(getRegisteredCompanies().find(c=>c.companyName===company)||{}).mobile||'';
+      let uploadedCount=0;
+      for(const file of fileList){
+        const safeName=sanitizeFileName(file.name);
+        const path=company.replace(/[^a-zA-Z0-9_-]/g,'_')+'/'+Date.now()+'-'+safeName;
+        const up=await supabaseClient.storage.from('bill-copies').upload(path,file,{cacheControl:'3600',upsert:false});
+        if(up.error){alert(up.error.message);return}
+        const pub=supabaseClient.storage.from('bill-copies').getPublicUrl(path);
+        const fileUrl=pub.data.publicUrl;
+        const ins=await supabaseClient.from('bill_copies').insert([{company_name:company,mobile,bill_number:billNumber,bill_date:billDate,notes,file_url:fileUrl}]);
+        if(ins.error){alert(ins.error.message);return}
+        uploadedCount++;
+      }
+      await supabaseClient.from('notifications').insert([{type:'Bill Copy Uploaded',message:uploadedCount+' bill copy/copies uploaded for '+company,company_name:company,mobile,status:'Unread'}]);
+      document.getElementById('billSuccess').innerText=uploadedCount+' bill copy/copies uploaded successfully.';
+      document.getElementById('billSuccess').style.display='block';setTimeout(()=>document.getElementById('billSuccess').style.display='none',3000);
+      document.getElementById('billFiles').value='';document.getElementById('billNumber').value='';document.getElementById('billNotes').value='';
+      await render();
+      renderBills();
+    }
+
+    function fileNameFromUrl(url){try{return decodeURIComponent(String(url||'').split('/').pop().split('?')[0])||'Bill_Copy'}catch(e){return 'Bill_Copy'}}
+    function renderBills(){
+      let bills=[...state.bills];
+      const company=document.getElementById('billSearchCompany')?.value||'';
+      const date=document.getElementById('billSearchDate')?.value||'';
+      if(company)bills=bills.filter(b=>b.company_name===company);
+      if(date)bills=bills.filter(b=>b.bill_date===date);
+      document.getElementById('billRows').innerHTML=bills.length?bills.map(b=>`<tr><td>${escapeHtml(b.company_name||'-')}</td><td>${escapeHtml(b.bill_number||'-')}</td><td>${escapeHtml(b.bill_date||'-')}</td><td>${escapeHtml(fileNameFromUrl(b.file_url))}</td><td>${escapeHtml(b.notes||'-')}</td><td>${escapeHtml(b.uploaded_at?new Date(b.uploaded_at).toLocaleString('en-IN'):'-')}</td><td><a class="download-link" href="${escapeAttr(b.file_url||'#')}" target="_blank" download>Download</a></td></tr>`).join(''):'<tr><td colspan="7">No bill copies found.</td></tr>';
+    }
+    function clearBillSearch(){document.getElementById('billSearchCompany').value='';document.getElementById('billSearchDate').value='';renderBills();}
+
+    async function updateMediatorVerification(mobile){
+      const status=document.getElementById('verify-'+mobile)?.value||'Pending Call Verification';
+      const notes=document.getElementById('verifyNotes-'+mobile)?.value.trim()||'';
+      const {error}=await supabaseClient.from('mediators').update({verification_status:status,verification_notes:notes}).eq('mobile',mobile);
+      if(error){alert(error.message);return}
+      alert('Verification status updated successfully.');
+      await render();
+    }
+    async function approve(mobile){
+      const mediator=state.mediators.find(x=>x.mobile===mobile);
+      if(!mediator){alert('Mediator not found.');return}
+      const {error}=await supabaseClient.from('mediators').update({status:'Approved',verification_status:'Verified'}).eq('mobile',mobile);
+      if(error){alert(error.message);return}
+      await supabaseClient.from('notifications').update({status:'Approved'}).eq('mobile',mobile).eq('type','Mediator Registration');
+      await render();
+    }
+    async function reject(mobile){
+      const {error}=await supabaseClient.from('mediators').update({status:'Rejected'}).eq('mobile',mobile);
+      if(error){alert(error.message);return}
+      await supabaseClient.from('notifications').update({status:'Rejected'}).eq('mobile',mobile).eq('type','Mediator Registration');
+      await render();
+    }
+
+    async function toggleMediatorRateAccess(mobile, currentValue){
+      const newValue = currentValue === true ? false : true;
+      const mediator = state.mediators.find(x => x.mobile === mobile);
+
+      const { error } = await supabaseClient
+        .from('mediators')
+        .update({ can_view_rates: newValue })
+        .eq('mobile', mobile);
+
+      if(error){
+        alert(error.message);
+        return;
+      }
+
+      alert(
+        'Current Quintal Rates are now ' +
+        (newValue ? 'ENABLED' : 'DISABLED') +
+        ' for ' +
+        ((mediator && mediator.company_name) ? mediator.company_name : mobile)
+      );
+
+      await render();
+    }
+
+    async function resetMediatorPassword(mobile){
+      const mediator=state.mediators.find(x=>x.mobile===mobile);
+      if(!mediator){alert('Mediator not found.');return}
+
+      const confirmReset=confirm('Reset password for '+(mediator.company_name||mobile)+'? Please verify by phone before continuing.');
+      if(!confirmReset)return;
+
+      const newPassword=prompt('Enter new password for '+(mediator.company_name||mobile)+':');
+      if(newPassword===null)return;
+
+      const cleanPassword=String(newPassword).trim();
+      if(cleanPassword.length<6){
+        alert('Password must be at least 6 characters.');
+        return;
+      }
+
+      const {error}=await supabaseClient
+        .from('mediators')
+        .update({password:cleanPassword})
+        .eq('mobile',mobile);
+
+      if(error){alert(error.message);return}
+
+      await supabaseClient.from('notifications').insert([{
+        type:'Mediator Password Reset',
+        message:'Password reset by staff for '+(mediator.company_name||'Mediator')+' ('+mobile+')',
+        mobile:mobile,
+        company_name:mediator.company_name||'',
+        status:'Unread'
+      }]);
+
+      alert('Password updated successfully. Please share it with the mediator after phone verification.');
+      await render();
+    }
+
+    function renderNotificationRows(){
+      const notifications=state.notifications;
+      document.getElementById('notificationRows').innerHTML=notifications.length?notifications.map(n=>`<tr><td>${escapeHtml(n.type)}</td><td>${escapeHtml(n.message)}</td><td>${escapeHtml(n.created_at?new Date(n.created_at).toLocaleString('en-IN'):'-')}</td><td><span class="status ${n.status==='Approved'?'approved':n.status==='Rejected'?'rejected':'pending'}">${escapeHtml(n.status||'Unread')}</span></td><td>${n.type==='Mediator Registration'&&n.status==='Unread'?`<button class="btn approve" onclick="approve('${escapeAttr(n.mobile)}')">Approve</button><button class="btn reject" onclick="reject('${escapeAttr(n.mobile)}')">Reject</button>`:'-'}</td></tr>`).join(''):'<tr><td colspan="5">No notifications yet.</td></tr>';
+    }
+    function renderMediatorRows(){
+      const mediators=state.mediators;
+      document.getElementById('mediatorRows').innerHTML=mediators.length?mediators.map(m=>`
+        <tr>
+          <td>${escapeHtml(m.company_name||'-')}</td>
+          <td>${escapeHtml(m.mobile)}</td>
+          <td>${escapeHtml(m.created_at?new Date(m.created_at).toLocaleString('en-IN'):'-')}</td>
+          <td>
+            <span class="status ${m.status==='Approved'?'approved':m.status==='Rejected'?'rejected':'pending'}">${escapeHtml(m.status)}</span>
+            <br><br>
+            <b>Verification:</b><br>
+            <span class="status ${m.verification_status==='Verified'?'approved':m.verification_status==='Invalid Details'?'rejected':'pending'}">${escapeHtml(m.verification_status||'Pending Call Verification')}</span>
+            <br><small>${escapeHtml(m.verification_notes||'')}</small>
+            <br><br>
+            <b>Rate Access:</b><br>
+            <span class="status ${m.can_view_rates===false?'rejected':'approved'}">${m.can_view_rates===false?'Disabled':'Enabled'}</span>
+          </td>
+          <td>
+            ${m.status==='Pending Approval'?`
+              <select id="verify-${escapeAttr(m.mobile)}" style="width:220px;margin-bottom:8px">
+                <option ${m.verification_status==='Pending Call Verification'?'selected':''}>Pending Call Verification</option>
+                <option ${m.verification_status==='Call Completed'?'selected':''}>Call Completed</option>
+                <option ${m.verification_status==='Verified'?'selected':''}>Verified</option>
+                <option ${m.verification_status==='No Response'?'selected':''}>No Response</option>
+                <option ${m.verification_status==='Callback Requested'?'selected':''}>Callback Requested</option>
+                <option ${m.verification_status==='Invalid Details'?'selected':''}>Invalid Details</option>
+              </select>
+              <textarea id="verifyNotes-${escapeAttr(m.mobile)}" placeholder="Call notes / verification remarks" style="width:260px;min-height:60px;margin-bottom:8px">${escapeHtml(m.verification_notes||'')}</textarea>
+              <br>
+              <button class="btn save" onclick="updateMediatorVerification('${escapeAttr(m.mobile)}')">Save Verification</button>
+              <button class="btn approve" onclick="approve('${escapeAttr(m.mobile)}')">Approve</button>
+              <button class="btn reject" onclick="reject('${escapeAttr(m.mobile)}')">Reject</button>
+              <button class="btn save" onclick="resetMediatorPassword('${escapeAttr(m.mobile)}')">Reset Password</button>
+              <button class="btn ${m.can_view_rates===false?'approve':'reject'}" onclick="toggleMediatorRateAccess('${escapeAttr(m.mobile)}', ${m.can_view_rates!==false})">${m.can_view_rates===false?'Enable Rates':'Disable Rates'}</button>
+            `:`
+              <button class="btn save" onclick="resetMediatorPassword('${escapeAttr(m.mobile)}')">Reset Password</button>
+              <button class="btn ${m.can_view_rates===false?'approve':'reject'}" onclick="toggleMediatorRateAccess('${escapeAttr(m.mobile)}', ${m.can_view_rates!==false})">${m.can_view_rates===false?'Enable Rates':'Disable Rates'}</button>
+            `}
+          </td>
+        </tr>
+      `).join(''):'<tr><td colspan="5">No mediator registrations yet.</td></tr>';
+    }
+
+    async function render(){
+      await loadData();
+      const mediators=state.mediators,notifications=state.notifications,orders=state.orders,bills=state.bills;
+      document.getElementById('pendingCount').innerText=mediators.filter(m=>m.status==='Pending Approval').length;
+      document.getElementById('approvedCount').innerText=mediators.filter(m=>m.status==='Approved').length;
+      document.getElementById('notificationCount').innerText=notifications.filter(n=>n.status==='Unread').length;
+      document.getElementById('ordersCount').innerText=orders.length;
+      document.getElementById('pendingOrdersCount').innerText=orders.filter(o=>(o.status||'Submitted')==='Submitted').length;
+      document.getElementById('acceptedOrdersCount').innerText=orders.filter(o=>o.status==='Accepted').length;
+      document.getElementById('updatedOrdersCount').innerText=orders.filter(o=>o.status==='Updated by Mediator').length;
+      document.getElementById('billsCount').innerText=bills.length;
+      renderNotificationRows();renderMediatorRows();renderCompanySubmenu();loadRates();
+      if(document.getElementById('orders').style.display!=='none')renderOrders(selectedCompany);
+      if(document.getElementById('billUpload').style.display!=='none'){loadBillCompanyOptions();renderBills();}
+    }
+    async function logout(){await supabaseClient.auth.signOut();localStorage.removeItem('staffLoggedIn');location.href='StaffLogin.html'}
+
+    (async function init(){if(await requireStaff())await render();})();
+  </script>
+</body>
+</html>

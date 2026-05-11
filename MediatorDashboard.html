@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mediator Dashboard</title>
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --surface: rgba(255, 255, 255, .88);
+      --text: #1d1d1f;
+      --muted: #6e6e73;
+      --line: rgba(0, 0, 0, .08);
+      --shadow: 0 22px 55px rgba(0, 0, 0, .08)
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif
+    }
+
+    body {
+      background: radial-gradient(circle at 75% 0, rgba(22, 163, 74, .10), transparent 30%), linear-gradient(180deg, #fff, var(--bg));
+      color: var(--text);
+      min-height: 100vh
+    }
+
+    .sidebar {
+      width: 280px;
+      background: rgba(17, 17, 19, .88);
+      color: white;
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      bottom: 18px;
+      padding: 24px 18px;
+      overflow-y: auto;
+      border-radius: 32px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, .22);
+      backdrop-filter: blur(28px)
+    }
+
+    .brand-box {
+      margin-bottom: 30px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12)
+    }
+
+    .brand-box img {
+      width: 220px;
+      object-fit: contain;
+      margin-bottom: 14px;
+      filter: drop-shadow(0 12px 28px rgba(0, 0, 0, .22))
+    }
+
+    .brand-box h1 {
+      font-size: 24px;
+      line-height: 1.08;
+      margin-bottom: 10px;
+      letter-spacing: -.04em
+    }
+
+    .brand-box p {
+      font-size: 13px;
+      color: rgba(255, 255, 255, .62);
+      line-height: 1.5
+    }
+
+    .menu-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: rgba(255, 255, 255, .45);
+      margin-bottom: 12px;
+      padding-left: 8px
+    }
+
+    .menu a {
+      display: block;
+      text-decoration: none;
+      color: rgba(255, 255, 255, .76);
+      padding: 13px 15px;
+      border-radius: 16px;
+      margin-bottom: 9px;
+      font-weight: 750;
+      font-size: 14px;
+      background: transparent;
+      transition: .18s
+    }
+
+    .menu a.active,
+    .menu a:hover {
+      background: rgba(255, 255, 255, .14);
+      color: white;
+      transform: translateX(2px)
+    }
+
+    .main {
+      margin-left: 316px;
+      min-height: 100vh;
+      padding: 28px 30px 44px
+    }
+
+    .topbar {
+      background: var(--surface);
+      padding: 30px 32px;
+      border-radius: 34px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 26px;
+      border: 1px solid rgba(255, 255, 255, .74);
+      backdrop-filter: blur(22px);
+      gap: 16px
+    }
+
+    .topbar h2 {
+      font-size: 40px;
+      letter-spacing: -.06em;
+      line-height: 1;
+      margin-bottom: 10px
+    }
+
+    .topbar p {
+      color: var(--muted);
+      font-size: 14px
+    }
+
+    .live-badge {
+      background: #ecfdf3;
+      color: #087443;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 850;
+      font-size: 14px;
+      border: 1px solid #dcfce7;
+      white-space: nowrap
+    }
+
+    .section {
+      background: white;
+      padding: 26px;
+      border-radius: 30px;
+      box-shadow: 0 14px 42px rgba(0, 0, 0, 0.06);
+      border: 1px solid var(--line);
+      margin-bottom: 24px;
+      overflow: hidden
+    }
+
+    .section-title {
+      font-size: 26px;
+      margin-bottom: 18px;
+      color: var(--text);
+      letter-spacing: -.04em
+    }
+
+    .rates-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px
+    }
+
+    .rate-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 17px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fbfbfd;
+      font-size: 16px
+    }
+
+    .rate-line span {
+      color: #087443;
+      font-weight: 900;
+      font-size: 19px;
+      letter-spacing: -.025em
+    }
+
+    .order-note {
+      background: #fbfbfd;
+      border: 1px solid var(--line);
+      color: #424245;
+      padding: 16px 18px;
+      border-radius: 18px;
+      line-height: 1.6;
+      font-size: 14px;
+      margin-bottom: 20px
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      border: 1px solid #d8d8df;
+      border-radius: 18px;
+      padding: 14px;
+      resize: vertical;
+      overflow-y: auto;
+      margin-bottom: 14px;
+      font-size: 14px;
+      outline: none;
+      line-height: 1.6;
+      background: #fbfbfd
+    }
+
+    textarea:focus,
+    input:focus,
+    select:focus {
+      border-color: #111827;
+      box-shadow: 0 0 0 4px rgba(17, 24, 39, .08);
+      background: white
+    }
+
+    button {
+      background: #111827;
+      color: white;
+      border: 0;
+      padding: 13px;
+      border-radius: 16px;
+      font-weight: 850;
+      cursor: pointer;
+      transition: .16s
+    }
+
+    button:hover {
+      transform: translateY(-1px)
+    }
+
+    .secondary-btn {
+      background: #f2f2f7;
+      color: #1d1d1f
+    }
+
+    .success-msg {
+      display: none;
+      background: #ecfdf3;
+      color: #087443;
+      border-left: 5px solid #0f8f4e;
+      padding: 14px 16px;
+      border-radius: 16px;
+      margin-bottom: 18px;
+      font-weight: 800
+    }
+
+    .history-filter {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 18px
+    }
+
+    .history-filter input,
+    .history-filter select {
+      padding: 12px 13px;
+      border: 1px solid #d8d8df;
+      border-radius: 16px;
+      font-size: 14px;
+      outline: none;
+      background: #fbfbfd
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 10px
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 14px 12px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+      vertical-align: top
+    }
+
+    th {
+      color: var(--muted);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: .08em;
+      background: #fbfbfd
+    }
+
+    .order-text {
+      max-width: 520px;
+      white-space: pre-wrap;
+      line-height: 1.55
+    }
+
+    .status-badge {
+      display: inline-block;
+      background: #fff7ed;
+      color: #9a5b00;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 12px
+    }
+
+    .edit-btn,
+    .update-btn {
+      background: #111827;
+      color: white;
+      border: 0;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight: 850;
+      cursor: pointer;
+      margin-top: 8px
+    }
+
+    .cancel-btn {
+      background: #f2f2f7;
+      color: #111827;
+      border: 0;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight: 850;
+      cursor: pointer
+    }
+
+    .download-link {
+      background: #111827;
+      color: white;
+      text-decoration: none;
+      padding: 9px 12px;
+      border-radius: 14px;
+      font-weight: 850;
+      display: inline-block
+    }
+
+    .bill-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    .whatsapp-link {
+      background: #16a34a;
+      color: white;
+      text-decoration: none;
+      padding: 9px 12px;
+      border-radius: 14px;
+      font-weight: 850;
+      display: inline-block;
+      border: 0;
+      cursor: pointer
+    }
+
+    .print-link {
+      background: #f2f2f7;
+      color: #111827;
+      text-decoration: none;
+      padding: 9px 12px;
+      border-radius: 14px;
+      font-weight: 850;
+      display: inline-block;
+      border: 0;
+      cursor: pointer
+    }
+
+
+    .structured-order-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr 1fr 1.4fr auto;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+
+    .structured-order-grid label {
+      display: block;
+      font-size: 12px;
+      font-weight: 850;
+      color: #424245;
+      margin-bottom: 7px;
+      letter-spacing: .02em;
+    }
+
+    .structured-order-grid input,
+    .structured-order-grid select {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #d8d8df;
+      border-radius: 16px;
+      font-size: 14px;
+      outline: none;
+      background: #fbfbfd;
+    }
+
+    .structured-order-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .structured-order-preview {
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .mini-btn {
+      padding: 12px 14px;
+      white-space: nowrap;
+    }
+
+    @media(max-width:1100px) {
+      .structured-order-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .structured-order-grid .full-mobile {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media(max-width:900px) {
+      .sidebar {
+        position: relative;
+        width: auto;
+        left: auto;
+        top: auto;
+        bottom: auto;
+        margin: 14px
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 18px
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start
+      }
+
+      .topbar h2 {
+        font-size: 34px
+      }
+
+      .rate-line {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="brand-box"><img src="images/logo.jpg" alt="Surya Teja Logo">
+      <h1>Surya Teja<br>Rice Industries</h1>
+      <p>Mediator dashboard for rates, orders and bills.</p>
+    </div>
+    <div class="menu-title">Mediator Menu</div>
+    <nav class="menu">
+      <a class="active" id="ratesMenuLink" href="#rates">Current Rates</a>
+      <a href="#order-comments">Order Comments</a>
+      <a href="#order-history" onclick="renderOrderHistory()">Order History</a>
+      <a href="#bill-copies" onclick="renderMediatorBills()">Bill Copies</a>
+      <a href="#" onclick="logoutMediator()">Logout</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <section class="topbar">
+      <div>
+        <h2>Mediator Dashboard</h2>
+        <p>View rates, submit WhatsApp-style orders, and download bill copies.</p>
+        <p style="margin-top:8px;font-weight:800;color:#4c1d95;">Company: <span id="mediatorCompanyName">-</span></p>
+      </div>
+      <div class="live-badge">Approved Mediator</div>
+    </section>
+
+    <section class="section" id="rates">
+      <h2 class="section-title">Current Quintal Rates</h2>
+      <div class="rates-list">
+        <div class="rate-line"><strong>Surya Teja HMT Premium Rice:</strong><span>₹<span id="mediator-rate-hmt"></span>
+            / Quintal</span></div>
+        <div class="rate-line"><strong>old Surya Teja Joker JSR Steam Rice:</strong><span>₹<span
+              id="mediator-rate-old-joker"></span> / Quintal</span></div>
+        <div class="rate-line"><strong>Surya Teja Joker JSR Steam Rice:</strong><span>₹<span
+              id="mediator-rate-joker"></span> / Quintal</span></div>
+        <div class="rate-line"><strong>Surya Teja KNM Steam Rice:</strong><span>₹<span id="mediator-rate-knm"></span> /
+            Quintal</span></div>
+        <div class="rate-line"><strong>Surya Teja RNR Boiled Rice(Loading Rate):</strong><span>₹<span
+              id="mediator-rate-rnr"></span> / Quintal</span></div>
+        <div class="rate-line"><strong>Surya Teja JSR Boiled Rice(Loading Rate):</strong><span>₹<span
+              id="mediator-rate-jsr"></span> / Quintal</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="order-comments">
+      <h2 class="section-title">Structured Order Entry</h2>
+      <div class="order-note">Enter each party order in simple boxes. Add multiple party orders, then submit all
+        together.</div>
+      <div id="successMsg" class="success-msg">Order submitted successfully.</div>
+
+      <div class="structured-order-grid">
+        <div>
+          <label>Party Name</label>
+          <input id="partyName" placeholder="Example: Maheshwar Sadashivpet">
+        </div>
+        <div>
+          <label>Quantity</label>
+          <input id="quantity" placeholder="Example: 30 Quintal">
+        </div>
+        <div>
+          <label>Variety</label>
+          <select id="variety">
+            <option value="">Select Variety</option>
+            <option>Surya Teja HMT Premium Rice</option>
+            <option>Old Surya Teja Joker JSR Steam Rice</option>
+            <option>Surya Teja Joker JSR Steam Rice</option>
+            <option>Surya Teja KNM Steam Rice</option>
+            <option>Surya Teja RNR Boiled Rice</option>
+            <option>Surya Teja JSR Boiled Rice</option>
+            <option>Surya Teja Joker Idly Rava 30KG</option>
+            <option>Surya Teja Joker Idly Rava 1KG</option>
+          </select>
+        </div>
+        <div>
+          <label>Loading</label>
+          <select id="loadingType" onchange="toggleFutureLoadingDate()">
+            <option value="Ready Loading">Ready Loading</option>
+            <option value="Future Loading">Future Loading</option>
+          </select>
+        </div>
+        <div id="futureLoadingDateBox" class="full-mobile" style="display:none">
+          <label>Future Loading Date</label>
+          <input id="loadingDate" type="date">
+        </div>
+        <div>
+          <button class="mini-btn" onclick="addStructuredOrder()">Add</button>
+        </div>
+      </div>
+
+      <div class="structured-order-preview">
+        <table>
+          <thead>
+            <tr>
+              <th>Party Name</th>
+              <th>Quantity</th>
+              <th>Variety</th>
+              <th>Loading</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="structuredOrderRows">
+            <tr>
+              <td colspan="5">No orders added yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="structured-order-actions">
+        <button onclick="submitStructuredOrders()" style="flex:1;min-width:220px">Submit All Orders</button>
+        <button onclick="clearStructuredOrders()" class="secondary-btn" style="flex:1;min-width:220px">Clear
+          All</button>
+      </div>
+    </section>
+
+    <section class="section" id="order-history">
+      <h2 class="section-title">Order History</h2>
+      <div class="order-note">View submitted orders date-wise. You can edit/update an order from here.</div>
+      <div class="history-filter">
+        <input type="date" id="historyDate">
+        <button onclick="filterOrdersByDate()">Search Orders</button>
+        <button class="secondary-btn" onclick="showAllOrders()">Show All</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Party Name</th>
+            <th>Quantity</th>
+            <th>Variety</th>
+            <th>Loading</th>
+            <th>Submitted Date</th>
+            <th>Status</th>
+            <th>Staff Comment</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="historyRows"></tbody>
+      </table>
+    </section>
+
+    <section class="section" id="bill-copies">
+      <h2 class="section-title">Bill Copies</h2>
+      <div class="order-note">View and download bill copies uploaded by staff for your company. Search by bill date.
+      </div>
+      <div class="history-filter">
+        <input type="date" id="mediatorBillDate">
+        <button onclick="renderMediatorBills()">Search Bills</button>
+        <button class="secondary-btn" onclick="showAllBills()">Show All</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Bill No.</th>
+            <th>Bill Date</th>
+            <th>File Name</th>
+            <th>Notes</th>
+            <th>Uploaded Time</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="mediatorBillRows"></tbody>
+      </table>
+    </section>
+  </main>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script>
+    let currentMediator = null;
+    let mediatorOrders = [];
+    let mediatorBills = [];
+
+    function escapeHtml(value) { return String(value == null ? '' : value).replace(/[&<>'"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[ch])); }
+    function escapeAttr(value) { return escapeHtml(value).replace(/`/g, '&#96;'); }
+    function getLocalDateKey(date) { return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0") }
+    function getOrderDateKey(order) { const d = new Date(order.created_at); return isNaN(d.getTime()) ? '' : getLocalDateKey(d) }
+    function showRate(id, value) { const el = document.getElementById(id); if (!el) return; el.innerText = Number(value || 0).toLocaleString('en-IN'); }
+    let structuredOrders = [];
+
+    function sanitizeText(value, maxLength) {
+      return String(value || '').replace(/[<>]/g, '').trim().slice(0, maxLength || 250);
+    }
+
+    function clearStructuredForm() {
+      document.getElementById('partyName').value = '';
+      document.getElementById('quantity').value = '';
+      document.getElementById('variety').value = '';
+      document.getElementById('loadingType').value = 'Ready Loading';
+      document.getElementById('loadingDate').value = '';
+      document.getElementById('futureLoadingDateBox').style.display = 'none';
+      document.getElementById('partyName').focus();
+    }
+
+    function toggleFutureLoadingDate() {
+      const loadingType = document.getElementById('loadingType').value;
+      const box = document.getElementById('futureLoadingDateBox');
+
+      if (loadingType === 'Future Loading') {
+        box.style.display = 'block';
+      } else {
+        box.style.display = 'none';
+        document.getElementById('loadingDate').value = '';
+      }
+    }
+
+    function renderStructuredOrderRows() {
+      const rows = document.getElementById('structuredOrderRows');
+      if (!structuredOrders.length) {
+        rows.innerHTML = '<tr><td colspan="5">No orders added yet.</td></tr>';
+        return;
+      }
+
+      rows.innerHTML = structuredOrders.map((o, index) => `
+        <tr>
+          <td>${escapeHtml(o.party_name)}</td>
+          <td>${escapeHtml(o.quantity)}</td>
+          <td>${escapeHtml(o.variety)}</td>
+          <td>${escapeHtml(o.comment || '-')}</td>
+          <td><button class="cancel-btn" onclick="removeStructuredOrder(${index})">Remove</button></td>
+        </tr>
+      `).join('');
+    }
+
+    function addStructuredOrder() {
+      const partyName = sanitizeText(document.getElementById('partyName').value, 140);
+      const quantity = sanitizeText(document.getElementById('quantity').value, 80);
+      const variety = sanitizeText(document.getElementById('variety').value, 140);
+      const loadingType = document.getElementById('loadingType').value;
+      const loadingDate = document.getElementById('loadingDate').value;
+      const comment = loadingType === 'Future Loading'
+        ? 'Future Loading - ' + loadingDate
+        : 'Ready Loading';
+
+      if (!partyName) { alert('Please enter party name.'); return; }
+      if (!quantity) { alert('Please enter quantity.'); return; }
+      if (!variety) { alert('Please select variety.'); return; }
+      if (loadingType === 'Future Loading' && !loadingDate) { alert('Please select future loading date.'); return; }
+
+      structuredOrders.push({
+        party_name: partyName,
+        quantity,
+        variety,
+        comment,
+        loading_type: loadingType,
+        loading_date: loadingDate || null
+      });
+      renderStructuredOrderRows();
+      clearStructuredForm();
+    }
+
+    function removeStructuredOrder(index) {
+      structuredOrders.splice(index, 1);
+      renderStructuredOrderRows();
+    }
+
+    function clearStructuredOrders() {
+      structuredOrders = [];
+      renderStructuredOrderRows();
+      clearStructuredForm();
+    }
+    function showMessage(text) { const msg = document.getElementById('successMsg'); msg.innerText = text; msg.style.display = 'block'; setTimeout(() => msg.style.display = 'none', 3000); }
+
+    async function loadCurrentMediator() {
+      const mobile = localStorage.getItem('loggedMediator');
+      if (!mobile) { alert('Please login as an approved mediator first.'); location.href = 'MediatorLogin.html'; return false; }
+      const { data, error } = await supabaseClient.from('mediators').select('*').eq('mobile', mobile).maybeSingle();
+      if (error || !data || data.status !== 'Approved') {
+        localStorage.removeItem('loggedMediator');
+        alert('Please login as an approved mediator first.');
+        location.href = 'MediatorLogin.html';
+        return false;
+      }
+      currentMediator = data;
+      localStorage.setItem('loggedMediatorCompany', data.company_name || 'Company Name Not Available');
+      document.getElementById('mediatorCompanyName').innerText = data.company_name || 'Company Name Not Available';
+
+      if (data.can_view_rates === false) {
+        const ratesSection = document.getElementById('rates');
+        const ratesMenuLink = document.getElementById('ratesMenuLink');
+        if (ratesSection) ratesSection.style.display = 'none';
+        if (ratesMenuLink) ratesMenuLink.style.display = 'none';
+      }
+
+      return true;
+    }
+
+    async function loadRates() {
+      const defaults = { hmt: 5465, oldJoker: 6200, joker: 5480, knm: 4500, rnr: 4950, jsrBoiled: 0 };
+      try {
+        const { data, error } = await supabaseClient.from('product_rates').select('product_key,quintal_rate');
+        if (error) throw error;
+        (data || []).forEach(r => defaults[r.product_key] = Number(r.quintal_rate || 0));
+      } catch (e) { console.warn(e) }
+      showRate('mediator-rate-hmt', defaults.hmt);
+      showRate('mediator-rate-old-joker', defaults.oldJoker);
+      showRate('mediator-rate-joker', defaults.joker);
+      showRate('mediator-rate-knm', defaults.knm);
+      showRate('mediator-rate-rnr', defaults.rnr);
+      showRate('mediator-rate-jsr', defaults.jsrBoiled);
+    }
+
+    async function submitStructuredOrders() {
+      if (!structuredOrders.length) {
+        alert('Please add at least one order.');
+        return;
+      }
+
+const rowsToInsert = structuredOrders.map(o => ({
+  company_name: currentMediator.company_name,
+  mobile: currentMediator.mobile,
+  party_name: o.party_name,
+  quantity: o.quantity,
+  variety: o.variety,
+  comment: o.comment,
+  loading_type: o.loading_type,
+  loading_date: o.loading_date || null,
+  order_text:
+    'Party Name: ' + o.party_name + '\\n' +
+    'Quantity: ' + o.quantity + '\\n' +
+    'Variety: ' + o.variety + '\\n' +
+    'Loading: ' + o.comment,
+  status: 'Submitted'
+}));
+
+      const { error } = await supabaseClient
+        .from('orders')
+        .insert(rowsToInsert);
+
+      if (error) { alert(error.message); return; }
+
+      await supabaseClient.from('notifications').insert([{
+        type: 'Mediator Structured Order',
+        message: structuredOrders.length + ' order(s) submitted by ' + (currentMediator.company_name || 'Mediator') + ' (' + currentMediator.mobile + ')',
+        mobile: currentMediator.mobile,
+        company_name: currentMediator.company_name,
+        status: 'Unread'
+      }]);
+
+      clearStructuredOrders();
+      showMessage('Structured order(s) submitted successfully.');
+      await renderOrderHistory();
+    }
+
+    async function getMediatorOrders() {
+      const { data, error } = await supabaseClient.from('orders').select('*').eq('mobile', currentMediator.mobile).order('created_at', { ascending: false });
+      if (error) { alert(error.message); return [] }
+      return data || [];
+    }
+
+    async function renderOrderHistory(filtered) {
+      const orders = filtered || await getMediatorOrders();
+      mediatorOrders = orders;
+      const rows = document.getElementById('historyRows');
+      if (!orders.length) { rows.innerHTML = '<tr><td colspan="9">No orders found.</td></tr>'; return }
+      rows.innerHTML = orders.map(o => `
+    <tr>
+      <td>${escapeHtml(o.id || '-')}</td>
+      <td>${escapeHtml(o.party_name || '-')}</td>
+      <td>${escapeHtml(o.quantity || '-')}</td>
+      <td>${escapeHtml(o.variety || '-')}</td>
+      <td class="order-text" id="orderText-${escapeAttr(o.id)}">${escapeHtml(o.comment || o.order_text || '-')}</td>
+      <td>${escapeHtml(o.created_at ? new Date(o.created_at).toLocaleString('en-IN') : '-')}</td>
+      <td><span class="status-badge">${escapeHtml(o.status || 'Submitted')}</span></td>
+      <td>${escapeHtml(o.staff_comment || '-')}</td>
+      <td><button class="edit-btn" onclick="startEditOrder('${escapeAttr(o.id)}')">Edit / Update</button></td>
+    </tr>`).join('');
+    }
+
+    async function filterOrdersByDate() {
+      const selected = document.getElementById('historyDate').value;
+      if (!selected) { alert('Please select a date from the calendar.'); return }
+      const orders = await getMediatorOrders();
+      renderOrderHistory(orders.filter(o => getOrderDateKey(o) === selected));
+    }
+    function showAllOrders() { document.getElementById('historyDate').value = ''; renderOrderHistory(); }
+
+    function startEditOrder(orderId) {
+      const order = mediatorOrders.find(o => String(o.id) === String(orderId));
+      if (!order) { alert('Order not found.'); return }
+      document.getElementById('orderText-' + orderId).innerHTML = `
+    <textarea id="editText-${escapeAttr(orderId)}">${escapeHtml(order.comment || order.order_text || '')}</textarea>
+    <button class="update-btn" onclick="saveEditedOrder('${escapeAttr(orderId)}')">Submit Update</button>
+    <button class="cancel-btn" onclick="renderOrderHistory()">Cancel</button>`;
+    }
+    async function saveEditedOrder(orderId) {
+      const updatedText = document.getElementById('editText-' + orderId).value.trim();
+      if (!updatedText) { alert('Order update cannot be empty.'); return }
+      const { error } = await supabaseClient
+        .from('orders')
+        .update({ comment: updatedText, order_text: updatedText, status: 'Updated by Mediator', staff_comment: null })
+        .eq('id', orderId)
+        .eq('mobile', currentMediator.mobile);
+      if (error) { alert(error.message); return }
+      await supabaseClient.from('notifications').insert([{ type: 'Mediator Order Updated', message: 'Order updated by ' + (currentMediator.company_name || 'Mediator') + ' (' + currentMediator.mobile + ') - ' + orderId, mobile: currentMediator.mobile, company_name: currentMediator.company_name, status: 'Unread' }]);
+      showMessage('Order ' + orderId + ' updated successfully. Staff dashboard has been notified.');
+      await renderOrderHistory();
+    }
+
+    async function getBillCopies() {
+      const { data, error } = await supabaseClient.from('bill_copies').select('*').or('mobile.eq.' + currentMediator.mobile + ',company_name.eq.' + (currentMediator.company_name || '')).order('uploaded_at', { ascending: false });
+      if (error) { console.warn(error); return [] }
+      return data || [];
+    }
+    function fileNameFromUrl(url) { try { return decodeURIComponent(String(url || '').split('/').pop().split('?')[0]) || 'Bill_Copy' } catch (e) { return 'Bill_Copy' } }
+    function getBillCopyById(billId) { return mediatorBills.find(b => String(b.id) === String(billId)) || null; }
+    function printBillCopyById(billId) { const bill = getBillCopyById(billId); if (!bill || !bill.file_url) { alert('Bill copy not found.'); return } const w = window.open(bill.file_url, '_blank'); if (!w) { alert('Please allow popup and print after opening.'); return } setTimeout(() => { try { w.print() } catch (e) { } }, 1000) }
+    async function shareBillOnWhatsApp(billId) {
+      const bill = getBillCopyById(billId); if (!bill) { alert('Bill copy not found.'); return }
+      const message = 'Surya Teja Rice Industries\n\nBill Copy\nBill No: ' + (bill.bill_number || '-') + '\nBill Date: ' + (bill.bill_date || '-') + '\nDownload: ' + (bill.file_url || '') + '\n\nThank you.';
+      if (navigator.share) { try { await navigator.share({ title: 'Surya Teja Bill Copy', text: message, url: bill.file_url || '' }); return } catch (e) { } }
+      window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank');
+    }
+    async function renderMediatorBills() {
+      const selectedDate = document.getElementById('mediatorBillDate').value;
+      let bills = await getBillCopies();
+      if (selectedDate) bills = bills.filter(b => b.bill_date === selectedDate);
+      mediatorBills = bills;
+      const rows = document.getElementById('mediatorBillRows');
+      if (!bills.length) { rows.innerHTML = '<tr><td colspan="6">No bill copies found.</td></tr>'; return }
+      rows.innerHTML = bills.map(b => {
+        const fileName = fileNameFromUrl(b.file_url);
+        return '<tr><td>' + escapeHtml(b.bill_number || '-') + '</td><td>' + escapeHtml(b.bill_date || '-') + '</td><td>' + escapeHtml(fileName) + '</td><td>' + escapeHtml(b.notes || '-') + '</td><td>' + escapeHtml(b.uploaded_at ? new Date(b.uploaded_at).toLocaleString('en-IN') : '-') + '</td><td><div class="bill-actions"><a class="download-link" href="' + escapeAttr(b.file_url || '#') + '" target="_blank" download>Download</a><button type="button" class="print-link" onclick="printBillCopyById(\'' + escapeAttr(b.id) + '\')">Print</button><button type="button" class="whatsapp-link" onclick="shareBillOnWhatsApp(\'' + escapeAttr(b.id) + '\')">WhatsApp</button></div></td></tr>';
+      }).join('');
+    }
+    function showAllBills() { document.getElementById('mediatorBillDate').value = ''; renderMediatorBills(); }
+    function logoutMediator() { localStorage.removeItem('loggedMediator'); localStorage.removeItem('loggedMediatorId'); localStorage.removeItem('loggedMediatorCompany'); location.href = 'MediatorLogin.html' }
+
+    (async function init() {
+      if (await loadCurrentMediator()) {
+        if (currentMediator && currentMediator.can_view_rates !== false) {
+          await loadRates();
+        }
+        await renderOrderHistory();
+        await renderMediatorBills();
+      }
+    })();
+  </script>
+</body>
+
+</html>

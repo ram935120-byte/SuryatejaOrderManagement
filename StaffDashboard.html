@@ -415,6 +415,78 @@
       border-color: var(--line) !important
     }
 
+
+    .print-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      margin-bottom:18px;
+      flex-wrap:wrap;
+    }
+
+    .print-title h2 {
+      margin-bottom:6px;
+    }
+
+    .loading-sheet-table th,
+    .loading-sheet-table td {
+      white-space: nowrap;
+    }
+
+    @media print {
+      body {
+        background: white !important;
+      }
+
+      .sidebar,
+      .topbar,
+      .cards,
+      .no-print,
+      button,
+      .filters {
+        display: none !important;
+      }
+
+      .main {
+        margin-left: 0 !important;
+        padding: 0 !important;
+      }
+
+      .section {
+        box-shadow: none !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+      }
+
+      .section:not(.printable-section) {
+        display: none !important;
+      }
+
+      .printable-section {
+        display: block !important;
+      }
+
+      table {
+        display: table !important;
+        width: 100% !important;
+        white-space: normal !important;
+        font-size: 11px !important;
+      }
+
+      th,
+      td {
+        padding: 8px 6px !important;
+        border: 1px solid #999 !important;
+      }
+
+      th {
+        background: #eee !important;
+        color: #111 !important;
+      }
+    }
+
     @media(max-width:900px) {
       .sidebar {
         position: relative;
@@ -465,6 +537,12 @@
       <div class="submenu" id="ordersSubmenu">
         <div class="submenu-title">Registered Companies</div>
         <div id="companyMenuRows"></div>
+      </div>
+      <a href="#" onclick="showLoadingSheetMenu(this)">Loading Sheet</a>
+      <div class="submenu" id="loadingSheetSubmenu">
+        <div class="submenu-title">Loading Sheet</div>
+        <a href="#" onclick="showTodayLoadingSheet(this)">Today Loading Sheet</a>
+        <a href="#" onclick="showDateWiseLoadingSheet(this)">Date wise Loading Sheet</a>
       </div>
       <a href="#" onclick="showSection('billUpload',this); loadBillCompanyOptions(); renderBills();">Bill Upload</a>
       <a href="#" onclick="showSection('rates',this)">Update Current Rates</a>
@@ -558,9 +636,68 @@
             <th>Status</th>
             <th>Update Status</th>
             <th>Timeline</th>
+            <th>Loading Sheet</th>
           </tr>
         </thead>
         <tbody id="orderRows"></tbody>
+      </table>
+    </section>
+
+    <section class="section printable-section" id="todayLoadingSheet" style="display:none">
+      <div class="print-header">
+        <div class="print-title">
+          <h2>Today Loading Sheet</h2>
+          <p style="color:#6b7280;margin-top:8px;">Date: <span id="todayLoadingDateLabel"></span></p>
+        </div>
+        <button class="btn save no-print" onclick="printCurrentPage()">Print Today Loading Sheet</button>
+      </div>
+
+      <table class="loading-sheet-table">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Company</th>
+            <th>Party Name</th>
+            <th>Quantity</th>
+            <th>Variety</th>
+            <th>Loading Type</th>
+            <th>Loading Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="todayLoadingRows"></tbody>
+      </table>
+    </section>
+
+    <section class="section printable-section" id="dateWiseLoadingSheet" style="display:none">
+      <div class="print-header">
+        <div class="print-title">
+          <h2>Date wise Loading Sheet</h2>
+          <p style="color:#6b7280;margin-top:8px;">Selected Date: <span id="dateWiseLoadingDateLabel">-</span></p>
+        </div>
+        <button class="btn save no-print" onclick="printCurrentPage()">Print Date wise Loading Sheet</button>
+      </div>
+
+      <div class="filters no-print">
+        <input type="date" id="loadingSheetDate">
+        <button onclick="renderDateWiseLoadingSheet()">Search</button>
+        <button onclick="setTodayForDateWiseSheet()" style="background:#f3f4f6;color:#111827">Today</button>
+      </div>
+
+      <table class="loading-sheet-table">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Company</th>
+            <th>Party Name</th>
+            <th>Quantity</th>
+            <th>Variety</th>
+            <th>Loading Type</th>
+            <th>Loading Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="dateWiseLoadingRows"></tbody>
       </table>
     </section>
 
@@ -758,8 +895,11 @@
       await render();
     }
 
-    function showSection(id,link){['notifications','orders','billUpload','rates','mediators'].forEach(s=>document.getElementById(s).style.display=s===id?'block':'none');document.querySelectorAll('.menu a').forEach(a=>a.classList.remove('active'));document.querySelectorAll('#companyMenuRows a').forEach(a=>a.classList.remove('company-active'));if(link)link.classList.add('active');if(id!=='orders')document.getElementById('ordersSubmenu').style.display='none';if(id==='rates')loadRates();}
+    function showSection(id,link){['notifications','orders','todayLoadingSheet','dateWiseLoadingSheet','billUpload','rates','mediators'].forEach(s=>document.getElementById(s).style.display=s===id?'block':'none');document.querySelectorAll('.menu a').forEach(a=>a.classList.remove('active'));document.querySelectorAll('#companyMenuRows a').forEach(a=>a.classList.remove('company-active'));if(link)link.classList.add('active');if(id!=='orders')document.getElementById('ordersSubmenu').style.display='none';if(id!=='todayLoadingSheet'&&id!=='dateWiseLoadingSheet')document.getElementById('loadingSheetSubmenu').style.display='none';if(id==='rates')loadRates();}
     function showOrdersMenu(link){selectedCompany='';showSection('orders',link);document.getElementById('ordersSubmenu').style.display='block';renderOrders()}
+    function showLoadingSheetMenu(link){showSection('todayLoadingSheet',link);document.getElementById('loadingSheetSubmenu').style.display='block';renderTodayLoadingSheet()}
+    function showTodayLoadingSheet(link){showSection('todayLoadingSheet',link);document.getElementById('loadingSheetSubmenu').style.display='block';if(link)link.classList.add('company-active');renderTodayLoadingSheet()}
+    function showDateWiseLoadingSheet(link){showSection('dateWiseLoadingSheet',link);document.getElementById('loadingSheetSubmenu').style.display='block';if(link)link.classList.add('company-active');setTodayForDateWiseSheet()}
     function showCompanyOrders(company,link){selectedCompany=company;showSection('orders',document.getElementById('ordersMainMenu'));document.getElementById('ordersSubmenu').style.display='block';document.querySelectorAll('#companyMenuRows a').forEach(a=>a.classList.remove('company-active'));if(link)link.classList.add('company-active');renderOrders(company)}
     function applyOrderFilters(){renderOrders(selectedCompany)}
     function clearOrderFilters(){document.getElementById('filterDate').value='';document.getElementById('filterStatus').value='';document.getElementById('filterSearch').value='';renderOrders(selectedCompany)}
@@ -809,7 +949,80 @@
   </button>
 </td>
           <td class="timeline"><b>${escapeHtml(o.status||'Submitted')}</b><br><small>${escapeHtml(o.created_at?new Date(o.created_at).toLocaleString('en-IN'):'')}</small></td>
-        </tr>`).join(''):'<tr><td colspan="7">No orders found.</td></tr>';
+          <td>${o.today_loading===true?'<span class="status approved">Added</span>':'<button class="btn save" onclick="addToLoadingSheet(\''+escapeAttr(o.id)+'\')">Add to Loading Sheet</button>'}</td>
+        </tr>`).join(''):'<tr><td colspan="8">No orders found.</td></tr>';
+    }
+
+
+    function getLoadingTypeLabel(o){
+      return o.loading_type || (String(o.comment||'').startsWith('Future Loading') ? 'Future Loading' : 'Ready Loading');
+    }
+
+    function getLoadingDateLabel(o){
+      return o.loading_date || (getLoadingTypeLabel(o)==='Ready Loading' ? '-' : '-');
+    }
+
+    async function addToLoadingSheet(orderId){
+      const today=getLocalDateKey(new Date());
+      const {error}=await supabaseClient
+        .from('orders')
+        .update({
+          today_loading:true,
+          loading_sheet_date:today,
+          today_loading_added_at:new Date().toISOString()
+        })
+        .eq('id',orderId);
+
+      if(error){alert(error.message);return}
+      alert('Added to Loading Sheet.');
+      await render();
+      if(document.getElementById('orders').style.display!=='none')renderOrders(selectedCompany);
+    }
+
+    function getLoadingSheetOrdersByDate(date){
+      return state.orders.filter(o=>{
+        const status=o.status||'Submitted';
+        if(status==='Completed'||status==='Rejected')return false;
+        return o.today_loading===true && o.loading_sheet_date===date;
+      });
+    }
+
+    function renderLoadingSheetRows(orders, tbodyId){
+      document.getElementById(tbodyId).innerHTML=orders.length?orders.map((o,index)=>`
+        <tr>
+          <td>${index+1}</td>
+          <td>${escapeHtml(getCompanyName(o))}</td>
+          <td>${escapeHtml(o.party_name||'-')}</td>
+          <td>${escapeHtml(o.quantity||'-')}</td>
+          <td>${escapeHtml(o.variety||'-')}</td>
+          <td>${escapeHtml(getLoadingTypeLabel(o))}</td>
+          <td>${escapeHtml(getLoadingDateLabel(o))}</td>
+          <td><span class="status ${statusClass(o.status)}">${escapeHtml(o.status||'Submitted')}</span></td>
+        </tr>
+      `).join(''):`<tr><td colspan="8">No loading sheet orders found.</td></tr>`;
+    }
+
+    function renderTodayLoadingSheet(){
+      const today=getLocalDateKey(new Date());
+      document.getElementById('todayLoadingDateLabel').innerText=new Date().toLocaleDateString('en-IN');
+      renderLoadingSheetRows(getLoadingSheetOrdersByDate(today),'todayLoadingRows');
+    }
+
+    function setTodayForDateWiseSheet(){
+      const today=getLocalDateKey(new Date());
+      document.getElementById('loadingSheetDate').value=today;
+      renderDateWiseLoadingSheet();
+    }
+
+    function renderDateWiseLoadingSheet(){
+      const date=document.getElementById('loadingSheetDate').value;
+      if(!date){alert('Please select loading sheet date.');return}
+      document.getElementById('dateWiseLoadingDateLabel').innerText=new Date(date+'T00:00:00').toLocaleDateString('en-IN');
+      renderLoadingSheetRows(getLoadingSheetOrdersByDate(date),'dateWiseLoadingRows');
+    }
+
+    function printCurrentPage(){
+      window.print();
     }
 
     async function updateOrderStatus(orderId){
@@ -1020,6 +1233,8 @@
       document.getElementById('billsCount').innerText=bills.length;
       renderNotificationRows();renderMediatorRows();renderCompanySubmenu();loadRates();
       if(document.getElementById('orders').style.display!=='none')renderOrders(selectedCompany);
+      if(document.getElementById('todayLoadingSheet').style.display!=='none')renderTodayLoadingSheet();
+      if(document.getElementById('dateWiseLoadingSheet').style.display!=='none')renderDateWiseLoadingSheet();
       if(document.getElementById('billUpload').style.display!=='none'){loadBillCompanyOptions();renderBills();}
     }
     async function logout(){await supabaseClient.auth.signOut();localStorage.removeItem('staffLoggedIn');location.href='StaffLogin.html'}

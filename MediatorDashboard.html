@@ -526,6 +526,10 @@
           <input id="quantity" placeholder="Example: 30 Quintal">
         </div>
         <div>
+          <label>Price / Quintal</label>
+          <input id="orderPrice" type="number" placeholder="Example: 5480" min="0" step="1">
+        </div>
+        <div>
           <label>Variety</label>
           <select id="variety">
             <option value="">Select Variety</option>
@@ -561,6 +565,7 @@
             <tr>
               <th>Party Name</th>
               <th>Quantity</th>
+              <th>Price / Quintal</th>
               <th>Variety</th>
               <th>Loading</th>
               <th>Action</th>
@@ -568,7 +573,7 @@
           </thead>
           <tbody id="structuredOrderRows">
             <tr>
-              <td colspan="5">No orders added yet.</td>
+              <td colspan="6">No orders added yet.</td>
             </tr>
           </tbody>
         </table>
@@ -595,6 +600,7 @@
             <th>Order ID</th>
             <th>Party Name</th>
             <th>Quantity</th>
+            <th>Price / Quintal</th>
             <th>Variety</th>
             <th>Loading</th>
             <th>Submitted Date</th>
@@ -654,6 +660,7 @@
     function clearStructuredForm() {
       document.getElementById('partyName').value = '';
       document.getElementById('quantity').value = '';
+      document.getElementById('orderPrice').value = '';
       document.getElementById('variety').value = '';
       document.getElementById('loadingType').value = 'Ready Loading';
       document.getElementById('loadingDate').value = '';
@@ -676,7 +683,7 @@
     function renderStructuredOrderRows() {
       const rows = document.getElementById('structuredOrderRows');
       if (!structuredOrders.length) {
-        rows.innerHTML = '<tr><td colspan="5">No orders added yet.</td></tr>';
+        rows.innerHTML = '<tr><td colspan="6">No orders added yet.</td></tr>';
         return;
       }
 
@@ -684,6 +691,7 @@
         <tr>
           <td>${escapeHtml(o.party_name)}</td>
           <td>${escapeHtml(o.quantity)}</td>
+          <td>${o.order_price ? '₹' + Number(o.order_price).toLocaleString('en-IN') : '-'}</td>
           <td>${escapeHtml(o.variety)}</td>
           <td>${escapeHtml(o.comment || '-')}</td>
           <td><button class="cancel-btn" onclick="removeStructuredOrder(${index})">Remove</button></td>
@@ -694,6 +702,7 @@
     function addStructuredOrder() {
       const partyName = sanitizeText(document.getElementById('partyName').value, 140);
       const quantity = sanitizeText(document.getElementById('quantity').value, 80);
+      const orderPrice = Number(document.getElementById('orderPrice').value);
       const variety = sanitizeText(document.getElementById('variety').value, 140);
       const loadingType = document.getElementById('loadingType').value;
       const loadingDate = document.getElementById('loadingDate').value;
@@ -703,12 +712,14 @@
 
       if (!partyName) { alert('Please enter party name.'); return; }
       if (!quantity) { alert('Please enter quantity.'); return; }
+      if (!orderPrice || orderPrice <= 0) { alert('Please enter price / quintal.'); return; }
       if (!variety) { alert('Please select variety.'); return; }
       if (loadingType === 'Future Loading' && !loadingDate) { alert('Please select future loading date.'); return; }
 
       structuredOrders.push({
         party_name: partyName,
         quantity,
+        order_price: orderPrice,
         variety,
         comment,
         loading_type: loadingType,
@@ -780,6 +791,7 @@ const rowsToInsert = structuredOrders.map(o => ({
   mobile: currentMediator.mobile,
   party_name: o.party_name,
   quantity: o.quantity,
+  order_price: o.order_price,
   variety: o.variety,
   comment: o.comment,
   loading_type: o.loading_type,
@@ -787,6 +799,7 @@ const rowsToInsert = structuredOrders.map(o => ({
   order_text:
     'Party Name: ' + o.party_name + '\n' +
     'Quantity: ' + o.quantity + '\n' +
+    'Price: ₹' + Number(o.order_price || 0).toLocaleString('en-IN') + ' / Quintal\n' +
     'Variety: ' + o.variety + '\n' +
     'Loading: ' + o.comment,
   status: 'Submitted'
@@ -821,12 +834,13 @@ const rowsToInsert = structuredOrders.map(o => ({
       const orders = filtered || await getMediatorOrders();
       mediatorOrders = orders;
       const rows = document.getElementById('historyRows');
-      if (!orders.length) { rows.innerHTML = '<tr><td colspan="9">No orders found.</td></tr>'; return }
+      if (!orders.length) { rows.innerHTML = '<tr><td colspan="10">No orders found.</td></tr>'; return }
       rows.innerHTML = orders.map(o => `
     <tr>
       <td>${escapeHtml(o.id || '-')}</td>
       <td>${escapeHtml(o.party_name || '-')}</td>
       <td>${escapeHtml(o.quantity || '-')}</td>
+      <td>${o.order_price ? '₹' + Number(o.order_price).toLocaleString('en-IN') : '-'}</td>
       <td>${escapeHtml(o.variety || '-')}</td>
       <td class="order-text" id="orderText-${escapeAttr(o.id)}">${escapeHtml(o.comment || o.order_text || '-')}</td>
       <td>${escapeHtml(o.created_at ? new Date(o.created_at).toLocaleString('en-IN') : '-')}</td>

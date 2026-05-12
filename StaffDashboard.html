@@ -633,6 +633,7 @@
             <th>Order ID</th>
             <th>Company</th>
             <th>Order Message</th>
+            <th>Price / Quintal</th>
             <th>Submitted</th>
             <th>Status</th>
             <th>Update Status</th>
@@ -660,10 +661,12 @@
             <th>Company</th>
             <th>Party Name</th>
             <th>Quantity</th>
+            <th>Price / Quintal</th>
             <th>Variety</th>
             <th>Loading Type</th>
             <th>Loading Date</th>
             <th>Status</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody id="todayLoadingRows"></tbody>
@@ -692,10 +695,12 @@
             <th>Company</th>
             <th>Party Name</th>
             <th>Quantity</th>
+            <th>Price / Quintal</th>
             <th>Variety</th>
             <th>Loading Type</th>
             <th>Loading Date</th>
             <th>Status</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody id="dateWiseLoadingRows"></tbody>
@@ -724,6 +729,7 @@
             <th>Company</th>
             <th>Party Name</th>
             <th>Quantity</th>
+            <th>Price / Quintal</th>
             <th>Variety</th>
             <th>Loading Type</th>
             <th>Loading Date</th>
@@ -959,6 +965,7 @@
           <td>${escapeHtml(o.id||'-')}</td>
           <td>${escapeHtml(getCompanyName(o))}<br><small>${escapeHtml(o.mobile||'')}</small></td>
           <td class="order-text">${escapeHtml(o.order_text||'-')}</td>
+          <td>${o.order_price ? '₹' + Number(o.order_price).toLocaleString('en-IN') : '-'}</td>
           <td>${escapeHtml(o.created_at?new Date(o.created_at).toLocaleString('en-IN'):'-')}</td>
           <td><span class="status ${statusClass(o.status)}">${escapeHtml(o.status||'Submitted')}</span><br><br><b>Staff Comment:</b><br>${escapeHtml(o.staff_comment||'-')}</td>
           <td>
@@ -984,7 +991,7 @@
 </td>
           <td class="timeline"><b>${escapeHtml(o.status||'Submitted')}</b><br><small>${escapeHtml(o.created_at?new Date(o.created_at).toLocaleString('en-IN'):'')}</small></td>
           <td>${o.today_loading===true?'<span class="status approved">Added</span>':'<button class="btn save" onclick="addToLoadingSheet(\''+escapeAttr(o.id)+'\')">Add to Loading Sheet</button>'}</td>
-        </tr>`).join(''):'<tr><td colspan="8">No orders found.</td></tr>';
+        </tr>`).join(''):'<tr><td colspan="9">No orders found.</td></tr>';
     }
 
 
@@ -1028,12 +1035,16 @@
           <td>${escapeHtml(getCompanyName(o))}</td>
           <td>${escapeHtml(o.party_name||'-')}</td>
           <td>${escapeHtml(o.quantity||'-')}</td>
+          <td>${o.order_price ? '₹' + Number(o.order_price).toLocaleString('en-IN') : '-'}</td>
           <td>${escapeHtml(o.variety||'-')}</td>
           <td>${escapeHtml(getLoadingTypeLabel(o))}</td>
           <td>${escapeHtml(getLoadingDateLabel(o))}</td>
           <td><span class="status ${statusClass(o.status)}">${escapeHtml(o.status||'Submitted')}</span></td>
+          <td>
+            <button class="btn reject no-print" onclick="removeFromLoadingSheet('${escapeAttr(o.id)}')">Delete</button>
+          </td>
         </tr>
-      `).join(''):`<tr><td colspan="8">No loading sheet orders found.</td></tr>`;
+      `).join(''):`<tr><td colspan="10">No loading sheet orders found.</td></tr>`;
     }
 
     function renderTodayLoadingSheet(){
@@ -1053,6 +1064,29 @@
       if(!date){alert('Please select loading sheet date.');return}
       document.getElementById('dateWiseLoadingDateLabel').innerText=new Date(date+'T00:00:00').toLocaleDateString('en-IN');
       renderLoadingSheetRows(getLoadingSheetOrdersByDate(date),'dateWiseLoadingRows');
+    }
+
+    async function removeFromLoadingSheet(orderId){
+      const confirmDelete=confirm('Remove this order from Loading Sheet?');
+      if(!confirmDelete)return;
+
+      const {error}=await supabaseClient
+        .from('orders')
+        .update({
+          today_loading:false,
+          loading_sheet_date:null,
+          today_loading_added_at:null
+        })
+        .eq('id',orderId);
+
+      if(error){alert(error.message);return}
+
+      alert('Removed from Loading Sheet.');
+      await render();
+
+      if(document.getElementById('todayLoadingSheet').style.display!=='none')renderTodayLoadingSheet();
+      if(document.getElementById('dateWiseLoadingSheet').style.display!=='none')renderDateWiseLoadingSheet();
+      if(document.getElementById('orders').style.display!=='none')renderOrders(selectedCompany);
     }
 
     function printCurrentPage(){
@@ -1082,12 +1116,13 @@
           <td>${escapeHtml(getCompanyName(o))}</td>
           <td>${escapeHtml(o.party_name||'-')}</td>
           <td>${escapeHtml(o.quantity||'-')}</td>
+          <td>${o.order_price ? '₹' + Number(o.order_price).toLocaleString('en-IN') : '-'}</td>
           <td>${escapeHtml(o.variety||'-')}</td>
           <td>${escapeHtml(getLoadingTypeLabel(o))}</td>
           <td>${escapeHtml(getLoadingDateLabel(o))}</td>
           <td><span class="status ${statusClass(o.status)}">${escapeHtml(o.status||'Submitted')}</span></td>
         </tr>
-      `).join(''):`<tr><td colspan="8">No daily sales orders found.</td></tr>`;
+      `).join(''):`<tr><td colspan="9">No daily sales orders found.</td></tr>`;
     }
 
 

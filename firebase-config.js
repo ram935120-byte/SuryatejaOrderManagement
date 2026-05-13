@@ -8,3 +8,6 @@
   };
 
 const FIREBASE_VAPID_KEY = "BKRNEIR286XJqQ_NFB7le6Pi41QjzSx4GaPXvAb-ekBSyBeHVeTrSapo1Cck_PvQ2pVFAWWc8iuUFHZa_Vpzv9w";
+
+window.firebaseConfig = firebaseConfig;
+window.FIREBASE_VAPID_KEY = FIREBASE_VAPID_KEY;

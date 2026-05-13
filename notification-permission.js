@@ -107,6 +107,18 @@ async function enableSuryatejaFirebaseNotifications(options) {
     getSuryatejaFirebaseApp();
     suryatejaMessaging = firebase.messaging();
 
+    suryatejaMessaging.onMessage((payload) => {
+      console.log("Foreground Firebase message:", payload);
+
+      const title = payload.notification?.title || "Suryateja Alert";
+      const body = payload.notification?.body || "New update received";
+
+      new Notification(title, {
+        body: body,
+        icon: "/icon.png"
+      });
+    });
+
     const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
 
     const token = await suryatejaMessaging.getToken({
@@ -121,25 +133,14 @@ async function enableSuryatejaFirebaseNotifications(options) {
     console.log('Suryateja FCM Token:', token);
 
     if (typeof supabaseClient !== 'undefined') {
-      // const payload = {
-      //   role: role,
-      //   user_id: String(userId || ''),
-      //   mobile: String(mobile || ''),
-      //   company_name: String(companyName || ''),
-      //   fcm_token: token,
-      //   platform: 'web',
-      //   user_agent: navigator.userAgent,
-      //   is_active: true,
-      //   updated_at: new Date().toISOString()
-      // };
       const payload = {
-  user_role: role,
-  mobile: String(mobile || ''),
-  company_name: String(companyName || ''),
-  fcm_token: token,
-  is_active: true,
-  updated_at: new Date().toISOString()
-};
+        user_role: role,
+        mobile: String(mobile || ''),
+        company_name: String(companyName || ''),
+        fcm_token: token,
+        is_active: true,
+        updated_at: new Date().toISOString()
+      };
 
       const { error } = await supabaseClient
         .from('user_notification_tokens')

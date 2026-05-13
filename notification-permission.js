@@ -115,7 +115,7 @@ async function enableSuryatejaFirebaseNotifications(options) {
 
       new Notification(title, {
         body: body,
-        icon: "/icon.png"
+        icon: "images/logo.jpg"
       });
     });
 

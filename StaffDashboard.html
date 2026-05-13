@@ -1166,6 +1166,54 @@
     }
 
 
+
+
+    async function sendSuryatejaPushToMediator(mobile, companyName, title, body) {
+      try {
+        let query = supabaseClient
+          .from('user_notification_tokens')
+          .select('fcm_token')
+          .eq('user_role', 'mediator')
+          .eq('is_active', true);
+
+        if (mobile) {
+          query = query.eq('mobile', mobile);
+        } else if (companyName) {
+          query = query.eq('company_name', companyName);
+        }
+
+        const { data: mediatorTokens, error: tokenError } = await query;
+
+        if (tokenError) {
+          console.error('Mediator notification token fetch failed:', tokenError);
+          return;
+        }
+
+        const tokens = [...new Set((mediatorTokens || []).map(row => row.fcm_token).filter(Boolean))];
+        if (!tokens.length) {
+          console.warn('No active mediator FCM tokens found for:', mobile || companyName);
+          return;
+        }
+
+        for (const token of tokens) {
+          const { error } = await supabaseClient.functions.invoke('send-notification', {
+            body: {
+              token,
+              title,
+              body,
+              url: window.location.origin + '/MediatorDashboard.html'
+            }
+          });
+
+          if (error) {
+            console.error('Mediator push notification failed:', error);
+          }
+        }
+      } catch (err) {
+        console.error('Mediator push notification error:', err);
+      }
+    }
+
     async function updateOrderStatus(orderId){
       const status=document.getElementById('status-'+orderId).value;
       const comment=document.getElementById('comment-'+orderId).value.trim();
@@ -1174,7 +1222,16 @@
       const order=state.orders.find(o=>String(o.id)===String(orderId));
       const {error}=await supabaseClient.from('orders').update({status,staff_comment:comment}).eq('id',orderId);
       if(error){alert(error.message);return}
-      if(order){await supabaseClient.from('notifications').insert([{type:'Order Status Update',message:'Order '+orderId+' was '+status+' by staff',mobile:order.mobile,company_name:order.company_name,status:'Unread'}]);}
+      if(order){
+        const statusMessage = 'Order ' + orderId + ' was ' + status + ' by staff. Comment: ' + comment;
+        await supabaseClient.from('notifications').insert([{type:'Order Status Update',message:statusMessage,mobile:order.mobile,company_name:order.company_name,status:'Unread'}]);
+        await sendSuryatejaPushToMediator(
+          order.mobile || '',
+          order.company_name || '',
+          'Order ' + status,
+          statusMessage
+        );
+      }
       alert('Order updated successfully.');
       await render();
       renderOrders(selectedCompany);
@@ -1213,7 +1270,14 @@
         if(ins.error){alert(ins.error.message);return}
         uploadedCount++;
       }
-      await supabaseClient.from('notifications').insert([{type:'Bill Copy Uploaded',message:uploadedCount+' bill copy/copies uploaded for '+company,company_name:company,mobile,status:'Unread'}]);
+      const billNotificationMessage = uploadedCount + ' bill copy/copies uploaded for ' + company;
+      await supabaseClient.from('notifications').insert([{type:'Bill Copy Uploaded',message:billNotificationMessage,company_name:company,mobile,status:'Unread'}]);
+      await sendSuryatejaPushToMediator(
+        mobile || '',
+        company,
+        'Bill Copy Uploaded',
+        billNotificationMessage
+      );
       document.getElementById('billSuccess').innerText=uploadedCount+' bill copy/copies uploaded successfully.';
       document.getElementById('billSuccess').style.display='block';setTimeout(()=>document.getElementById('billSuccess').style.display='none',3000);
       document.getElementById('billFiles').value='';document.getElementById('billNumber').value='';document.getElementById('billNotes').value='';

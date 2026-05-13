@@ -820,6 +820,46 @@
       showRate('mediator-rate-jsr', defaults.jsrBoiled);
     }
 
+
+
+    async function sendSuryatejaPushToStaff(title, body) {
+      try {
+        const { data: staffTokens, error: tokenError } = await supabaseClient
+          .from('user_notification_tokens')
+          .select('fcm_token')
+          .eq('user_role', 'staff')
+          .eq('is_active', true);
+
+        if (tokenError) {
+          console.error('Staff notification token fetch failed:', tokenError);
+          return;
+        }
+
+        const tokens = [...new Set((staffTokens || []).map(row => row.fcm_token).filter(Boolean))];
+        if (!tokens.length) {
+          console.warn('No active staff FCM tokens found. Ask staff to click Enable Notifications.');
+          return;
+        }
+
+        for (const token of tokens) {
+          const { error } = await supabaseClient.functions.invoke('send-notification', {
+            body: {
+              token,
+              title,
+              body,
+              url: window.location.origin + '/StaffDashboard.html'
+            }
+          });
+
+          if (error) {
+            console.error('Staff push notification failed:', error);
+          }
+        }
+      } catch (err) {
+        console.error('Staff push notification error:', err);
+      }
+    }
+
     async function submitStructuredOrders() {
       if (!structuredOrders.length) {
         alert('Please add at least one order.');
@@ -851,13 +891,21 @@ const rowsToInsert = structuredOrders.map(o => ({
 
       if (error) { alert(error.message); return; }
 
+      const submittedOrdersCount = structuredOrders.length;
+      const notificationMessage = submittedOrdersCount + ' order(s) submitted by ' + (currentMediator.company_name || 'Mediator') + ' (' + currentMediator.mobile + ')';
+
       await supabaseClient.from('notifications').insert([{
         type: 'Mediator Structured Order',
-        message: structuredOrders.length + ' order(s) submitted by ' + (currentMediator.company_name || 'Mediator') + ' (' + currentMediator.mobile + ')',
+        message: notificationMessage,
         mobile: currentMediator.mobile,
         company_name: currentMediator.company_name,
         status: 'Unread'
       }]);
+
+      await sendSuryatejaPushToStaff(
+        'New Order Received',
+        notificationMessage
+      );
 
       clearStructuredOrders();
       showMessage('Structured order(s) submitted successfully.');
@@ -915,7 +963,9 @@ const rowsToInsert = structuredOrders.map(o => ({
         .eq('id', orderId)
         .eq('mobile', currentMediator.mobile);
       if (error) { alert(error.message); return }
-      await supabaseClient.from('notifications').insert([{ type: 'Mediator Order Updated', message: 'Order updated by ' + (currentMediator.company_name || 'Mediator') + ' (' + currentMediator.mobile + ') - ' + orderId, mobile: currentMediator.mobile, company_name: currentMediator.company_name, status: 'Unread' }]);
+      const updateMessage = 'Order updated by ' + (currentMediator.company_name || 'Mediator') + ' (' + currentMediator.mobile + ') - ' + orderId;
+      await supabaseClient.from('notifications').insert([{ type: 'Mediator Order Updated', message: updateMessage, mobile: currentMediator.mobile, company_name: currentMediator.company_name, status: 'Unread' }]);
+      await sendSuryatejaPushToStaff('Order Updated by Mediator', updateMessage);
       showMessage('Order ' + orderId + ' updated successfully. Staff dashboard has been notified.');
       await renderOrderHistory();
     }

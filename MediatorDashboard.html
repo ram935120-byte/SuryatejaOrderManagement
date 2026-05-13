@@ -463,6 +463,38 @@
         white-space: nowrap
       }
     }
+
+    .notification-action-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .notification-enable-btn {
+      background: #111827;
+      color: #fff;
+      border: 0;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 850;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(17, 24, 39, .12);
+    }
+
+    .notification-enable-btn.enabled {
+      background: #0f8f4e;
+    }
+
+    .notification-status-text {
+      width: 100%;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+      font-weight: 750;
+    }
+
   </style>
 </head>
 
@@ -489,7 +521,11 @@
         <p>View rates, submit WhatsApp-style orders, and download bill copies.</p>
         <p style="margin-top:8px;font-weight:800;color:#4c1d95;">Company: <span id="mediatorCompanyName">-</span></p>
       </div>
-      <div class="live-badge">Approved Mediator</div>
+      <div class="notification-action-box">
+        <div class="live-badge">Approved Mediator</div>
+        <button type="button" id="mediatorNotificationButton" class="notification-enable-btn" onclick="enableMediatorFirebaseNotifications()">🔔 Enable Notifications</button>
+        <div id="mediatorNotificationStatus" class="notification-status-text">Notifications not enabled</div>
+      </div>
     </section>
 
     <section class="section" id="rates">
@@ -641,6 +677,10 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="notification-permission.js"></script>
   <script>
     let currentMediator = null;
     let mediatorOrders = [];
@@ -908,6 +948,26 @@ const rowsToInsert = structuredOrders.map(o => ({
     }
     function showAllBills() { document.getElementById('mediatorBillDate').value = ''; renderMediatorBills(); }
     function logoutMediator() { localStorage.removeItem('loggedMediator'); localStorage.removeItem('loggedMediatorId'); localStorage.removeItem('loggedMediatorCompany'); location.href = 'MediatorLogin.html' }
+
+
+    async function enableMediatorFirebaseNotifications(){
+      if(!currentMediator){
+        alert('Mediator details are still loading. Please try again in a few seconds.');
+        return;
+      }
+      if(typeof enableSuryatejaFirebaseNotifications !== 'function'){
+        alert('Firebase notification files are not loaded. Please check firebase-config.js and notification-permission.js.');
+        return;
+      }
+      await enableSuryatejaFirebaseNotifications({
+        role:'mediator',
+        userId:String(currentMediator.id || currentMediator.mobile || ''),
+        mobile:currentMediator.mobile || '',
+        companyName:currentMediator.company_name || 'Mediator',
+        buttonId:'mediatorNotificationButton',
+        statusId:'mediatorNotificationStatus'
+      });
+    }
 
     (async function init() {
       if (await loadCurrentMediator()) {

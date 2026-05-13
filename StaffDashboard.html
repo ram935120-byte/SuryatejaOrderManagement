@@ -525,6 +525,38 @@
         white-space: nowrap
       }
     }
+
+    .notification-action-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .notification-enable-btn {
+      background: #111827;
+      color: #fff;
+      border: 0;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 850;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(17, 24, 39, .12);
+    }
+
+    .notification-enable-btn.enabled {
+      background: #0f8f4e;
+    }
+
+    .notification-status-text {
+      width: 100%;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+      font-weight: 750;
+    }
+
   </style>
 </head>
 
@@ -558,7 +590,11 @@
         <h1>Staff Dashboard</h1>
         <p>Approve mediators, update rates, manage orders, and upload bill copies company-wise.</p>
       </div>
-      <div class="badge"><span id="notificationCount">0</span> Notifications</div>
+      <div class="notification-action-box">
+        <div class="badge"><span id="notificationCount">0</span> Notifications</div>
+        <button type="button" id="staffNotificationButton" class="notification-enable-btn" onclick="enableStaffFirebaseNotifications()">🔔 Enable Notifications</button>
+        <div id="staffNotificationStatus" class="notification-status-text">Notifications not enabled</div>
+      </div>
     </div>
 
     <section class="cards">
@@ -867,6 +903,10 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="notification-permission.js"></script>
   <script>
     const productNames={hmt:'Surya Teja HMT Premium Rice',oldJoker:'Old Surya Teja Joker JSR Steam Rice',joker:'Surya Teja Joker JSR Steam Rice',knm:'Surya Teja KNM Steam Rice',rnr:'Surya Teja RNR Boiled Rice',jsrBoiled:'Surya Teja JSR Boiled Rice'};
     const defaultRates={hmt:5465,oldJoker:6200,joker:5480,knm:4500,rnr:4950,jsrBoiled:0};
@@ -1340,6 +1380,22 @@
       if(document.getElementById('billUpload').style.display!=='none'){loadBillCompanyOptions();renderBills();}
     }
     async function logout(){await supabaseClient.auth.signOut();localStorage.removeItem('staffLoggedIn');location.href='StaffLogin.html'}
+
+
+    async function enableStaffFirebaseNotifications(){
+      if(typeof enableSuryatejaFirebaseNotifications !== 'function'){
+        alert('Firebase notification files are not loaded. Please check firebase-config.js and notification-permission.js.');
+        return;
+      }
+      await enableSuryatejaFirebaseNotifications({
+        role:'staff',
+        userId:'staff-admin',
+        mobile:'staff',
+        companyName:'Surya Teja Staff',
+        buttonId:'staffNotificationButton',
+        statusId:'staffNotificationStatus'
+      });
+    }
 
     (async function init(){if(await requireStaff())await render();})();
   </script>

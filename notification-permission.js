@@ -121,17 +121,25 @@ async function enableSuryatejaFirebaseNotifications(options) {
     console.log('Suryateja FCM Token:', token);
 
     if (typeof supabaseClient !== 'undefined') {
+      // const payload = {
+      //   role: role,
+      //   user_id: String(userId || ''),
+      //   mobile: String(mobile || ''),
+      //   company_name: String(companyName || ''),
+      //   fcm_token: token,
+      //   platform: 'web',
+      //   user_agent: navigator.userAgent,
+      //   is_active: true,
+      //   updated_at: new Date().toISOString()
+      // };
       const payload = {
-        role: role,
-        user_id: String(userId || ''),
-        mobile: String(mobile || ''),
-        company_name: String(companyName || ''),
-        fcm_token: token,
-        platform: 'web',
-        user_agent: navigator.userAgent,
-        is_active: true,
-        updated_at: new Date().toISOString()
-      };
+  user_role: role,
+  mobile: String(mobile || ''),
+  company_name: String(companyName || ''),
+  fcm_token: token,
+  is_active: true,
+  updated_at: new Date().toISOString()
+};
 
       const { error } = await supabaseClient
         .from('user_notification_tokens')

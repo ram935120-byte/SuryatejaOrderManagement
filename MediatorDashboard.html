@@ -903,11 +903,23 @@ tbody tr:hover td{background:#faf8f4!important;}
     async function invokeSuryatejaPush(payload) {
       try {
         const { data, error } = await supabaseClient.functions.invoke('send-notification', { body: payload });
+
         if (error) {
           console.error('Push edge function failed:', error);
           return false;
         }
+
         console.log('Push edge function response:', data || 'OK');
+
+        // IMPORTANT:
+        // Some Edge Functions return HTTP 200 even when Firebase rejects the message.
+        // Example: { error: { message: "Recipient of the message is not set." } }
+        // Treat that as failure so fallback token-based sending can run.
+        if (data && data.error) {
+          console.error('Firebase push rejected:', data.error);
+          return false;
+        }
+
         return true;
       } catch (err) {
         console.error('Push edge function error:', err);

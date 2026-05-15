@@ -13,62 +13,35 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function(payload) {
-
-  console.log(
-    '[firebase-messaging-sw.js] Background message ',
-    payload
-  );
+  console.log('[firebase-messaging-sw.js] Background message', payload);
 
   const notificationTitle =
     payload.notification?.title ||
+    payload.data?.title ||
     'Suryateja Notification';
 
   const notificationOptions = {
-    body:
-      payload.notification?.body ||
-      'New update received',
-    icon: '/images/logo.jpg',
-    badge: '/images/logo.jpg',
+    body: payload.notification?.body || payload.data?.body || 'New update received',
+    icon: './images/logo.jpg',
+    badge: './images/logo.jpg',
     data: {
-      url:
-        payload?.fcmOptions?.link ||
-        payload?.data?.url ||
-        'https://suryateja-order-management.netlify.app'
+      url: payload?.fcmOptions?.link || payload?.data?.url || self.location.origin
     }
   };
 
-  self.registration.showNotification(
-    notificationTitle,
-    notificationOptions
-  );
+  self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-self.addEventListener(
-  'notificationclick',
-  function(event) {
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  const targetUrl = event.notification.data?.url || self.location.origin;
 
-    event.notification.close();
-
-    const targetUrl =
-      event.notification.data?.url ||
-      'https://suryateja-order-management.netlify.app';
-
-    event.waitUntil(
-      clients.matchAll({
-        type: 'window',
-        includeUncontrolled: true
-      }).then(function(clientList) {
-
-        for (const client of clientList) {
-          if (client.url === targetUrl && 'focus' in client) {
-            return client.focus();
-          }
-        }
-
-        if (clients.openWindow) {
-          return clients.openWindow(targetUrl);
-        }
-      })
-    );
-  }
-);
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(clientList) {
+      for (const client of clientList) {
+        if (client.url === targetUrl && 'focus' in client) return client.focus();
+      }
+      if (clients.openWindow) return clients.openWindow(targetUrl);
+    })
+  );
+});

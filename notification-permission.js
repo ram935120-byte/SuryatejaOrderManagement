@@ -1,37 +1,3 @@
-// async function enableFirebaseNotifications() {
-
-//   try {
-
-//     const permission =
-//       await Notification.requestPermission();
-
-//     if (permission !== "granted") {
-
-//       alert("Notification permission denied");
-//       return;
-//     }
-
-//     firebase.initializeApp(firebaseConfig);
-
-//     const messaging = firebase.messaging();
-
-//     const token = await messaging.getToken({
-//       vapidKey: FIREBASE_VAPID_KEY
-//     });
-
-//     console.log("FCM TOKEN:", token);
-
-//     alert("Notifications Enabled");
-
-//   } catch (error) {
-
-//     console.error(error);
-
-//     alert("Notification setup failed");
-//   }
-// }
-
-
 // notification-permission.js
 // Suryateja Firebase Web Push + Supabase token saving
 
@@ -57,23 +23,31 @@ function setSuryatejaNotificationButton(buttonId, enabled) {
 
 function getSuryatejaFirebaseApp() {
   if (!window.firebaseConfig) {
-    throw new Error('firebaseConfig missing. Fill firebase-config.js first.');
+    throw new Error('firebaseConfig missing. Check firebase-config.js.');
+  }
+  if (!window.FIREBASE_VAPID_KEY) {
+    throw new Error('FIREBASE_VAPID_KEY missing. Check firebase-config.js.');
+  }
+  if (typeof firebase === 'undefined') {
+    throw new Error('Firebase scripts are not loaded. Check Firebase script tags.');
   }
 
   if (!suryatejaFirebaseApp) {
-    if (!firebase.apps.length) {
-      suryatejaFirebaseApp = firebase.initializeApp(window.firebaseConfig);
-    } else {
-      suryatejaFirebaseApp = firebase.app();
-    }
+    suryatejaFirebaseApp = firebase.apps.length
+      ? firebase.app()
+      : firebase.initializeApp(window.firebaseConfig);
   }
 
   return suryatejaFirebaseApp;
 }
 
+function getServiceWorkerUrl() {
+  // Works on Netlify root hosting and also GitHub Pages/subfolder hosting.
+  return new URL('firebase-messaging-sw.js', window.location.href).toString();
+}
+
 async function enableSuryatejaFirebaseNotifications(options) {
   const role = options.role;
-  const userId = options.userId;
   const mobile = options.mobile || '';
   const companyName = options.companyName || '';
   const buttonId = options.buttonId;
@@ -81,7 +55,7 @@ async function enableSuryatejaFirebaseNotifications(options) {
 
   try {
     if (!('Notification' in window)) {
-      alert('This browser does not support notifications.');
+      alert('This browser does not support notifications. Try Chrome or Edge.');
       return;
     }
 
@@ -90,36 +64,45 @@ async function enableSuryatejaFirebaseNotifications(options) {
       return;
     }
 
-    if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
-      alert('Firebase web notifications need HTTPS hosting. Please test after uploading to Netlify/Vercel/HTTPS domain.');
+    if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+      alert('Browser push notifications need HTTPS hosting. Use Netlify/Vercel/Firebase Hosting, not file:// or normal http://.');
       return;
     }
 
     setSuryatejaNotificationStatus(statusId, 'Requesting notification permission...');
 
-    const permission = await Notification.requestPermission();
+    let permission = Notification.permission;
+    if (permission === 'default') {
+      permission = await Notification.requestPermission();
+    }
+
     if (permission !== 'granted') {
       setSuryatejaNotificationStatus(statusId, 'Notification permission denied');
-      alert('Notification permission denied. Please allow notifications in browser settings.');
+      alert('Notification permission denied. Enable it from browser site settings and try again.');
       return;
     }
 
     getSuryatejaFirebaseApp();
     suryatejaMessaging = firebase.messaging();
 
+    const swUrl = getServiceWorkerUrl();
+    const registration = await navigator.serviceWorker.register(swUrl);
+    await navigator.serviceWorker.ready;
+
     suryatejaMessaging.onMessage((payload) => {
-      console.log("Foreground Firebase message:", payload);
+      console.log('Foreground Firebase message:', payload);
+      const title = payload.notification?.title || payload.data?.title || 'Suryateja Alert';
+      const body = payload.notification?.body || payload.data?.body || 'New update received';
 
-      const title = payload.notification?.title || "Suryateja Alert";
-      const body = payload.notification?.body || "New update received";
-
-      new Notification(title, {
-        body: body,
-        icon: "images/logo.jpg"
-      });
+      if (Notification.permission === 'granted') {
+        new Notification(title, {
+          body,
+          icon: new URL('images/logo.jpg', window.location.href).toString(),
+          badge: new URL('images/logo.jpg', window.location.href).toString(),
+          data: { url: payload?.fcmOptions?.link || payload?.data?.url || window.location.href }
+        });
+      }
     });
-
-    const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
 
     const token = await suryatejaMessaging.getToken({
       vapidKey: window.FIREBASE_VAPID_KEY,
@@ -127,14 +110,14 @@ async function enableSuryatejaFirebaseNotifications(options) {
     });
 
     if (!token) {
-      throw new Error('Firebase token not generated.');
+      throw new Error('Firebase token was not generated. Check Firebase Cloud Messaging Web Push certificate/VAPID key.');
     }
 
     console.log('Suryateja FCM Token:', token);
 
     if (typeof supabaseClient !== 'undefined') {
       const payload = {
-        user_role: role,
+        user_role: String(role || ''),
         mobile: String(mobile || ''),
         company_name: String(companyName || ''),
         fcm_token: token,
@@ -148,8 +131,7 @@ async function enableSuryatejaFirebaseNotifications(options) {
 
       if (error) {
         console.error('Supabase token save error:', error);
-        alert('Firebase token created, but Supabase saving failed: ' + error.message);
-        return;
+        throw new Error('FCM token created, but Supabase saving failed: ' + error.message + '. Run FIREBASE_NOTIFICATION_SQL_FIX.sql in Supabase SQL Editor.');
       }
     }
 

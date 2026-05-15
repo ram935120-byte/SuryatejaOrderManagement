@@ -304,7 +304,85 @@
         font-size: 34px
       }
     }
-  </style>
+  
+/* === Premium Surya Teja UI Refresh: visual-only overrides === */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+:root{
+  --gold:#c9a84c!important;--gold-light:#e8d08a!important;--gold-bg:rgba(201,168,76,.10)!important;
+  --cream:#faf6ef!important;--cream2:#f5f0e8!important;--dark:#1a1208!important;--dark2:#2d2010!important;
+  --dark3:#4a3728!important;--muted:#7a6a58!important;--green:#2d6a4f!important;--green-light:#52b788!important;
+  --red:#a4262c!important;--surface:#fffdf8!important;--line:rgba(201,168,76,.22)!important;
+  --border:rgba(201,168,76,.22)!important;--shadow:0 20px 55px rgba(26,18,8,.12)!important;--radius:22px!important;
+}
+*{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif!important;}
+body{
+  background:radial-gradient(ellipse at 15% 0%,rgba(201,168,76,.18),transparent 38%),radial-gradient(ellipse at 85% 10%,rgba(45,106,79,.14),transparent 36%),linear-gradient(180deg,#fffaf0 0%,var(--cream) 100%)!important;
+  color:var(--dark)!important;
+}
+h1,h2,h3,.brand-box h1,.brand,.topbar h1,.topbar-title,.section-title,.product-name,.card h2,.card-title{
+  font-family:'Playfair Display',serif!important;letter-spacing:-.025em!important;color:var(--dark)!important;
+}
+.sidebar{
+  background:linear-gradient(175deg,#1a1208 0%,#2a1e0e 58%,#1a2d1f 100%)!important;
+  border:1px solid rgba(201,168,76,.22)!important;border-radius:28px!important;box-shadow:0 34px 85px rgba(26,18,8,.22)!important;
+}
+.brand-box,.sidebar .brand{border-bottom-color:rgba(201,168,76,.22)!important;}
+.brand-box h1,.sidebar .brand h1,.brand{color:#fff!important;}
+.brand-box h1 span,.sidebar .brand h1 span,.brand span{color:var(--gold)!important;}
+.brand-box img{filter:drop-shadow(0 18px 34px rgba(0,0,0,.28))!important;}
+.menu-title,.submenu-title{color:rgba(255,255,255,.36)!important;letter-spacing:.16em!important;text-transform:uppercase!important;font-weight:700!important;}
+.menu button,.submenu button,.sidebar a,.nav-link{
+  border-radius:14px!important;color:rgba(255,255,255,.68)!important;transition:all .18s ease!important;
+}
+.menu button:hover,.menu button.active,.submenu button:hover,.submenu button.active,.nav-link:hover,.nav-link.active{
+  background:rgba(201,168,76,.14)!important;color:var(--gold-light)!important;transform:translateX(2px);
+}
+.main{background:transparent!important;}
+.topbar,.section,.card,.summary-card,.product-card,.structured-order-preview{
+  background:rgba(255,253,248,.94)!important;border:1px solid rgba(201,168,76,.18)!important;border-radius:24px!important;box-shadow:var(--shadow)!important;backdrop-filter:blur(18px)!important;
+}
+.topbar{padding:24px 28px!important;}
+.section-title{font-size:clamp(24px,3vw,34px)!important;}
+.summary-card,.product-card,.card{transition:transform .18s ease,box-shadow .18s ease!important;}
+.summary-card:hover,.product-card:hover,.card:hover{transform:translateY(-2px);box-shadow:0 26px 65px rgba(26,18,8,.15)!important;}
+button,.btn,.update-btn,.secondary-btn,.mini-btn,.edit-btn,.download-link,.print-link,.whatsapp-link,.notification-enable-btn{
+  border-radius:14px!important;font-weight:700!important;transition:all .18s ease!important;
+}
+button:hover,.btn:hover,.update-btn:hover,.secondary-btn:hover,.mini-btn:hover,.edit-btn:hover,.download-link:hover,.print-link:hover,.whatsapp-link:hover{transform:translateY(-1px);filter:brightness(1.04);}
+.update-btn,.btn.save,.btn.approve,.primary,.notification-enable-btn{background:var(--green)!important;color:#fff!important;border:0!important;}
+.secondary-btn,.mini-btn,.link,.download-link,.print-link{background:var(--gold-bg)!important;color:var(--dark)!important;border:1px solid rgba(201,168,76,.28)!important;}
+.whatsapp-link{background:#ecf7f1!important;color:var(--green)!important;border:1px solid rgba(45,106,79,.18)!important;}
+.btn.reject,.cancel-btn{background:#fdf2f2!important;color:var(--red)!important;border:1px solid rgba(164,38,44,.18)!important;}
+input,select,textarea{
+  border:1px solid #e6ddcf!important;border-radius:14px!important;background:#fff!important;color:var(--dark)!important;outline:none!important;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)!important;box-shadow:0 0 0 4px rgba(201,168,76,.15)!important;}
+table{border-collapse:separate!important;border-spacing:0!important;background:#fff!important;}
+thead tr{background:var(--cream2)!important;}
+th{color:var(--muted)!important;letter-spacing:.08em!important;text-transform:uppercase!important;font-size:11px!important;border-bottom:1px solid #ede8e0!important;}
+td{border-bottom:1px solid rgba(26,18,8,.05)!important;color:var(--dark3)!important;}
+tbody tr:hover td{background:#faf8f4!important;}
+.status,.status-badge,.badge,.live-badge{border-radius:999px!important;font-weight:800!important;letter-spacing:.02em!important;}
+.status.approved,.badge.approved,.badge.accepted{background:#ecf7f1!important;color:var(--green)!important;}
+.status.pending,.badge.pending,.live-badge{background:#fff8ec!important;color:#92540a!important;}
+.status.rejected,.badge.rejected{background:#fdf2f2!important;color:var(--red)!important;}
+.success,.success-msg{background:#ecf7f1!important;color:var(--green)!important;border-left:4px solid var(--green-light)!important;}
+.error{background:#fdf2f2!important;color:var(--red)!important;border-left:4px solid var(--red)!important;}
+.product-image img{filter:drop-shadow(0 22px 38px rgba(26,18,8,.16))!important;}
+@media(max-width:900px){
+  .sidebar{position:relative!important;top:auto!important;left:auto!important;bottom:auto!important;width:auto!important;margin:12px!important;}
+  .main{margin-left:0!important;padding:12px 14px 32px!important;}
+  .topbar{flex-direction:column!important;gap:12px!important;}
+  .cards,.rate-grid,.form-grid,.structured-order-grid{grid-template-columns:1fr!important;}
+  table{min-width:760px;}
+}
+@media(max-width:560px){
+  body{padding:0!important;}
+  .section,.card,.topbar,.summary-card,.product-card{border-radius:18px!important;padding:18px!important;}
+  .brand-box img{width:160px!important;}
+}
+
+</style>
 </head>
 
 <body>

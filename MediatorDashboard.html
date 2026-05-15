@@ -930,18 +930,10 @@ tbody tr:hover td{background:#faf8f4!important;}
     async function sendSuryatejaPushToStaff(title, body) {
       const staffDashboardUrl = new URL('StaffDashboard.html', window.location.href).href;
 
-      // First try the role-based payload. This works with the updated send-notification Edge Function.
-      const roleBasedSent = await invokeSuryatejaPush({
-        role: 'staff',
-        title,
-        body,
-        url: staffDashboardUrl
-      });
-
-      // If your Edge Function supports role-based sending, stop here to avoid duplicate notifications.
-      if (roleBasedSent) return;
-
-      // Fallback: older Edge Function versions expect a direct Firebase token.
+      // FINAL SAFE VERSION:
+      // Do NOT call the Edge Function with role:'staff' because your deployed
+      // send-notification function expects a direct FCM token.
+      // Firebase error "Recipient of the message is not set" happens when token is missing.
       try {
         const { data: staffTokens, error: tokenError } = await supabaseClient
           .from('user_notification_tokens')
@@ -955,8 +947,10 @@ tbody tr:hover td{background:#faf8f4!important;}
         }
 
         const tokens = [...new Set((staffTokens || []).map(row => row.fcm_token).filter(Boolean))];
+        console.log('Active staff FCM token count:', tokens.length);
+
         if (!tokens.length) {
-          console.warn('No active staff FCM tokens found. Ask staff to click Enable Notifications.');
+          console.warn('No active staff FCM tokens found. Open Staff Dashboard and click Enable Notifications.');
           return;
         }
 

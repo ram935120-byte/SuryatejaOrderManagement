@@ -1246,7 +1246,38 @@ tbody tr:hover td{background:#faf8f4!important;}
 
 
 
+    async function invokeSuryatejaPush(payload) {
+      try {
+        const { data, error } = await supabaseClient.functions.invoke('send-notification', { body: payload });
+        if (error) {
+          console.error('Push edge function failed:', error);
+          return false;
+        }
+        console.log('Push edge function response:', data || 'OK');
+        return true;
+      } catch (err) {
+        console.error('Push edge function error:', err);
+        return false;
+      }
+    }
+
     async function sendSuryatejaPushToMediator(mobile, companyName, title, body) {
+      const mediatorDashboardUrl = new URL('MediatorDashboard.html', window.location.href).href;
+
+      // First try role + mediator filters. This works with the updated send-notification Edge Function.
+      const rolePayload = {
+        role: 'mediator',
+        mobile: mobile || '',
+        company_name: companyName || '',
+        companyName: companyName || '',
+        title,
+        body,
+        url: mediatorDashboardUrl
+      };
+      const roleBasedSent = await invokeSuryatejaPush(rolePayload);
+      if (roleBasedSent) return;
+
+      // Fallback: older Edge Function versions expect a direct Firebase token.
       try {
         let query = supabaseClient
           .from('user_notification_tokens')
@@ -1274,18 +1305,12 @@ tbody tr:hover td{background:#faf8f4!important;}
         }
 
         for (const token of tokens) {
-          const { error } = await supabaseClient.functions.invoke('send-notification', {
-            body: {
-              token,
-              title,
-              body,
-              url: window.location.origin + '/MediatorDashboard.html'
-            }
+          await invokeSuryatejaPush({
+            token,
+            title,
+            body,
+            url: mediatorDashboardUrl
           });
-
-          if (error) {
-            console.error('Mediator push notification failed:', error);
-          }
         }
       } catch (err) {
         console.error('Mediator push notification error:', err);
@@ -1524,6 +1549,55 @@ tbody tr:hover td{background:#faf8f4!important;}
     async function logout(){await supabaseClient.auth.signOut();localStorage.removeItem('staffLoggedIn');location.href='StaffLogin.html'}
 
 
+    let staffNotificationChannel = null;
+    let lastLocalNotificationAt = 0;
+
+    function showLocalStaffBrowserNotification(title, body) {
+      try {
+        if (!('Notification' in window) || Notification.permission !== 'granted') return;
+        const now = Date.now();
+        if (now - lastLocalNotificationAt < 1200) return; // avoids accidental double popups
+        lastLocalNotificationAt = now;
+        const n = new Notification(title, {
+          body,
+          icon: 'images/logo.jpg',
+          badge: 'images/logo.jpg',
+          tag: 'suryateja-staff-order-alert',
+          requireInteraction: false
+        });
+        n.onclick = function () {
+          window.focus();
+          try { showSection('notifications', document.querySelector('.menu a')); } catch (e) {}
+          n.close();
+        };
+      } catch (err) {
+        console.error('Local browser notification failed:', err);
+      }
+    }
+
+    function setupStaffRealtimeNotifications() {
+      if (!supabaseClient || !supabaseClient.channel || staffNotificationChannel) return;
+
+      staffNotificationChannel = supabaseClient
+        .channel('staff-notifications-live')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, async payload => {
+          const row = payload.new || {};
+          const type = String(row.type || '').toLowerCase();
+          const isMediatorOrder = type.includes('mediator') || type.includes('order');
+          if (!isMediatorOrder) return;
+
+          showLocalStaffBrowserNotification(
+            row.type || 'New Mediator Order',
+            row.message || 'A new order was submitted.'
+          );
+
+          await render();
+        })
+        .subscribe(status => {
+          console.log('Staff realtime notification channel:', status);
+        });
+    }
+
     async function enableStaffFirebaseNotifications(){
       if(typeof enableSuryatejaFirebaseNotifications !== 'function'){
         alert('Firebase notification files are not loaded. Please check firebase-config.js and notification-permission.js.');
@@ -1539,7 +1613,7 @@ tbody tr:hover td{background:#faf8f4!important;}
       });
     }
 
-    (async function init(){if(await requireStaff())await render();})();
+    (async function init(){if(await requireStaff()){await render();setupStaffRealtimeNotifications();}})();
   </script>
 </body>
 </html>

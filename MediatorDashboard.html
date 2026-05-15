@@ -900,7 +900,36 @@ tbody tr:hover td{background:#faf8f4!important;}
 
 
 
+    async function invokeSuryatejaPush(payload) {
+      try {
+        const { data, error } = await supabaseClient.functions.invoke('send-notification', { body: payload });
+        if (error) {
+          console.error('Push edge function failed:', error);
+          return false;
+        }
+        console.log('Push edge function response:', data || 'OK');
+        return true;
+      } catch (err) {
+        console.error('Push edge function error:', err);
+        return false;
+      }
+    }
+
     async function sendSuryatejaPushToStaff(title, body) {
+      const staffDashboardUrl = new URL('StaffDashboard.html', window.location.href).href;
+
+      // First try the role-based payload. This works with the updated send-notification Edge Function.
+      const roleBasedSent = await invokeSuryatejaPush({
+        role: 'staff',
+        title,
+        body,
+        url: staffDashboardUrl
+      });
+
+      // If your Edge Function supports role-based sending, stop here to avoid duplicate notifications.
+      if (roleBasedSent) return;
+
+      // Fallback: older Edge Function versions expect a direct Firebase token.
       try {
         const { data: staffTokens, error: tokenError } = await supabaseClient
           .from('user_notification_tokens')
@@ -920,18 +949,12 @@ tbody tr:hover td{background:#faf8f4!important;}
         }
 
         for (const token of tokens) {
-          const { error } = await supabaseClient.functions.invoke('send-notification', {
-            body: {
-              token,
-              title,
-              body,
-              url: window.location.origin + '/StaffDashboard.html'
-            }
+          await invokeSuryatejaPush({
+            token,
+            title,
+            body,
+            url: staffDashboardUrl
           });
-
-          if (error) {
-            console.error('Staff push notification failed:', error);
-          }
         }
       } catch (err) {
         console.error('Staff push notification error:', err);
@@ -972,13 +995,18 @@ const rowsToInsert = structuredOrders.map(o => ({
       const submittedOrdersCount = structuredOrders.length;
       const notificationMessage = submittedOrdersCount + ' order(s) submitted by ' + (currentMediator.company_name || 'Mediator') + ' (' + currentMediator.mobile + ')';
 
-      await supabaseClient.from('notifications').insert([{
+      const { error: notificationError } = await supabaseClient.from('notifications').insert([{
         type: 'Mediator Structured Order',
         message: notificationMessage,
         mobile: currentMediator.mobile,
         company_name: currentMediator.company_name,
-        status: 'Unread'
+        status: 'Unread',
+        created_at: new Date().toISOString()
       }]);
+
+      if (notificationError) {
+        console.error('Notification row insert failed:', notificationError);
+      }
 
       await sendSuryatejaPushToStaff(
         'New Order Received',

@@ -417,16 +417,16 @@
 
 
     .print-header {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:16px;
-      margin-bottom:18px;
-      flex-wrap:wrap;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
     }
 
     .print-title h2 {
-      margin-bottom:6px;
+      margin-bottom: 6px;
     }
 
     .loading-sheet-table th,
@@ -557,85 +557,351 @@
       font-weight: 750;
     }
 
-  
-/* === Premium Surya Teja UI Refresh: visual-only overrides === */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
-:root{
-  --gold:#c9a84c!important;--gold-light:#e8d08a!important;--gold-bg:rgba(201,168,76,.10)!important;
-  --cream:#faf6ef!important;--cream2:#f5f0e8!important;--dark:#1a1208!important;--dark2:#2d2010!important;
-  --dark3:#4a3728!important;--muted:#7a6a58!important;--green:#2d6a4f!important;--green-light:#52b788!important;
-  --red:#a4262c!important;--surface:#fffdf8!important;--line:rgba(201,168,76,.22)!important;
-  --border:rgba(201,168,76,.22)!important;--shadow:0 20px 55px rgba(26,18,8,.12)!important;--radius:22px!important;
-}
-*{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif!important;}
-body{
-  background:radial-gradient(ellipse at 15% 0%,rgba(201,168,76,.18),transparent 38%),radial-gradient(ellipse at 85% 10%,rgba(45,106,79,.14),transparent 36%),linear-gradient(180deg,#fffaf0 0%,var(--cream) 100%)!important;
-  color:var(--dark)!important;
-}
-h1,h2,h3,.brand-box h1,.brand,.topbar h1,.topbar-title,.section-title,.product-name,.card h2,.card-title{
-  font-family:'Playfair Display',serif!important;letter-spacing:-.025em!important;color:var(--dark)!important;
-}
-.sidebar{
-  background:linear-gradient(175deg,#1a1208 0%,#2a1e0e 58%,#1a2d1f 100%)!important;
-  border:1px solid rgba(201,168,76,.22)!important;border-radius:28px!important;box-shadow:0 34px 85px rgba(26,18,8,.22)!important;
-}
-.brand-box,.sidebar .brand{border-bottom-color:rgba(201,168,76,.22)!important;}
-.brand-box h1,.sidebar .brand h1,.brand{color:#fff!important;}
-.brand-box h1 span,.sidebar .brand h1 span,.brand span{color:var(--gold)!important;}
-.brand-box img{filter:drop-shadow(0 18px 34px rgba(0,0,0,.28))!important;}
-.menu-title,.submenu-title{color:rgba(255,255,255,.36)!important;letter-spacing:.16em!important;text-transform:uppercase!important;font-weight:700!important;}
-.menu button,.submenu button,.sidebar a,.nav-link{
-  border-radius:14px!important;color:rgba(255,255,255,.68)!important;transition:all .18s ease!important;
-}
-.menu button:hover,.menu button.active,.submenu button:hover,.submenu button.active,.nav-link:hover,.nav-link.active{
-  background:rgba(201,168,76,.14)!important;color:var(--gold-light)!important;transform:translateX(2px);
-}
-.main{background:transparent!important;}
-.topbar,.section,.card,.summary-card,.product-card,.structured-order-preview{
-  background:rgba(255,253,248,.94)!important;border:1px solid rgba(201,168,76,.18)!important;border-radius:24px!important;box-shadow:var(--shadow)!important;backdrop-filter:blur(18px)!important;
-}
-.topbar{padding:24px 28px!important;}
-.section-title{font-size:clamp(24px,3vw,34px)!important;}
-.summary-card,.product-card,.card{transition:transform .18s ease,box-shadow .18s ease!important;}
-.summary-card:hover,.product-card:hover,.card:hover{transform:translateY(-2px);box-shadow:0 26px 65px rgba(26,18,8,.15)!important;}
-button,.btn,.update-btn,.secondary-btn,.mini-btn,.edit-btn,.download-link,.print-link,.whatsapp-link,.notification-enable-btn{
-  border-radius:14px!important;font-weight:700!important;transition:all .18s ease!important;
-}
-button:hover,.btn:hover,.update-btn:hover,.secondary-btn:hover,.mini-btn:hover,.edit-btn:hover,.download-link:hover,.print-link:hover,.whatsapp-link:hover{transform:translateY(-1px);filter:brightness(1.04);}
-.update-btn,.btn.save,.btn.approve,.primary,.notification-enable-btn{background:var(--green)!important;color:#fff!important;border:0!important;}
-.secondary-btn,.mini-btn,.link,.download-link,.print-link{background:var(--gold-bg)!important;color:var(--dark)!important;border:1px solid rgba(201,168,76,.28)!important;}
-.whatsapp-link{background:#ecf7f1!important;color:var(--green)!important;border:1px solid rgba(45,106,79,.18)!important;}
-.btn.reject,.cancel-btn{background:#fdf2f2!important;color:var(--red)!important;border:1px solid rgba(164,38,44,.18)!important;}
-input,select,textarea{
-  border:1px solid #e6ddcf!important;border-radius:14px!important;background:#fff!important;color:var(--dark)!important;outline:none!important;
-}
-input:focus,select:focus,textarea:focus{border-color:var(--gold)!important;box-shadow:0 0 0 4px rgba(201,168,76,.15)!important;}
-table{border-collapse:separate!important;border-spacing:0!important;background:#fff!important;}
-thead tr{background:var(--cream2)!important;}
-th{color:var(--muted)!important;letter-spacing:.08em!important;text-transform:uppercase!important;font-size:11px!important;border-bottom:1px solid #ede8e0!important;}
-td{border-bottom:1px solid rgba(26,18,8,.05)!important;color:var(--dark3)!important;}
-tbody tr:hover td{background:#faf8f4!important;}
-.status,.status-badge,.badge,.live-badge{border-radius:999px!important;font-weight:800!important;letter-spacing:.02em!important;}
-.status.approved,.badge.approved,.badge.accepted{background:#ecf7f1!important;color:var(--green)!important;}
-.status.pending,.badge.pending,.live-badge{background:#fff8ec!important;color:#92540a!important;}
-.status.rejected,.badge.rejected{background:#fdf2f2!important;color:var(--red)!important;}
-.success,.success-msg{background:#ecf7f1!important;color:var(--green)!important;border-left:4px solid var(--green-light)!important;}
-.error{background:#fdf2f2!important;color:var(--red)!important;border-left:4px solid var(--red)!important;}
-.product-image img{filter:drop-shadow(0 22px 38px rgba(26,18,8,.16))!important;}
-@media(max-width:900px){
-  .sidebar{position:relative!important;top:auto!important;left:auto!important;bottom:auto!important;width:auto!important;margin:12px!important;}
-  .main{margin-left:0!important;padding:12px 14px 32px!important;}
-  .topbar{flex-direction:column!important;gap:12px!important;}
-  .cards,.rate-grid,.form-grid,.structured-order-grid{grid-template-columns:1fr!important;}
-  table{min-width:760px;}
-}
-@media(max-width:560px){
-  body{padding:0!important;}
-  .section,.card,.topbar,.summary-card,.product-card{border-radius:18px!important;padding:18px!important;}
-  .brand-box img{width:160px!important;}
-}
 
-</style>
+    /* === Premium Surya Teja UI Refresh: visual-only overrides === */
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+    :root {
+      --gold: #c9a84c !important;
+      --gold-light: #e8d08a !important;
+      --gold-bg: rgba(201, 168, 76, .10) !important;
+      --cream: #faf6ef !important;
+      --cream2: #f5f0e8 !important;
+      --dark: #1a1208 !important;
+      --dark2: #2d2010 !important;
+      --dark3: #4a3728 !important;
+      --muted: #7a6a58 !important;
+      --green: #2d6a4f !important;
+      --green-light: #52b788 !important;
+      --red: #a4262c !important;
+      --surface: #fffdf8 !important;
+      --line: rgba(201, 168, 76, .22) !important;
+      --border: rgba(201, 168, 76, .22) !important;
+      --shadow: 0 20px 55px rgba(26, 18, 8, .12) !important;
+      --radius: 22px !important;
+    }
+
+    * {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+    }
+
+    body {
+      background: radial-gradient(ellipse at 15% 0%, rgba(201, 168, 76, .18), transparent 38%), radial-gradient(ellipse at 85% 10%, rgba(45, 106, 79, .14), transparent 36%), linear-gradient(180deg, #fffaf0 0%, var(--cream) 100%) !important;
+      color: var(--dark) !important;
+    }
+
+    h1,
+    h2,
+    h3,
+    .brand-box h1,
+    .brand,
+    .topbar h1,
+    .topbar-title,
+    .section-title,
+    .product-name,
+    .card h2,
+    .card-title {
+      font-family: 'Playfair Display', serif !important;
+      letter-spacing: -.025em !important;
+      color: var(--dark) !important;
+    }
+
+    .sidebar {
+      background: linear-gradient(175deg, #1a1208 0%, #2a1e0e 58%, #1a2d1f 100%) !important;
+      border: 1px solid rgba(201, 168, 76, .22) !important;
+      border-radius: 28px !important;
+      box-shadow: 0 34px 85px rgba(26, 18, 8, .22) !important;
+    }
+
+    .brand-box,
+    .sidebar .brand {
+      border-bottom-color: rgba(201, 168, 76, .22) !important;
+    }
+
+    .brand-box h1,
+    .sidebar .brand h1,
+    .brand {
+      color: #fff !important;
+    }
+
+    .brand-box h1 span,
+    .sidebar .brand h1 span,
+    .brand span {
+      color: var(--gold) !important;
+    }
+
+    .brand-box img {
+      filter: drop-shadow(0 18px 34px rgba(0, 0, 0, .28)) !important;
+    }
+
+    .menu-title,
+    .submenu-title {
+      color: rgba(255, 255, 255, .36) !important;
+      letter-spacing: .16em !important;
+      text-transform: uppercase !important;
+      font-weight: 700 !important;
+    }
+
+    .menu button,
+    .submenu button,
+    .sidebar a,
+    .nav-link {
+      border-radius: 14px !important;
+      color: rgba(255, 255, 255, .68) !important;
+      transition: all .18s ease !important;
+    }
+
+    .menu button:hover,
+    .menu button.active,
+    .submenu button:hover,
+    .submenu button.active,
+    .nav-link:hover,
+    .nav-link.active {
+      background: rgba(201, 168, 76, .14) !important;
+      color: var(--gold-light) !important;
+      transform: translateX(2px);
+    }
+
+    .main {
+      background: transparent !important;
+    }
+
+    .topbar,
+    .section,
+    .card,
+    .summary-card,
+    .product-card,
+    .structured-order-preview {
+      background: rgba(255, 253, 248, .94) !important;
+      border: 1px solid rgba(201, 168, 76, .18) !important;
+      border-radius: 24px !important;
+      box-shadow: var(--shadow) !important;
+      backdrop-filter: blur(18px) !important;
+    }
+
+    .topbar {
+      padding: 24px 28px !important;
+    }
+
+    .section-title {
+      font-size: clamp(24px, 3vw, 34px) !important;
+    }
+
+    .summary-card,
+    .product-card,
+    .card {
+      transition: transform .18s ease, box-shadow .18s ease !important;
+    }
+
+    .summary-card:hover,
+    .product-card:hover,
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 26px 65px rgba(26, 18, 8, .15) !important;
+    }
+
+    button,
+    .btn,
+    .update-btn,
+    .secondary-btn,
+    .mini-btn,
+    .edit-btn,
+    .download-link,
+    .print-link,
+    .whatsapp-link,
+    .notification-enable-btn {
+      border-radius: 14px !important;
+      font-weight: 700 !important;
+      transition: all .18s ease !important;
+    }
+
+    button:hover,
+    .btn:hover,
+    .update-btn:hover,
+    .secondary-btn:hover,
+    .mini-btn:hover,
+    .edit-btn:hover,
+    .download-link:hover,
+    .print-link:hover,
+    .whatsapp-link:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+    }
+
+    .update-btn,
+    .btn.save,
+    .btn.approve,
+    .primary,
+    .notification-enable-btn {
+      background: var(--green) !important;
+      color: #fff !important;
+      border: 0 !important;
+    }
+
+    .secondary-btn,
+    .mini-btn,
+    .link,
+    .download-link,
+    .print-link {
+      background: var(--gold-bg) !important;
+      color: var(--dark) !important;
+      border: 1px solid rgba(201, 168, 76, .28) !important;
+    }
+
+    .whatsapp-link {
+      background: #ecf7f1 !important;
+      color: var(--green) !important;
+      border: 1px solid rgba(45, 106, 79, .18) !important;
+    }
+
+    .btn.reject,
+    .cancel-btn {
+      background: #fdf2f2 !important;
+      color: var(--red) !important;
+      border: 1px solid rgba(164, 38, 44, .18) !important;
+    }
+
+    input,
+    select,
+    textarea {
+      border: 1px solid #e6ddcf !important;
+      border-radius: 14px !important;
+      background: #fff !important;
+      color: var(--dark) !important;
+      outline: none !important;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--gold) !important;
+      box-shadow: 0 0 0 4px rgba(201, 168, 76, .15) !important;
+    }
+
+    table {
+      border-collapse: separate !important;
+      border-spacing: 0 !important;
+      background: #fff !important;
+    }
+
+    thead tr {
+      background: var(--cream2) !important;
+    }
+
+    th {
+      color: var(--muted) !important;
+      letter-spacing: .08em !important;
+      text-transform: uppercase !important;
+      font-size: 11px !important;
+      border-bottom: 1px solid #ede8e0 !important;
+    }
+
+    td {
+      border-bottom: 1px solid rgba(26, 18, 8, .05) !important;
+      color: var(--dark3) !important;
+    }
+
+    tbody tr:hover td {
+      background: #faf8f4 !important;
+    }
+
+    .status,
+    .status-badge,
+    .badge,
+    .live-badge {
+      border-radius: 999px !important;
+      font-weight: 800 !important;
+      letter-spacing: .02em !important;
+    }
+
+    .status.approved,
+    .badge.approved,
+    .badge.accepted {
+      background: #ecf7f1 !important;
+      color: var(--green) !important;
+    }
+
+    .status.pending,
+    .badge.pending,
+    .live-badge {
+      background: #fff8ec !important;
+      color: #92540a !important;
+    }
+
+    .status.rejected,
+    .badge.rejected {
+      background: #fdf2f2 !important;
+      color: var(--red) !important;
+    }
+
+    .success,
+    .success-msg {
+      background: #ecf7f1 !important;
+      color: var(--green) !important;
+      border-left: 4px solid var(--green-light) !important;
+    }
+
+    .error {
+      background: #fdf2f2 !important;
+      color: var(--red) !important;
+      border-left: 4px solid var(--red) !important;
+    }
+
+    .product-image img {
+      filter: drop-shadow(0 22px 38px rgba(26, 18, 8, .16)) !important;
+    }
+
+    @media(max-width:900px) {
+      .sidebar {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        bottom: auto !important;
+        width: auto !important;
+        margin: 12px !important;
+      }
+
+      .main {
+        margin-left: 0 !important;
+        padding: 12px 14px 32px !important;
+      }
+
+      .topbar {
+        flex-direction: column !important;
+        gap: 12px !important;
+      }
+
+      .cards,
+      .rate-grid,
+      .form-grid,
+      .structured-order-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      table {
+        min-width: 760px;
+      }
+    }
+
+    @media(max-width:560px) {
+      body {
+        padding: 0 !important;
+      }
+
+      .section,
+      .card,
+      .topbar,
+      .summary-card,
+      .product-card {
+        border-radius: 18px !important;
+        padding: 18px !important;
+      }
+
+      .brand-box img {
+        width: 160px !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -670,7 +936,8 @@ tbody tr:hover td{background:#faf8f4!important;}
       </div>
       <div class="notification-action-box">
         <div class="badge"><span id="notificationCount">0</span> Notifications</div>
-        <button type="button" id="staffNotificationButton" class="notification-enable-btn" onclick="enableStaffFirebaseNotifications()">🔔 Enable Notifications</button>
+        <button type="button" id="staffNotificationButton" class="notification-enable-btn"
+          onclick="enableStaffFirebaseNotifications()">🔔 Enable Notifications</button>
         <div id="staffNotificationStatus" class="notification-status-text">Notifications not enabled</div>
       </div>
     </div>
@@ -986,106 +1253,106 @@ tbody tr:hover td{background:#faf8f4!important;}
   <script src="firebase-config.js"></script>
   <script src="notification-permission.js"></script>
   <script>
-    const productNames={hmt:'Surya Teja HMT Premium Rice',oldJoker:'Old Surya Teja Joker JSR Steam Rice',joker:'Surya Teja Joker JSR Steam Rice',knm:'Surya Teja KNM Steam Rice',rnr:'Surya Teja RNR Boiled Rice',jsrBoiled:'Surya Teja JSR Boiled Rice'};
-    const defaultRates={hmt:5465,oldJoker:6200,joker:5480,knm:4500,rnr:4950,jsrBoiled:0};
-    let selectedCompany='';
-    let state={mediators:[],notifications:[],orders:[],bills:[],rates:{...defaultRates}};
+    const productNames = { hmt: 'Surya Teja HMT Premium Rice', oldJoker: 'Old Surya Teja Joker JSR Steam Rice', joker: 'Surya Teja Joker JSR Steam Rice', knm: 'Surya Teja KNM Steam Rice', rnr: 'Surya Teja RNR Boiled Rice', jsrBoiled: 'Surya Teja JSR Boiled Rice' };
+    const defaultRates = { hmt: 5465, oldJoker: 6200, joker: 5480, knm: 4500, rnr: 4950, jsrBoiled: 0 };
+    let selectedCompany = '';
+    let state = { mediators: [], notifications: [], orders: [], bills: [], rates: { ...defaultRates } };
 
-    function escapeHtml(value){return String(value==null?'':value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
-    function escapeAttr(value){return escapeHtml(value).replace(/`/g,'&#96;');}
-    function safeNumber(value){const n=Number(value);return Number.isFinite(n)&&n>=0?n:0;}
-    function sanitizeFileName(name){return String(name||'bill-copy').replace(/[^a-zA-Z0-9._ -]/g,'_').slice(0,120);}
-    function isAllowedBillFile(file){const allowedTypes=['application/pdf','image/jpeg','image/png'];const allowedExt=/\.(pdf|jpg|jpeg|png)$/i;const maxBytes=10*1024*1024;return file&&allowedTypes.includes(file.type)&&allowedExt.test(file.name||'')&&file.size<=maxBytes;}
-    function getLocalDateKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-    function getOrderDateKey(o){const d=new Date(o.created_at);return isNaN(d.getTime())?'':getLocalDateKey(d)}
-    function getCompanyName(o){return (o.company_name&&o.company_name.trim())?o.company_name.trim():'Unknown Company'}
+    function escapeHtml(value) { return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch])); }
+    function escapeAttr(value) { return escapeHtml(value).replace(/`/g, '&#96;'); }
+    function safeNumber(value) { const n = Number(value); return Number.isFinite(n) && n >= 0 ? n : 0; }
+    function sanitizeFileName(name) { return String(name || 'bill-copy').replace(/[^a-zA-Z0-9._ -]/g, '_').slice(0, 120); }
+    function isAllowedBillFile(file) { const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png']; const allowedExt = /\.(pdf|jpg|jpeg|png)$/i; const maxBytes = 10 * 1024 * 1024; return file && allowedTypes.includes(file.type) && allowedExt.test(file.name || '') && file.size <= maxBytes; }
+    function getLocalDateKey(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0') }
+    function getOrderDateKey(o) { const d = new Date(o.created_at); return isNaN(d.getTime()) ? '' : getLocalDateKey(d) }
+    function getCompanyName(o) { return (o.company_name && o.company_name.trim()) ? o.company_name.trim() : 'Unknown Company' }
     // function statusClass(s){return s==='Accepted'||s==='Completed'||s==='Dispatched'||s==='Bill Uploaded'?'approved':s==='Rejected'||s==='Cancelled'?'rejected':'pending'}
-    function statusClass(s){
-  return s==='Accepted'||s==='Completed'
-    ?'approved'
-    :s==='Rejected'
-    ?'rejected'
-    :'pending'
-}
-    async function requireStaff(){
-      const {data}=await supabaseClient.auth.getSession();
-      if(!data.session && localStorage.getItem('staffLoggedIn')!=='true'){
-        location.href='StaffLogin.html';
+    function statusClass(s) {
+      return s === 'Accepted' || s === 'Completed'
+        ? 'approved'
+        : s === 'Rejected'
+          ? 'rejected'
+          : 'pending'
+    }
+    async function requireStaff() {
+      const { data } = await supabaseClient.auth.getSession();
+      if (!data.session && localStorage.getItem('staffLoggedIn') !== 'true') {
+        location.href = 'StaffLogin.html';
         return false;
       }
-      localStorage.setItem('staffLoggedIn','true');
+      localStorage.setItem('staffLoggedIn', 'true');
       return true;
     }
 
-    async function loadData(){
-      const [m,n,o,b,r]=await Promise.all([
-        supabaseClient.from('mediators').select('*').order('created_at',{ascending:false}),
-        supabaseClient.from('notifications').select('*').order('created_at',{ascending:false}),
-        supabaseClient.from('orders').select('*').order('created_at',{ascending:false}),
-        supabaseClient.from('bill_copies').select('*').order('uploaded_at',{ascending:false}),
+    async function loadData() {
+      const [m, n, o, b, r] = await Promise.all([
+        supabaseClient.from('mediators').select('*').order('created_at', { ascending: false }),
+        supabaseClient.from('notifications').select('*').order('created_at', { ascending: false }),
+        supabaseClient.from('orders').select('*').order('created_at', { ascending: false }),
+        supabaseClient.from('bill_copies').select('*').order('uploaded_at', { ascending: false }),
         supabaseClient.from('product_rates').select('*')
       ]);
-      if(m.error) console.warn(m.error); if(n.error) console.warn(n.error); if(o.error) console.warn(o.error); if(b.error) console.warn(b.error); if(r.error) console.warn(r.error);
-      state.mediators=m.data||[]; state.notifications=n.data||[]; state.orders=o.data||[]; state.bills=b.data||[];
-      state.rates={...defaultRates};
-      (r.data||[]).forEach(x=>state.rates[x.product_key]=Number(x.quintal_rate||0));
+      if (m.error) console.warn(m.error); if (n.error) console.warn(n.error); if (o.error) console.warn(o.error); if (b.error) console.warn(b.error); if (r.error) console.warn(r.error);
+      state.mediators = m.data || []; state.notifications = n.data || []; state.orders = o.data || []; state.bills = b.data || [];
+      state.rates = { ...defaultRates };
+      (r.data || []).forEach(x => state.rates[x.product_key] = Number(x.quintal_rate || 0));
     }
 
-    function getRegisteredCompanies(){
-      const fromMediators=state.mediators.map(m=>({companyName:m.company_name||'Unknown Company',mobile:m.mobile||''}));
-      const fromOrders=state.orders.map(o=>({companyName:getCompanyName(o),mobile:o.mobile||''}));
-      const map={};
-      [...fromMediators,...fromOrders].forEach(item=>{if(item.companyName&&item.companyName!=='Unknown Company')map[item.companyName]=item.mobile||map[item.companyName]||'';});
-      return Object.keys(map).sort((a,b)=>a.localeCompare(b)).map(name=>({companyName:name,mobile:map[name]}));
+    function getRegisteredCompanies() {
+      const fromMediators = state.mediators.map(m => ({ companyName: m.company_name || 'Unknown Company', mobile: m.mobile || '' }));
+      const fromOrders = state.orders.map(o => ({ companyName: getCompanyName(o), mobile: o.mobile || '' }));
+      const map = {};
+      [...fromMediators, ...fromOrders].forEach(item => { if (item.companyName && item.companyName !== 'Unknown Company') map[item.companyName] = item.mobile || map[item.companyName] || ''; });
+      return Object.keys(map).sort((a, b) => a.localeCompare(b)).map(name => ({ companyName: name, mobile: map[name] }));
     }
 
-    function loadRates(){
-      ['hmt','oldJoker','joker','knm','rnr','jsrBoiled'].forEach(k=>{const input=document.getElementById('rate-'+k);if(input)input.value=state.rates[k]??0;});
+    function loadRates() {
+      ['hmt', 'oldJoker', 'joker', 'knm', 'rnr', 'jsrBoiled'].forEach(k => { const input = document.getElementById('rate-' + k); if (input) input.value = state.rates[k] ?? 0; });
     }
 
-    async function saveRates(){
-      const rows=['hmt','oldJoker','joker','knm','rnr','jsrBoiled'].map(k=>({product_key:k,product_name:productNames[k]||k,quintal_rate:safeNumber(document.getElementById('rate-'+k).value),updated_at:new Date().toISOString()}));
-      const {error}=await supabaseClient.from('product_rates').upsert(rows,{onConflict:'product_key'});
-      if(error){alert(error.message);return}
-      document.getElementById('rateSuccess').style.display='block';
-      setTimeout(()=>document.getElementById('rateSuccess').style.display='none',3000);
+    async function saveRates() {
+      const rows = ['hmt', 'oldJoker', 'joker', 'knm', 'rnr', 'jsrBoiled'].map(k => ({ product_key: k, product_name: productNames[k] || k, quintal_rate: safeNumber(document.getElementById('rate-' + k).value), updated_at: new Date().toISOString() }));
+      const { error } = await supabaseClient.from('product_rates').upsert(rows, { onConflict: 'product_key' });
+      if (error) { alert(error.message); return }
+      document.getElementById('rateSuccess').style.display = 'block';
+      setTimeout(() => document.getElementById('rateSuccess').style.display = 'none', 3000);
       await render();
     }
 
-    function showSection(id,link){['notifications','orders','todayLoadingSheet','dateWiseLoadingSheet','dailySales','billUpload','rates','mediators'].forEach(s=>document.getElementById(s).style.display=s===id?'block':'none');document.querySelectorAll('.menu a').forEach(a=>a.classList.remove('active'));document.querySelectorAll('#companyMenuRows a').forEach(a=>a.classList.remove('company-active'));if(link)link.classList.add('active');if(id!=='orders')document.getElementById('ordersSubmenu').style.display='none';if(id!=='todayLoadingSheet'&&id!=='dateWiseLoadingSheet')document.getElementById('loadingSheetSubmenu').style.display='none';if(id==='rates')loadRates();}
-    function showOrdersMenu(link){selectedCompany='';showSection('orders',link);document.getElementById('ordersSubmenu').style.display='block';renderOrders()}
-    function showLoadingSheetMenu(link){showSection('todayLoadingSheet',link);document.getElementById('loadingSheetSubmenu').style.display='block';renderTodayLoadingSheet()}
-    function showTodayLoadingSheet(link){showSection('todayLoadingSheet',link);document.getElementById('loadingSheetSubmenu').style.display='block';if(link)link.classList.add('company-active');renderTodayLoadingSheet()}
-    function showDateWiseLoadingSheet(link){showSection('dateWiseLoadingSheet',link);document.getElementById('loadingSheetSubmenu').style.display='block';if(link)link.classList.add('company-active');setTodayForDateWiseSheet()}
-    function showDailySales(link){showSection('dailySales',link);setTodayForDailySales()}
-    function showCompanyOrders(company,link){selectedCompany=company;showSection('orders',document.getElementById('ordersMainMenu'));document.getElementById('ordersSubmenu').style.display='block';document.querySelectorAll('#companyMenuRows a').forEach(a=>a.classList.remove('company-active'));if(link)link.classList.add('company-active');renderOrders(company)}
-    function applyOrderFilters(){renderOrders(selectedCompany)}
-    function clearOrderFilters(){document.getElementById('filterDate').value='';document.getElementById('filterStatus').value='';document.getElementById('filterSearch').value='';renderOrders(selectedCompany)}
+    function showSection(id, link) { ['notifications', 'orders', 'todayLoadingSheet', 'dateWiseLoadingSheet', 'dailySales', 'billUpload', 'rates', 'mediators'].forEach(s => document.getElementById(s).style.display = s === id ? 'block' : 'none'); document.querySelectorAll('.menu a').forEach(a => a.classList.remove('active')); document.querySelectorAll('#companyMenuRows a').forEach(a => a.classList.remove('company-active')); if (link) link.classList.add('active'); if (id !== 'orders') document.getElementById('ordersSubmenu').style.display = 'none'; if (id !== 'todayLoadingSheet' && id !== 'dateWiseLoadingSheet') document.getElementById('loadingSheetSubmenu').style.display = 'none'; if (id === 'rates') loadRates(); }
+    function showOrdersMenu(link) { selectedCompany = ''; showSection('orders', link); document.getElementById('ordersSubmenu').style.display = 'block'; renderOrders() }
+    function showLoadingSheetMenu(link) { showSection('todayLoadingSheet', link); document.getElementById('loadingSheetSubmenu').style.display = 'block'; renderTodayLoadingSheet() }
+    function showTodayLoadingSheet(link) { showSection('todayLoadingSheet', link); document.getElementById('loadingSheetSubmenu').style.display = 'block'; if (link) link.classList.add('company-active'); renderTodayLoadingSheet() }
+    function showDateWiseLoadingSheet(link) { showSection('dateWiseLoadingSheet', link); document.getElementById('loadingSheetSubmenu').style.display = 'block'; if (link) link.classList.add('company-active'); setTodayForDateWiseSheet() }
+    function showDailySales(link) { showSection('dailySales', link); setTodayForDailySales() }
+    function showCompanyOrders(company, link) { selectedCompany = company; showSection('orders', document.getElementById('ordersMainMenu')); document.getElementById('ordersSubmenu').style.display = 'block'; document.querySelectorAll('#companyMenuRows a').forEach(a => a.classList.remove('company-active')); if (link) link.classList.add('company-active'); renderOrders(company) }
+    function applyOrderFilters() { renderOrders(selectedCompany) }
+    function clearOrderFilters() { document.getElementById('filterDate').value = ''; document.getElementById('filterStatus').value = ''; document.getElementById('filterSearch').value = ''; renderOrders(selectedCompany) }
 
-    function renderCompanySubmenu(){
-      const companies=[...new Set(state.orders.map(getCompanyName))].sort((a,b)=>a.localeCompare(b));
-      document.getElementById('companyMenuRows').innerHTML=companies.length?companies.map(c=>`<a href="#" onclick="showCompanyOrders('${escapeAttr(c)}',this)">${escapeHtml(c)}</a>`).join(''):'<div class="empty-company">No company orders yet.</div>';
+    function renderCompanySubmenu() {
+      const companies = [...new Set(state.orders.map(getCompanyName))].sort((a, b) => a.localeCompare(b));
+      document.getElementById('companyMenuRows').innerHTML = companies.length ? companies.map(c => `<a href="#" onclick="showCompanyOrders('${escapeAttr(c)}',this)">${escapeHtml(c)}</a>`).join('') : '<div class="empty-company">No company orders yet.</div>';
     }
 
-    function renderOrders(company){
-      let orders=[...state.orders];
-      if(company)orders=orders.filter(o=>getCompanyName(o)===company);
-      const date=document.getElementById('filterDate')?.value||'';
-      const status=document.getElementById('filterStatus')?.value||'';
-      const search=(document.getElementById('filterSearch')?.value||'').toLowerCase();
-      if(date)orders=orders.filter(o=>getOrderDateKey(o)===date);
-      if(status)orders=orders.filter(o=>(o.status||'Submitted')===status);
-      if(search)orders=orders.filter(o=>(getCompanyName(o)+' '+(o.mobile||'')+' '+(o.order_text||'')).toLowerCase().includes(search));
-      document.getElementById('ordersTitle').innerText=company?company+' - Orders':'Orders';
-      document.getElementById('selectedCompanyPill').innerText=company||'All Companies';
-      document.getElementById('orderRows').innerHTML=orders.length?orders.map(o=>`
+    function renderOrders(company) {
+      let orders = [...state.orders];
+      if (company) orders = orders.filter(o => getCompanyName(o) === company);
+      const date = document.getElementById('filterDate')?.value || '';
+      const status = document.getElementById('filterStatus')?.value || '';
+      const search = (document.getElementById('filterSearch')?.value || '').toLowerCase();
+      if (date) orders = orders.filter(o => getOrderDateKey(o) === date);
+      if (status) orders = orders.filter(o => (o.status || 'Submitted') === status);
+      if (search) orders = orders.filter(o => (getCompanyName(o) + ' ' + (o.mobile || '') + ' ' + (o.order_text || '')).toLowerCase().includes(search));
+      document.getElementById('ordersTitle').innerText = company ? company + ' - Orders' : 'Orders';
+      document.getElementById('selectedCompanyPill').innerText = company || 'All Companies';
+      document.getElementById('orderRows').innerHTML = orders.length ? orders.map(o => `
         <tr>
-          <td>${escapeHtml(o.id||'-')}</td>
-          <td>${escapeHtml(getCompanyName(o))}<br><small>${escapeHtml(o.mobile||'')}</small></td>
-          <td class="order-text">${escapeHtml(o.order_text||'-')}</td>
+          <td>${escapeHtml(o.id || '-')}</td>
+          <td>${escapeHtml(getCompanyName(o))}<br><small>${escapeHtml(o.mobile || '')}</small></td>
+          <td class="order-text">${escapeHtml(o.order_text || '-')}</td>
           <td>${o.order_price ? '₹' + Number(o.order_price).toLocaleString('en-IN') : '-'}</td>
-          <td>${escapeHtml(o.created_at?new Date(o.created_at).toLocaleString('en-IN'):'-')}</td>
-          <td><span class="status ${statusClass(o.status)}">${escapeHtml(o.status||'Submitted')}</span><br><br><b>Staff Comment:</b><br>${escapeHtml(o.staff_comment||'-')}</td>
+          <td>${escapeHtml(o.created_at ? new Date(o.created_at).toLocaleString('en-IN') : '-')}</td>
+          <td><span class="status ${statusClass(o.status)}">${escapeHtml(o.status || 'Submitted')}</span><br><br><b>Staff Comment:</b><br>${escapeHtml(o.staff_comment || '-')}</td>
           <td>
   <select id="status-${escapeAttr(o.id)}" style="width:100%;margin-bottom:8px">
     <option value="">Select</option>
@@ -1107,140 +1374,140 @@ tbody tr:hover td{background:#faf8f4!important;}
     Submit
   </button>
 </td>
-          <td class="timeline"><b>${escapeHtml(o.status||'Submitted')}</b><br><small>${escapeHtml(o.created_at?new Date(o.created_at).toLocaleString('en-IN'):'')}</small></td>
-          <td>${o.today_loading===true?'<span class="status approved">Added</span>':'<button class="btn save" onclick="addToLoadingSheet(\''+escapeAttr(o.id)+'\')">Add to Loading Sheet</button>'}</td>
-        </tr>`).join(''):'<tr><td colspan="9">No orders found.</td></tr>';
+          <td class="timeline"><b>${escapeHtml(o.status || 'Submitted')}</b><br><small>${escapeHtml(o.created_at ? new Date(o.created_at).toLocaleString('en-IN') : '')}</small></td>
+          <td>${o.today_loading === true ? '<span class="status approved">Added</span>' : '<button class="btn save" onclick="addToLoadingSheet(\'' + escapeAttr(o.id) + '\')">Add to Loading Sheet</button>'}</td>
+        </tr>`).join('') : '<tr><td colspan="9">No orders found.</td></tr>';
     }
 
 
-    function getLoadingTypeLabel(o){
-      return o.loading_type || (String(o.comment||'').startsWith('Future Loading') ? 'Future Loading' : 'Ready Loading');
+    function getLoadingTypeLabel(o) {
+      return o.loading_type || (String(o.comment || '').startsWith('Future Loading') ? 'Future Loading' : 'Ready Loading');
     }
 
-    function getLoadingDateLabel(o){
-      return o.loading_date || (getLoadingTypeLabel(o)==='Ready Loading' ? '-' : '-');
+    function getLoadingDateLabel(o) {
+      return o.loading_date || (getLoadingTypeLabel(o) === 'Ready Loading' ? '-' : '-');
     }
 
-    async function addToLoadingSheet(orderId){
-      const today=getLocalDateKey(new Date());
-      const {error}=await supabaseClient
+    async function addToLoadingSheet(orderId) {
+      const today = getLocalDateKey(new Date());
+      const { error } = await supabaseClient
         .from('orders')
         .update({
-          today_loading:true,
-          loading_sheet_date:today,
-          today_loading_added_at:new Date().toISOString()
+          today_loading: true,
+          loading_sheet_date: today,
+          today_loading_added_at: new Date().toISOString()
         })
-        .eq('id',orderId);
+        .eq('id', orderId);
 
-      if(error){alert(error.message);return}
+      if (error) { alert(error.message); return }
       alert('Added to Loading Sheet.');
       await render();
-      if(document.getElementById('orders').style.display!=='none')renderOrders(selectedCompany);
+      if (document.getElementById('orders').style.display !== 'none') renderOrders(selectedCompany);
     }
 
-    function getLoadingSheetOrdersByDate(date){
-      return state.orders.filter(o=>{
-        const status=o.status||'Submitted';
-        if(status==='Completed'||status==='Rejected')return false;
-        return o.today_loading===true && o.loading_sheet_date===date;
+    function getLoadingSheetOrdersByDate(date) {
+      return state.orders.filter(o => {
+        const status = o.status || 'Submitted';
+        if (status === 'Completed' || status === 'Rejected') return false;
+        return o.today_loading === true && o.loading_sheet_date === date;
       });
     }
 
-    function renderLoadingSheetRows(orders, tbodyId){
-      document.getElementById(tbodyId).innerHTML=orders.length?orders.map((o,index)=>`
+    function renderLoadingSheetRows(orders, tbodyId) {
+      document.getElementById(tbodyId).innerHTML = orders.length ? orders.map((o, index) => `
         <tr>
-          <td>${index+1}</td>
+          <td>${index + 1}</td>
           <td>${escapeHtml(getCompanyName(o))}</td>
-          <td>${escapeHtml(o.party_name||'-')}</td>
-          <td>${escapeHtml(o.quantity||'-')}</td>
+          <td>${escapeHtml(o.party_name || '-')}</td>
+          <td>${escapeHtml(o.quantity || '-')}</td>
           <td>${o.order_price ? '₹' + Number(o.order_price).toLocaleString('en-IN') : '-'}</td>
-          <td>${escapeHtml(o.variety||'-')}</td>
+          <td>${escapeHtml(o.variety || '-')}</td>
           <td>${escapeHtml(getLoadingTypeLabel(o))}</td>
           <td>${escapeHtml(getLoadingDateLabel(o))}</td>
-          <td><span class="status ${statusClass(o.status)}">${escapeHtml(o.status||'Submitted')}</span></td>
+          <td><span class="status ${statusClass(o.status)}">${escapeHtml(o.status || 'Submitted')}</span></td>
           <td>
             <button class="btn reject no-print" onclick="removeFromLoadingSheet('${escapeAttr(o.id)}')">Delete</button>
           </td>
         </tr>
-      `).join(''):`<tr><td colspan="10">No loading sheet orders found.</td></tr>`;
+      `).join('') : `<tr><td colspan="10">No loading sheet orders found.</td></tr>`;
     }
 
-    function renderTodayLoadingSheet(){
-      const today=getLocalDateKey(new Date());
-      document.getElementById('todayLoadingDateLabel').innerText=new Date().toLocaleDateString('en-IN');
-      renderLoadingSheetRows(getLoadingSheetOrdersByDate(today),'todayLoadingRows');
+    function renderTodayLoadingSheet() {
+      const today = getLocalDateKey(new Date());
+      document.getElementById('todayLoadingDateLabel').innerText = new Date().toLocaleDateString('en-IN');
+      renderLoadingSheetRows(getLoadingSheetOrdersByDate(today), 'todayLoadingRows');
     }
 
-    function setTodayForDateWiseSheet(){
-      const today=getLocalDateKey(new Date());
-      document.getElementById('loadingSheetDate').value=today;
+    function setTodayForDateWiseSheet() {
+      const today = getLocalDateKey(new Date());
+      document.getElementById('loadingSheetDate').value = today;
       renderDateWiseLoadingSheet();
     }
 
-    function renderDateWiseLoadingSheet(){
-      const date=document.getElementById('loadingSheetDate').value;
-      if(!date){alert('Please select loading sheet date.');return}
-      document.getElementById('dateWiseLoadingDateLabel').innerText=new Date(date+'T00:00:00').toLocaleDateString('en-IN');
-      renderLoadingSheetRows(getLoadingSheetOrdersByDate(date),'dateWiseLoadingRows');
+    function renderDateWiseLoadingSheet() {
+      const date = document.getElementById('loadingSheetDate').value;
+      if (!date) { alert('Please select loading sheet date.'); return }
+      document.getElementById('dateWiseLoadingDateLabel').innerText = new Date(date + 'T00:00:00').toLocaleDateString('en-IN');
+      renderLoadingSheetRows(getLoadingSheetOrdersByDate(date), 'dateWiseLoadingRows');
     }
 
-    async function removeFromLoadingSheet(orderId){
-      const confirmDelete=confirm('Remove this order from Loading Sheet?');
-      if(!confirmDelete)return;
+    async function removeFromLoadingSheet(orderId) {
+      const confirmDelete = confirm('Remove this order from Loading Sheet?');
+      if (!confirmDelete) return;
 
-      const {error}=await supabaseClient
+      const { error } = await supabaseClient
         .from('orders')
         .update({
-          today_loading:false,
-          loading_sheet_date:null,
-          today_loading_added_at:null
+          today_loading: false,
+          loading_sheet_date: null,
+          today_loading_added_at: null
         })
-        .eq('id',orderId);
+        .eq('id', orderId);
 
-      if(error){alert(error.message);return}
+      if (error) { alert(error.message); return }
 
       alert('Removed from Loading Sheet.');
       await render();
 
-      if(document.getElementById('todayLoadingSheet').style.display!=='none')renderTodayLoadingSheet();
-      if(document.getElementById('dateWiseLoadingSheet').style.display!=='none')renderDateWiseLoadingSheet();
-      if(document.getElementById('orders').style.display!=='none')renderOrders(selectedCompany);
+      if (document.getElementById('todayLoadingSheet').style.display !== 'none') renderTodayLoadingSheet();
+      if (document.getElementById('dateWiseLoadingSheet').style.display !== 'none') renderDateWiseLoadingSheet();
+      if (document.getElementById('orders').style.display !== 'none') renderOrders(selectedCompany);
     }
 
-    function printCurrentPage(){
+    function printCurrentPage() {
       window.print();
     }
 
-    function setTodayForDailySales(){
-      const today=getLocalDateKey(new Date());
-      document.getElementById('dailySalesDate').value=today;
+    function setTodayForDailySales() {
+      const today = getLocalDateKey(new Date());
+      document.getElementById('dailySalesDate').value = today;
       renderDailySales();
     }
 
-    function getDailySalesOrdersByDate(date){
-      return state.orders.filter(o=>getOrderDateKey(o)===date);
+    function getDailySalesOrdersByDate(date) {
+      return state.orders.filter(o => getOrderDateKey(o) === date);
     }
 
-    function renderDailySales(){
-      const date=document.getElementById('dailySalesDate').value;
-      if(!date){alert('Please select daily sales date.');return}
+    function renderDailySales() {
+      const date = document.getElementById('dailySalesDate').value;
+      if (!date) { alert('Please select daily sales date.'); return }
 
-      document.getElementById('dailySalesDateLabel').innerText=new Date(date+'T00:00:00').toLocaleDateString('en-IN');
-      const orders=getDailySalesOrdersByDate(date);
+      document.getElementById('dailySalesDateLabel').innerText = new Date(date + 'T00:00:00').toLocaleDateString('en-IN');
+      const orders = getDailySalesOrdersByDate(date);
 
-      document.getElementById('dailySalesRows').innerHTML=orders.length?orders.map((o,index)=>`
+      document.getElementById('dailySalesRows').innerHTML = orders.length ? orders.map((o, index) => `
         <tr>
-          <td>${index+1}</td>
+          <td>${index + 1}</td>
           <td>${escapeHtml(getCompanyName(o))}</td>
-          <td>${escapeHtml(o.party_name||'-')}</td>
-          <td>${escapeHtml(o.quantity||'-')}</td>
+          <td>${escapeHtml(o.party_name || '-')}</td>
+          <td>${escapeHtml(o.quantity || '-')}</td>
           <td>${o.order_price ? '₹' + Number(o.order_price).toLocaleString('en-IN') : '-'}</td>
-          <td>${escapeHtml(o.variety||'-')}</td>
+          <td>${escapeHtml(o.variety || '-')}</td>
           <td>${escapeHtml(getLoadingTypeLabel(o))}</td>
           <td>${escapeHtml(getLoadingDateLabel(o))}</td>
-          <td><span class="status ${statusClass(o.status)}">${escapeHtml(o.status||'Submitted')}</span></td>
+          <td><span class="status ${statusClass(o.status)}">${escapeHtml(o.status || 'Submitted')}</span></td>
         </tr>
-      `).join(''):`<tr><td colspan="9">No daily sales orders found.</td></tr>`;
+      `).join('') : `<tr><td colspan="9">No daily sales orders found.</td></tr>`;
     }
 
 
@@ -1317,17 +1584,17 @@ tbody tr:hover td{background:#faf8f4!important;}
       }
     }
 
-    async function updateOrderStatus(orderId){
-      const status=document.getElementById('status-'+orderId).value;
-      const comment=document.getElementById('comment-'+orderId).value.trim();
-      if(!status){alert('Please select order status.');return}
-      if(!comment){alert('Please enter staff comment.');return}
-      const order=state.orders.find(o=>String(o.id)===String(orderId));
-      const {error}=await supabaseClient.from('orders').update({status,staff_comment:comment}).eq('id',orderId);
-      if(error){alert(error.message);return}
-      if(order){
+    async function updateOrderStatus(orderId) {
+      const status = document.getElementById('status-' + orderId).value;
+      const comment = document.getElementById('comment-' + orderId).value.trim();
+      if (!status) { alert('Please select order status.'); return }
+      if (!comment) { alert('Please enter staff comment.'); return }
+      const order = state.orders.find(o => String(o.id) === String(orderId));
+      const { error } = await supabaseClient.from('orders').update({ status, staff_comment: comment }).eq('id', orderId);
+      if (error) { alert(error.message); return }
+      if (order) {
         const statusMessage = 'Order ' + orderId + ' was ' + status + ' by staff. Comment: ' + comment;
-        await supabaseClient.from('notifications').insert([{type:'Order Status Update',message:statusMessage,mobile:order.mobile,company_name:order.company_name,status:'Unread'}]);
+        await supabaseClient.from('notifications').insert([{ type: 'Order Status Update', message: statusMessage, mobile: order.mobile, company_name: order.company_name, status: 'Unread' }]);
         await sendSuryatejaPushToMediator(
           order.mobile || '',
           order.company_name || '',
@@ -1340,89 +1607,89 @@ tbody tr:hover td{background:#faf8f4!important;}
       renderOrders(selectedCompany);
     }
 
-    function loadBillCompanyOptions(){
-      const companies=getRegisteredCompanies();
-      const options='<option value="">Select Company</option>'+companies.map(c=>`<option value="${escapeAttr(c.companyName)}" data-mobile="${escapeAttr(c.mobile)}">${escapeHtml(c.companyName)}</option>`).join('');
-      document.getElementById('billCompany').innerHTML=options;
-      document.getElementById('billSearchCompany').innerHTML='<option value="">All Companies</option>'+companies.map(c=>`<option value="${escapeAttr(c.companyName)}">${escapeHtml(c.companyName)}</option>`).join('');
-      if(!document.getElementById('billDate').value)document.getElementById('billDate').value=getLocalDateKey(new Date());
+    function loadBillCompanyOptions() {
+      const companies = getRegisteredCompanies();
+      const options = '<option value="">Select Company</option>' + companies.map(c => `<option value="${escapeAttr(c.companyName)}" data-mobile="${escapeAttr(c.mobile)}">${escapeHtml(c.companyName)}</option>`).join('');
+      document.getElementById('billCompany').innerHTML = options;
+      document.getElementById('billSearchCompany').innerHTML = '<option value="">All Companies</option>' + companies.map(c => `<option value="${escapeAttr(c.companyName)}">${escapeHtml(c.companyName)}</option>`).join('');
+      if (!document.getElementById('billDate').value) document.getElementById('billDate').value = getLocalDateKey(new Date());
     }
 
-    async function uploadBills(){
-      const company=document.getElementById('billCompany').value;
-      const billDate=document.getElementById('billDate').value;
-      const billNumber=document.getElementById('billNumber').value.trim();
-      const notes=document.getElementById('billNotes').value.trim();
-      const files=document.getElementById('billFiles').files;
-      if(!company){alert('Please select registered company.');return}
-      if(!billDate){alert('Please select bill date.');return}
-      if(!files.length){alert('Please upload at least one bill copy.');return}
-      const fileList=Array.from(files);
-      const invalid=fileList.find(f=>!isAllowedBillFile(f));
-      if(invalid){alert('Only PDF, JPG, JPEG, PNG files up to 10 MB are allowed. Invalid file: '+invalid.name);return}
-      const mobile=(getRegisteredCompanies().find(c=>c.companyName===company)||{}).mobile||'';
-      let uploadedCount=0;
-      for(const file of fileList){
-        const safeName=sanitizeFileName(file.name);
-        const path=company.replace(/[^a-zA-Z0-9_-]/g,'_')+'/'+Date.now()+'-'+safeName;
-        const up=await supabaseClient.storage.from('bill-copies').upload(path,file,{cacheControl:'3600',upsert:false});
-        if(up.error){alert(up.error.message);return}
-        const pub=supabaseClient.storage.from('bill-copies').getPublicUrl(path);
-        const fileUrl=pub.data.publicUrl;
-        const ins=await supabaseClient.from('bill_copies').insert([{company_name:company,mobile,bill_number:billNumber,bill_date:billDate,notes,file_url:fileUrl}]);
-        if(ins.error){alert(ins.error.message);return}
+    async function uploadBills() {
+      const company = document.getElementById('billCompany').value;
+      const billDate = document.getElementById('billDate').value;
+      const billNumber = document.getElementById('billNumber').value.trim();
+      const notes = document.getElementById('billNotes').value.trim();
+      const files = document.getElementById('billFiles').files;
+      if (!company) { alert('Please select registered company.'); return }
+      if (!billDate) { alert('Please select bill date.'); return }
+      if (!files.length) { alert('Please upload at least one bill copy.'); return }
+      const fileList = Array.from(files);
+      const invalid = fileList.find(f => !isAllowedBillFile(f));
+      if (invalid) { alert('Only PDF, JPG, JPEG, PNG files up to 10 MB are allowed. Invalid file: ' + invalid.name); return }
+      const mobile = (getRegisteredCompanies().find(c => c.companyName === company) || {}).mobile || '';
+      let uploadedCount = 0;
+      for (const file of fileList) {
+        const safeName = sanitizeFileName(file.name);
+        const path = company.replace(/[^a-zA-Z0-9_-]/g, '_') + '/' + Date.now() + '-' + safeName;
+        const up = await supabaseClient.storage.from('bill-copies').upload(path, file, { cacheControl: '3600', upsert: false });
+        if (up.error) { alert(up.error.message); return }
+        const pub = supabaseClient.storage.from('bill-copies').getPublicUrl(path);
+        const fileUrl = pub.data.publicUrl;
+        const ins = await supabaseClient.from('bill_copies').insert([{ company_name: company, mobile, bill_number: billNumber, bill_date: billDate, notes, file_url: fileUrl }]);
+        if (ins.error) { alert(ins.error.message); return }
         uploadedCount++;
       }
       const billNotificationMessage = uploadedCount + ' bill copy/copies uploaded for ' + company;
-      await supabaseClient.from('notifications').insert([{type:'Bill Copy Uploaded',message:billNotificationMessage,company_name:company,mobile,status:'Unread'}]);
+      await supabaseClient.from('notifications').insert([{ type: 'Bill Copy Uploaded', message: billNotificationMessage, company_name: company, mobile, status: 'Unread' }]);
       await sendSuryatejaPushToMediator(
         mobile || '',
         company,
         'Bill Copy Uploaded',
         billNotificationMessage
       );
-      document.getElementById('billSuccess').innerText=uploadedCount+' bill copy/copies uploaded successfully.';
-      document.getElementById('billSuccess').style.display='block';setTimeout(()=>document.getElementById('billSuccess').style.display='none',3000);
-      document.getElementById('billFiles').value='';document.getElementById('billNumber').value='';document.getElementById('billNotes').value='';
+      document.getElementById('billSuccess').innerText = uploadedCount + ' bill copy/copies uploaded successfully.';
+      document.getElementById('billSuccess').style.display = 'block'; setTimeout(() => document.getElementById('billSuccess').style.display = 'none', 3000);
+      document.getElementById('billFiles').value = ''; document.getElementById('billNumber').value = ''; document.getElementById('billNotes').value = '';
       await render();
       renderBills();
     }
 
-    function fileNameFromUrl(url){try{return decodeURIComponent(String(url||'').split('/').pop().split('?')[0])||'Bill_Copy'}catch(e){return 'Bill_Copy'}}
-    function renderBills(){
-      let bills=[...state.bills];
-      const company=document.getElementById('billSearchCompany')?.value||'';
-      const date=document.getElementById('billSearchDate')?.value||'';
-      if(company)bills=bills.filter(b=>b.company_name===company);
-      if(date)bills=bills.filter(b=>b.bill_date===date);
-      document.getElementById('billRows').innerHTML=bills.length?bills.map(b=>`<tr><td>${escapeHtml(b.company_name||'-')}</td><td>${escapeHtml(b.bill_number||'-')}</td><td>${escapeHtml(b.bill_date||'-')}</td><td>${escapeHtml(fileNameFromUrl(b.file_url))}</td><td>${escapeHtml(b.notes||'-')}</td><td>${escapeHtml(b.uploaded_at?new Date(b.uploaded_at).toLocaleString('en-IN'):'-')}</td><td><a class="download-link" href="${escapeAttr(b.file_url||'#')}" target="_blank" download>Download</a></td></tr>`).join(''):'<tr><td colspan="7">No bill copies found.</td></tr>';
+    function fileNameFromUrl(url) { try { return decodeURIComponent(String(url || '').split('/').pop().split('?')[0]) || 'Bill_Copy' } catch (e) { return 'Bill_Copy' } }
+    function renderBills() {
+      let bills = [...state.bills];
+      const company = document.getElementById('billSearchCompany')?.value || '';
+      const date = document.getElementById('billSearchDate')?.value || '';
+      if (company) bills = bills.filter(b => b.company_name === company);
+      if (date) bills = bills.filter(b => b.bill_date === date);
+      document.getElementById('billRows').innerHTML = bills.length ? bills.map(b => `<tr><td>${escapeHtml(b.company_name || '-')}</td><td>${escapeHtml(b.bill_number || '-')}</td><td>${escapeHtml(b.bill_date || '-')}</td><td>${escapeHtml(fileNameFromUrl(b.file_url))}</td><td>${escapeHtml(b.notes || '-')}</td><td>${escapeHtml(b.uploaded_at ? new Date(b.uploaded_at).toLocaleString('en-IN') : '-')}</td><td><a class="download-link" href="${escapeAttr(b.file_url || '#')}" target="_blank" download>Download</a></td></tr>`).join('') : '<tr><td colspan="7">No bill copies found.</td></tr>';
     }
-    function clearBillSearch(){document.getElementById('billSearchCompany').value='';document.getElementById('billSearchDate').value='';renderBills();}
+    function clearBillSearch() { document.getElementById('billSearchCompany').value = ''; document.getElementById('billSearchDate').value = ''; renderBills(); }
 
-    async function updateMediatorVerification(mobile){
-      const status=document.getElementById('verify-'+mobile)?.value||'Pending Call Verification';
-      const notes=document.getElementById('verifyNotes-'+mobile)?.value.trim()||'';
-      const {error}=await supabaseClient.from('mediators').update({verification_status:status,verification_notes:notes}).eq('mobile',mobile);
-      if(error){alert(error.message);return}
+    async function updateMediatorVerification(mobile) {
+      const status = document.getElementById('verify-' + mobile)?.value || 'Pending Call Verification';
+      const notes = document.getElementById('verifyNotes-' + mobile)?.value.trim() || '';
+      const { error } = await supabaseClient.from('mediators').update({ verification_status: status, verification_notes: notes }).eq('mobile', mobile);
+      if (error) { alert(error.message); return }
       alert('Verification status updated successfully.');
       await render();
     }
-    async function approve(mobile){
-      const mediator=state.mediators.find(x=>x.mobile===mobile);
-      if(!mediator){alert('Mediator not found.');return}
-      const {error}=await supabaseClient.from('mediators').update({status:'Approved',verification_status:'Verified'}).eq('mobile',mobile);
-      if(error){alert(error.message);return}
-      await supabaseClient.from('notifications').update({status:'Approved'}).eq('mobile',mobile).eq('type','Mediator Registration');
+    async function approve(mobile) {
+      const mediator = state.mediators.find(x => x.mobile === mobile);
+      if (!mediator) { alert('Mediator not found.'); return }
+      const { error } = await supabaseClient.from('mediators').update({ status: 'Approved', verification_status: 'Verified' }).eq('mobile', mobile);
+      if (error) { alert(error.message); return }
+      await supabaseClient.from('notifications').update({ status: 'Approved' }).eq('mobile', mobile).eq('type', 'Mediator Registration');
       await render();
     }
-    async function reject(mobile){
-      const {error}=await supabaseClient.from('mediators').update({status:'Rejected'}).eq('mobile',mobile);
-      if(error){alert(error.message);return}
-      await supabaseClient.from('notifications').update({status:'Rejected'}).eq('mobile',mobile).eq('type','Mediator Registration');
+    async function reject(mobile) {
+      const { error } = await supabaseClient.from('mediators').update({ status: 'Rejected' }).eq('mobile', mobile);
+      if (error) { alert(error.message); return }
+      await supabaseClient.from('notifications').update({ status: 'Rejected' }).eq('mobile', mobile).eq('type', 'Mediator Registration');
       await render();
     }
 
-    async function toggleMediatorRateAccess(mobile, currentValue){
+    async function toggleMediatorRateAccess(mobile, currentValue) {
       const newValue = currentValue === true ? false : true;
       const mediator = state.mediators.find(x => x.mobile === mobile);
 
@@ -1431,7 +1698,7 @@ tbody tr:hover td{background:#faf8f4!important;}
         .update({ can_view_rates: newValue })
         .eq('mobile', mobile);
 
-      if(error){
+      if (error) {
         alert(error.message);
         return;
       }
@@ -1446,107 +1713,107 @@ tbody tr:hover td{background:#faf8f4!important;}
       await render();
     }
 
-    async function resetMediatorPassword(mobile){
-      const mediator=state.mediators.find(x=>x.mobile===mobile);
-      if(!mediator){alert('Mediator not found.');return}
+    async function resetMediatorPassword(mobile) {
+      const mediator = state.mediators.find(x => x.mobile === mobile);
+      if (!mediator) { alert('Mediator not found.'); return }
 
-      const confirmReset=confirm('Reset password for '+(mediator.company_name||mobile)+'? Please verify by phone before continuing.');
-      if(!confirmReset)return;
+      const confirmReset = confirm('Reset password for ' + (mediator.company_name || mobile) + '? Please verify by phone before continuing.');
+      if (!confirmReset) return;
 
-      const newPassword=prompt('Enter new password for '+(mediator.company_name||mobile)+':');
-      if(newPassword===null)return;
+      const newPassword = prompt('Enter new password for ' + (mediator.company_name || mobile) + ':');
+      if (newPassword === null) return;
 
-      const cleanPassword=String(newPassword).trim();
-      if(cleanPassword.length<6){
+      const cleanPassword = String(newPassword).trim();
+      if (cleanPassword.length < 6) {
         alert('Password must be at least 6 characters.');
         return;
       }
 
-      const {error}=await supabaseClient
+      const { error } = await supabaseClient
         .from('mediators')
-        .update({password:cleanPassword})
-        .eq('mobile',mobile);
+        .update({ password: cleanPassword })
+        .eq('mobile', mobile);
 
-      if(error){alert(error.message);return}
+      if (error) { alert(error.message); return }
 
       await supabaseClient.from('notifications').insert([{
-        type:'Mediator Password Reset',
-        message:'Password reset by staff for '+(mediator.company_name||'Mediator')+' ('+mobile+')',
-        mobile:mobile,
-        company_name:mediator.company_name||'',
-        status:'Unread'
+        type: 'Mediator Password Reset',
+        message: 'Password reset by staff for ' + (mediator.company_name || 'Mediator') + ' (' + mobile + ')',
+        mobile: mobile,
+        company_name: mediator.company_name || '',
+        status: 'Unread'
       }]);
 
       alert('Password updated successfully. Please share it with the mediator after phone verification.');
       await render();
     }
 
-    function renderNotificationRows(){
-      const notifications=state.notifications;
-      document.getElementById('notificationRows').innerHTML=notifications.length?notifications.map(n=>`<tr><td>${escapeHtml(n.type)}</td><td>${escapeHtml(n.message)}</td><td>${escapeHtml(n.created_at?new Date(n.created_at).toLocaleString('en-IN'):'-')}</td><td><span class="status ${n.status==='Approved'?'approved':n.status==='Rejected'?'rejected':'pending'}">${escapeHtml(n.status||'Unread')}</span></td><td>${n.type==='Mediator Registration'&&n.status==='Unread'?`<button class="btn approve" onclick="approve('${escapeAttr(n.mobile)}')">Approve</button><button class="btn reject" onclick="reject('${escapeAttr(n.mobile)}')">Reject</button>`:'-'}</td></tr>`).join(''):'<tr><td colspan="5">No notifications yet.</td></tr>';
+    function renderNotificationRows() {
+      const notifications = state.notifications;
+      document.getElementById('notificationRows').innerHTML = notifications.length ? notifications.map(n => `<tr><td>${escapeHtml(n.type)}</td><td>${escapeHtml(n.message)}</td><td>${escapeHtml(n.created_at ? new Date(n.created_at).toLocaleString('en-IN') : '-')}</td><td><span class="status ${n.status === 'Approved' ? 'approved' : n.status === 'Rejected' ? 'rejected' : 'pending'}">${escapeHtml(n.status || 'Unread')}</span></td><td>${n.type === 'Mediator Registration' && n.status === 'Unread' ? `<button class="btn approve" onclick="approve('${escapeAttr(n.mobile)}')">Approve</button><button class="btn reject" onclick="reject('${escapeAttr(n.mobile)}')">Reject</button>` : '-'}</td></tr>`).join('') : '<tr><td colspan="5">No notifications yet.</td></tr>';
     }
-    function renderMediatorRows(){
-      const mediators=state.mediators;
-      document.getElementById('mediatorRows').innerHTML=mediators.length?mediators.map(m=>`
+    function renderMediatorRows() {
+      const mediators = state.mediators;
+      document.getElementById('mediatorRows').innerHTML = mediators.length ? mediators.map(m => `
         <tr>
-          <td>${escapeHtml(m.company_name||'-')}</td>
+          <td>${escapeHtml(m.company_name || '-')}</td>
           <td>${escapeHtml(m.mobile)}</td>
-          <td>${escapeHtml(m.created_at?new Date(m.created_at).toLocaleString('en-IN'):'-')}</td>
+          <td>${escapeHtml(m.created_at ? new Date(m.created_at).toLocaleString('en-IN') : '-')}</td>
           <td>
-            <span class="status ${m.status==='Approved'?'approved':m.status==='Rejected'?'rejected':'pending'}">${escapeHtml(m.status)}</span>
+            <span class="status ${m.status === 'Approved' ? 'approved' : m.status === 'Rejected' ? 'rejected' : 'pending'}">${escapeHtml(m.status)}</span>
             <br><br>
             <b>Verification:</b><br>
-            <span class="status ${m.verification_status==='Verified'?'approved':m.verification_status==='Invalid Details'?'rejected':'pending'}">${escapeHtml(m.verification_status||'Pending Call Verification')}</span>
-            <br><small>${escapeHtml(m.verification_notes||'')}</small>
+            <span class="status ${m.verification_status === 'Verified' ? 'approved' : m.verification_status === 'Invalid Details' ? 'rejected' : 'pending'}">${escapeHtml(m.verification_status || 'Pending Call Verification')}</span>
+            <br><small>${escapeHtml(m.verification_notes || '')}</small>
             <br><br>
             <b>Rate Access:</b><br>
-            <span class="status ${m.can_view_rates===false?'rejected':'approved'}">${m.can_view_rates===false?'Disabled':'Enabled'}</span>
+            <span class="status ${m.can_view_rates === false ? 'rejected' : 'approved'}">${m.can_view_rates === false ? 'Disabled' : 'Enabled'}</span>
           </td>
           <td>
-            ${m.status==='Pending Approval'?`
+            ${m.status === 'Pending Approval' ? `
               <select id="verify-${escapeAttr(m.mobile)}" style="width:220px;margin-bottom:8px">
-                <option ${m.verification_status==='Pending Call Verification'?'selected':''}>Pending Call Verification</option>
-                <option ${m.verification_status==='Call Completed'?'selected':''}>Call Completed</option>
-                <option ${m.verification_status==='Verified'?'selected':''}>Verified</option>
-                <option ${m.verification_status==='No Response'?'selected':''}>No Response</option>
-                <option ${m.verification_status==='Callback Requested'?'selected':''}>Callback Requested</option>
-                <option ${m.verification_status==='Invalid Details'?'selected':''}>Invalid Details</option>
+                <option ${m.verification_status === 'Pending Call Verification' ? 'selected' : ''}>Pending Call Verification</option>
+                <option ${m.verification_status === 'Call Completed' ? 'selected' : ''}>Call Completed</option>
+                <option ${m.verification_status === 'Verified' ? 'selected' : ''}>Verified</option>
+                <option ${m.verification_status === 'No Response' ? 'selected' : ''}>No Response</option>
+                <option ${m.verification_status === 'Callback Requested' ? 'selected' : ''}>Callback Requested</option>
+                <option ${m.verification_status === 'Invalid Details' ? 'selected' : ''}>Invalid Details</option>
               </select>
-              <textarea id="verifyNotes-${escapeAttr(m.mobile)}" placeholder="Call notes / verification remarks" style="width:260px;min-height:60px;margin-bottom:8px">${escapeHtml(m.verification_notes||'')}</textarea>
+              <textarea id="verifyNotes-${escapeAttr(m.mobile)}" placeholder="Call notes / verification remarks" style="width:260px;min-height:60px;margin-bottom:8px">${escapeHtml(m.verification_notes || '')}</textarea>
               <br>
               <button class="btn save" onclick="updateMediatorVerification('${escapeAttr(m.mobile)}')">Save Verification</button>
               <button class="btn approve" onclick="approve('${escapeAttr(m.mobile)}')">Approve</button>
               <button class="btn reject" onclick="reject('${escapeAttr(m.mobile)}')">Reject</button>
               <button class="btn save" onclick="resetMediatorPassword('${escapeAttr(m.mobile)}')">Reset Password</button>
-              <button class="btn ${m.can_view_rates===false?'approve':'reject'}" onclick="toggleMediatorRateAccess('${escapeAttr(m.mobile)}', ${m.can_view_rates!==false})">${m.can_view_rates===false?'Enable Rates':'Disable Rates'}</button>
-            `:`
+              <button class="btn ${m.can_view_rates === false ? 'approve' : 'reject'}" onclick="toggleMediatorRateAccess('${escapeAttr(m.mobile)}', ${m.can_view_rates !== false})">${m.can_view_rates === false ? 'Enable Rates' : 'Disable Rates'}</button>
+            `: `
               <button class="btn save" onclick="resetMediatorPassword('${escapeAttr(m.mobile)}')">Reset Password</button>
-              <button class="btn ${m.can_view_rates===false?'approve':'reject'}" onclick="toggleMediatorRateAccess('${escapeAttr(m.mobile)}', ${m.can_view_rates!==false})">${m.can_view_rates===false?'Enable Rates':'Disable Rates'}</button>
+              <button class="btn ${m.can_view_rates === false ? 'approve' : 'reject'}" onclick="toggleMediatorRateAccess('${escapeAttr(m.mobile)}', ${m.can_view_rates !== false})">${m.can_view_rates === false ? 'Enable Rates' : 'Disable Rates'}</button>
             `}
           </td>
         </tr>
-      `).join(''):'<tr><td colspan="5">No mediator registrations yet.</td></tr>';
+      `).join('') : '<tr><td colspan="5">No mediator registrations yet.</td></tr>';
     }
 
-    async function render(){
+    async function render() {
       await loadData();
-      const mediators=state.mediators,notifications=state.notifications,orders=state.orders,bills=state.bills;
-      document.getElementById('pendingCount').innerText=mediators.filter(m=>m.status==='Pending Approval').length;
-      document.getElementById('approvedCount').innerText=mediators.filter(m=>m.status==='Approved').length;
-      document.getElementById('notificationCount').innerText=notifications.filter(n=>n.status==='Unread').length;
-      document.getElementById('ordersCount').innerText=orders.length;
-      document.getElementById('pendingOrdersCount').innerText=orders.filter(o=>(o.status||'Submitted')==='Submitted').length;
-      document.getElementById('acceptedOrdersCount').innerText=orders.filter(o=>o.status==='Accepted').length;
-      document.getElementById('updatedOrdersCount').innerText=orders.filter(o=>o.status==='Updated by Mediator').length;
-      document.getElementById('billsCount').innerText=bills.length;
-      renderNotificationRows();renderMediatorRows();renderCompanySubmenu();loadRates();
-      if(document.getElementById('orders').style.display!=='none')renderOrders(selectedCompany);
-      if(document.getElementById('todayLoadingSheet').style.display!=='none')renderTodayLoadingSheet();
-      if(document.getElementById('dateWiseLoadingSheet').style.display!=='none')renderDateWiseLoadingSheet();
-      if(document.getElementById('dailySales').style.display!=='none')renderDailySales();
-      if(document.getElementById('billUpload').style.display!=='none'){loadBillCompanyOptions();renderBills();}
+      const mediators = state.mediators, notifications = state.notifications, orders = state.orders, bills = state.bills;
+      document.getElementById('pendingCount').innerText = mediators.filter(m => m.status === 'Pending Approval').length;
+      document.getElementById('approvedCount').innerText = mediators.filter(m => m.status === 'Approved').length;
+      document.getElementById('notificationCount').innerText = notifications.filter(n => n.status === 'Unread').length;
+      document.getElementById('ordersCount').innerText = orders.length;
+      document.getElementById('pendingOrdersCount').innerText = orders.filter(o => (o.status || 'Submitted') === 'Submitted').length;
+      document.getElementById('acceptedOrdersCount').innerText = orders.filter(o => o.status === 'Accepted').length;
+      document.getElementById('updatedOrdersCount').innerText = orders.filter(o => o.status === 'Updated by Mediator').length;
+      document.getElementById('billsCount').innerText = bills.length;
+      renderNotificationRows(); renderMediatorRows(); renderCompanySubmenu(); loadRates();
+      if (document.getElementById('orders').style.display !== 'none') renderOrders(selectedCompany);
+      if (document.getElementById('todayLoadingSheet').style.display !== 'none') renderTodayLoadingSheet();
+      if (document.getElementById('dateWiseLoadingSheet').style.display !== 'none') renderDateWiseLoadingSheet();
+      if (document.getElementById('dailySales').style.display !== 'none') renderDailySales();
+      if (document.getElementById('billUpload').style.display !== 'none') { loadBillCompanyOptions(); renderBills(); }
     }
-    async function logout(){await supabaseClient.auth.signOut();localStorage.removeItem('staffLoggedIn');location.href='StaffLogin.html'}
+    async function logout() { await supabaseClient.auth.signOut(); localStorage.removeItem('staffLoggedIn'); location.href = 'StaffLogin.html' }
 
 
     let staffNotificationChannel = null;
@@ -1567,7 +1834,7 @@ tbody tr:hover td{background:#faf8f4!important;}
         });
         n.onclick = function () {
           window.focus();
-          try { showSection('notifications', document.querySelector('.menu a')); } catch (e) {}
+          try { showSection('notifications', document.querySelector('.menu a')); } catch (e) { }
           n.close();
         };
       } catch (err) {
@@ -1598,22 +1865,62 @@ tbody tr:hover td{background:#faf8f4!important;}
         });
     }
 
-    async function enableStaffFirebaseNotifications(){
-      if(typeof enableSuryatejaFirebaseNotifications !== 'function'){
+
+    function updateSuryatejaNotificationButtonState(buttonId, statusId) {
+      const btn = document.getElementById(buttonId);
+      const status = document.getElementById(statusId);
+      if (!btn || !status) return;
+
+      if (!('Notification' in window)) {
+        btn.classList.remove('enabled');
+        btn.innerText = 'Notifications Not Supported';
+        status.innerText = 'This browser does not support notifications';
+        return;
+      }
+
+      if (Notification.permission === 'granted') {
+        btn.classList.add('enabled');
+        btn.innerText = '✅ Notifications Enabled';
+        status.innerText = 'Notifications enabled on this browser';
+      } else if (Notification.permission === 'denied') {
+        btn.classList.remove('enabled');
+        btn.innerText = 'Notifications Blocked';
+        status.innerText = 'Allow notifications from browser/site settings';
+      } else {
+        btn.classList.remove('enabled');
+        btn.innerText = '🔔 Enable Notifications';
+        status.innerText = 'Notifications not enabled';
+      }
+    }
+
+    async function enableStaffFirebaseNotifications() {
+      if (typeof enableSuryatejaFirebaseNotifications !== 'function') {
         alert('Firebase notification files are not loaded. Please check firebase-config.js and notification-permission.js.');
         return;
       }
       await enableSuryatejaFirebaseNotifications({
-        role:'staff',
-        userId:'staff-admin',
-        mobile:'staff',
-        companyName:'Surya Teja Staff',
-        buttonId:'staffNotificationButton',
-        statusId:'staffNotificationStatus'
+        role: 'staff',
+        userId: 'staff-admin',
+        mobile: 'staff',
+        companyName: 'Surya Teja Staff',
+        buttonId: 'staffNotificationButton',
+        statusId: 'staffNotificationStatus'
       });
+      updateSuryatejaNotificationButtonState('staffNotificationButton', 'staffNotificationStatus');
     }
 
-    (async function init(){if(await requireStaff()){await render();setupStaffRealtimeNotifications();}})();
+    (async function init() {
+      updateSuryatejaNotificationButtonState('staffNotificationButton', 'staffNotificationStatus');
+      if (await requireStaff()) {
+        await render();
+        setupStaffRealtimeNotifications();
+        updateSuryatejaNotificationButtonState('staffNotificationButton', 'staffNotificationStatus');
+        if (typeof initializeSuryatejaForegroundMessaging === 'function') {
+          initializeSuryatejaForegroundMessaging();
+        }
+      }
+    })();
   </script>
 </body>
+
 </html>

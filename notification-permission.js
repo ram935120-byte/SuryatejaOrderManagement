@@ -3,6 +3,7 @@
 
 let suryatejaFirebaseApp = null;
 let suryatejaMessaging = null;
+let suryatejaForegroundHandlerAttached = false;
 
 function setSuryatejaNotificationStatus(statusId, message) {
   const el = document.getElementById(statusId);
@@ -46,6 +47,81 @@ function getServiceWorkerUrl() {
   return new URL('firebase-messaging-sw.js', window.location.href).toString();
 }
 
+function updateSuryatejaNotificationButtonState(buttonId, statusId) {
+  const btn = document.getElementById(buttonId);
+  const status = document.getElementById(statusId);
+  if (!btn || !status) return;
+
+  if (!('Notification' in window)) {
+    btn.classList.remove('enabled');
+    btn.innerText = 'Notifications Not Supported';
+    status.innerText = 'This browser does not support notifications';
+    return;
+  }
+
+  if (Notification.permission === 'granted') {
+    btn.classList.add('enabled');
+    btn.innerText = '✅ Notifications Enabled';
+    status.innerText = 'Notifications enabled on this browser';
+  } else if (Notification.permission === 'denied') {
+    btn.classList.remove('enabled');
+    btn.innerText = 'Notifications Blocked';
+    status.innerText = 'Allow notifications from browser/site settings';
+  } else {
+    btn.classList.remove('enabled');
+    btn.innerText = '🔔 Enable Notifications';
+    status.innerText = 'Notifications not enabled';
+  }
+}
+
+async function initializeSuryatejaForegroundMessaging() {
+  try {
+    if (!('Notification' in window) || Notification.permission !== 'granted') return false;
+    if (!('serviceWorker' in navigator)) return false;
+    if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') return false;
+
+    getSuryatejaFirebaseApp();
+    suryatejaMessaging = firebase.messaging();
+
+    const swUrl = getServiceWorkerUrl();
+    const registration = await navigator.serviceWorker.register(swUrl);
+    await navigator.serviceWorker.ready;
+
+    if (!suryatejaForegroundHandlerAttached) {
+      suryatejaForegroundHandlerAttached = true;
+
+      suryatejaMessaging.onMessage((payload) => {
+        console.log('Foreground Firebase message:', payload);
+
+        const title = payload.notification?.title || payload.data?.title || 'Suryateja Alert';
+        const body = payload.notification?.body || payload.data?.body || 'New update received';
+
+        if (Notification.permission === 'granted') {
+          const notification = new Notification(title, {
+            body,
+            icon: new URL('images/logo.jpg', window.location.href).toString(),
+            badge: new URL('images/logo.jpg', window.location.href).toString(),
+            tag: payload.data?.tag || 'suryateja-alert',
+            data: { url: payload?.fcmOptions?.link || payload?.data?.url || window.location.href }
+          });
+
+          notification.onclick = function () {
+            window.focus();
+            const url = payload?.fcmOptions?.link || payload?.data?.url || window.location.href;
+            window.location.href = url;
+            notification.close();
+          };
+        }
+      });
+    }
+
+    return registration;
+  } catch (error) {
+    console.warn('Foreground messaging auto-init skipped:', error);
+    return false;
+  }
+}
+
 async function enableSuryatejaFirebaseNotifications(options) {
   const role = options.role;
   const mobile = options.mobile || '';
@@ -82,27 +158,10 @@ async function enableSuryatejaFirebaseNotifications(options) {
       return;
     }
 
-    getSuryatejaFirebaseApp();
-    suryatejaMessaging = firebase.messaging();
-
-    const swUrl = getServiceWorkerUrl();
-    const registration = await navigator.serviceWorker.register(swUrl);
-    await navigator.serviceWorker.ready;
-
-    suryatejaMessaging.onMessage((payload) => {
-      console.log('Foreground Firebase message:', payload);
-      const title = payload.notification?.title || payload.data?.title || 'Suryateja Alert';
-      const body = payload.notification?.body || payload.data?.body || 'New update received';
-
-      if (Notification.permission === 'granted') {
-        new Notification(title, {
-          body,
-          icon: new URL('images/logo.jpg', window.location.href).toString(),
-          badge: new URL('images/logo.jpg', window.location.href).toString(),
-          data: { url: payload?.fcmOptions?.link || payload?.data?.url || window.location.href }
-        });
-      }
-    });
+    const registration = await initializeSuryatejaForegroundMessaging();
+    if (!registration) {
+      throw new Error('Notification permission granted, but Firebase messaging could not initialize.');
+    }
 
     const token = await suryatejaMessaging.getToken({
       vapidKey: window.FIREBASE_VAPID_KEY,
@@ -146,3 +205,8 @@ async function enableSuryatejaFirebaseNotifications(options) {
     alert('Notification setup failed: ' + error.message);
   }
 }
+
+// Expose helpers for dashboard pages
+window.updateSuryatejaNotificationButtonState = updateSuryatejaNotificationButtonState;
+window.initializeSuryatejaForegroundMessaging = initializeSuryatejaForegroundMessaging;
+window.enableSuryatejaFirebaseNotifications = enableSuryatejaFirebaseNotifications;

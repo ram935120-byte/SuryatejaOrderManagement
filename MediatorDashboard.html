@@ -1112,6 +1112,34 @@ const rowsToInsert = structuredOrders.map(o => ({
     function logoutMediator() { localStorage.removeItem('loggedMediator'); localStorage.removeItem('loggedMediatorId'); localStorage.removeItem('loggedMediatorCompany'); location.href = 'MediatorLogin.html' }
 
 
+
+    function updateSuryatejaNotificationButtonState(buttonId, statusId) {
+      const btn = document.getElementById(buttonId);
+      const status = document.getElementById(statusId);
+      if (!btn || !status) return;
+
+      if (!('Notification' in window)) {
+        btn.classList.remove('enabled');
+        btn.innerText = 'Notifications Not Supported';
+        status.innerText = 'This browser does not support notifications';
+        return;
+      }
+
+      if (Notification.permission === 'granted') {
+        btn.classList.add('enabled');
+        btn.innerText = '✅ Notifications Enabled';
+        status.innerText = 'Notifications enabled on this browser';
+      } else if (Notification.permission === 'denied') {
+        btn.classList.remove('enabled');
+        btn.innerText = 'Notifications Blocked';
+        status.innerText = 'Allow notifications from browser/site settings';
+      } else {
+        btn.classList.remove('enabled');
+        btn.innerText = '🔔 Enable Notifications';
+        status.innerText = 'Notifications not enabled';
+      }
+    }
+
     async function enableMediatorFirebaseNotifications(){
       if(!currentMediator){
         alert('Mediator details are still loading. Please try again in a few seconds.');
@@ -1129,15 +1157,21 @@ const rowsToInsert = structuredOrders.map(o => ({
         buttonId:'mediatorNotificationButton',
         statusId:'mediatorNotificationStatus'
       });
+      updateSuryatejaNotificationButtonState('mediatorNotificationButton', 'mediatorNotificationStatus');
     }
 
     (async function init() {
+      updateSuryatejaNotificationButtonState('mediatorNotificationButton', 'mediatorNotificationStatus');
       if (await loadCurrentMediator()) {
         if (currentMediator && currentMediator.can_view_rates !== false) {
           await loadRates();
         }
         await renderOrderHistory();
         await renderMediatorBills();
+        updateSuryatejaNotificationButtonState('mediatorNotificationButton', 'mediatorNotificationStatus');
+        if (typeof initializeSuryatejaForegroundMessaging === 'function') {
+          initializeSuryatejaForegroundMessaging();
+        }
       }
     })();
   </script>
